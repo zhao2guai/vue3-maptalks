@@ -26,5 +26,16 @@ export default [
         component: () => import("@/layout/redirect.vue")
       }
     ]
+  },
+  // 下面是一个无layout菜单的例子（一个全屏空白页面），因为这种情况极少发生，所以只需要在前端配置即可（配置路径：src/router/modules/remaining.ts）
+  {
+    path: "/empty",
+    name: "Empty",
+    component: () => import("@/views/empty/index.vue"),
+    meta: {
+      title: "无Layout页",
+      showLink: false,
+      rank: 103
+    }
   }
 ] satisfies Array<RouteConfigsTable>;

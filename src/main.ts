@@ -50,6 +50,10 @@ import "tippy.js/themes/light.css";
 import VueTippy from "vue-tippy";
 app.use(VueTippy);
 
+// 全局注册maptalks组件
+import MaptalksComponents from "./maptalks/components/index";
+app.use(MaptalksComponents);
+
 getPlatformConfig(app).then(async config => {
   setupStore(app);
   app.use(router);

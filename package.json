@@ -1,6 +1,6 @@
 {
-  "name": "pure-admin-thin",
-  "version": "5.3.0",
+  "name": "@zhao2guai/maptalks-vue3",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -33,21 +33,26 @@
     "vite",
     "esm"
   ],
-  "homepage": "https://github.com/pure-admin/pure-admin-thin",
+  "main": "src/maptalks/components/index.js",
+  "homepage": "https://gitee.com/zhao2guai/gis-maptalks-vue3",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pure-admin/pure-admin-thin.git"
+    "url": "git+https://gitee.com/zhao2guai/gis-maptalks-vue3.git"
   },
   "bugs": {
-    "url": "https://github.com/pure-admin/pure-admin-thin/issues"
+    "url": "https://gitee.com/zhao2guai/gis-maptalks-vue3/issues"
   },
   "license": "MIT",
   "author": {
-    "name": "xiaoxian521",
-    "email": "pureadmin@163.com",
-    "url": "https://github.com/xiaoxian521"
+    "name": "zhao2guai",
+    "email": "1090685714@qq.com.com",
+    "url": "https://github.com/zhao2guai"
   },
   "dependencies": {
+    "@maptalks/gl-layers": "^0.34.1",
+    "@maptalks/transcoders.crn": "^0.97.4",
+    "@maptalks/transcoders.draco": "^0.97.4",
+    "@maptalks/transcoders.ktx2": "^0.97.4",
     "@pureadmin/descriptions": "^1.2.1",
     "@pureadmin/table": "^3.1.2",
     "@pureadmin/utils": "^2.4.7",
@@ -61,6 +66,7 @@
     "js-cookie": "^3.0.5",
     "localforage": "^1.10.0",
     "mitt": "^3.0.1",
+    "maptalks": "^1.0.0-rc.33",
     "nprogress": "^0.2.0",
     "path": "^0.12.7",
     "pinia": "^2.1.7",
