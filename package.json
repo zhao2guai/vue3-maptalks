@@ -1,5 +1,5 @@
 {
-  "name": "@zhao2guai/maptalks-vue3",
+  "name": "@zhao2guai/vue3-maptalks",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -34,19 +34,19 @@
     "esm"
   ],
   "main": "src/maptalks/components/index.js",
-  "homepage": "https://gitee.com/zhao2guai/gis-maptalks-vue3",
+  "homepage": "https://gitee.com/zhao2guai/vue3-maptalks",
   "repository": {
     "type": "git",
-    "url": "git+https://gitee.com/zhao2guai/gis-maptalks-vue3.git"
+    "url": "git+https://gitee.com/zhao2guai/vue3-maptalks.git"
   },
   "bugs": {
-    "url": "https://gitee.com/zhao2guai/gis-maptalks-vue3/issues"
+    "url": "https://https://gitee.com/zhao2guai/vue3-maptalks/issues"
   },
   "license": "MIT",
   "author": {
     "name": "zhao2guai",
     "email": "1090685714@qq.com.com",
-    "url": "https://github.com/zhao2guai"
+    "url": "https://gitee.com/zhao2guai"
   },
   "dependencies": {
     "@maptalks/gl-layers": "^0.34.1",

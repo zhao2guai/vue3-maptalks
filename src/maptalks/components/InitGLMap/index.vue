@@ -15,7 +15,7 @@ import {
   watch,
   defineComponent
 } from "vue";
-import { Map, TileLayer, GroupTileLayer } from "maptalks";
+import { Map, TileLayer } from "maptalks";
 import { GroupGLLayer } from "@maptalks/gl-layers";
 import "@maptalks/transcoders.draco";
 import "@maptalks/transcoders.crn";
