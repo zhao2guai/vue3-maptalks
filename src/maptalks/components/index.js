@@ -1,16 +1,16 @@
 /*
- * @Description: maptalks 地图库组件注册
+ * @Description: maptalks 地图库组件注册首页
  * @Author: zhao2guai
  * @Date: 2024-02-02 14:23:07
  * @LastEditors: 赵二乖
  * @LastEditTime: 2024-03-28 09:01:16
  */
-import InitMap from "./InitMap/index.vue";
-import InitGLMap from "./InitGLMap/index.vue";
+import * as Map from "./map";
+import * as Layers from "./layers";
 
 export default {
   install(app) {
-    app.component("mt-tianditu-map", InitMap);
-    app.component("mt-gl-map", InitGLMap);
+    app.use(Map.install);
+    app.use(Layers.install);
   }
 };

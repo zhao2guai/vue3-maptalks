@@ -1,12 +1,12 @@
 <template>
-  <div class="map-content">
+  <div ref="mapRef" class="maptalks-content">
     <!-- 地图加载区域 -->
-    <div :id="container" class="maptalks-content" />
+    <div :id="container" class="maptalks-map" />
     <!-- 地图子组件插槽区域 -->
     <slot v-if="mapload" />
   </div>
 </template>
-<script lang="ts">
+<script>
 import {
   ref,
   provide,
@@ -16,11 +16,8 @@ import {
   watch,
   defineComponent
 } from "vue";
-import { Map, TileLayer, GroupTileLayer } from "maptalks";
-import "@maptalks/transcoders.draco";
-import "@maptalks/transcoders.crn";
-import "@maptalks/transcoders.ktx2";
-import { tiandituApi } from "../../config/tianditu.js";
+import { Map } from "maptalks";
+import { useMaptalksStoreHook } from "@/store/modules/maptalks";
 export default defineComponent({
   /** 初始化地图组件 */
   name: "mt-tianditu-map",
@@ -34,7 +31,7 @@ export default defineComponent({
     options: {
       type: Object,
       default: () => ({
-        center: [103.82591437579072, 36.05400583727757], // 兰州坐标
+        center: [103.831741, 36.061685], // 甘肃省兰州市
         zoom: 10,
         spatialReference: {
           projection: "EPSG:4326"
@@ -52,21 +49,76 @@ export default defineComponent({
         // 是否禁用贴图拖动
         draggable: true
       })
+    },
+    // 光照配置
+    lights: {
+      type: Object,
+      default: () => ({
+        directional: {
+          direction: [0.5, 0, -1],
+          color: [1, 1, 1]
+        },
+        ambient: {
+          resource: {
+            url: {
+              front: new URL(
+                "@/maptalks/assets/imgs/weather/446/front.jpg",
+                import.meta.url
+              ),
+              back: new URL(
+                "@/maptalks/assets/imgs/weather/446/back.jpg",
+                import.meta.url
+              ),
+              left: new URL(
+                "@/maptalks/assets/imgs/weather/446/left.jpg",
+                import.meta.url
+              ),
+              right: new URL(
+                "@/maptalks/assets/imgs/weather/446/right.jpg",
+                import.meta.url
+              ),
+              top: new URL(
+                "@/maptalks/assets/imgs/weather/446/top.jpg",
+                import.meta.url
+              ),
+              bottom: new URL(
+                "@/maptalks/assets/imgs/weather/446/bottom.jpg",
+                import.meta.url
+              )
+            },
+            prefilterCubeSize: 1024
+          },
+          exposure: 0.787,
+          hsv: [0, 0, 0],
+          orientation: 0
+        }
+      })
     }
   },
 
   setup(props, context) {
     // 地图对象
-    let map: Map | undefined = undefined;
+    let map = undefined;
     // 地图加载状态
-    let mapload: Bolean = ref(false);
+    let mapload = ref(false);
 
     // 监听地图配置
     watch(
       () => props.options,
-      newOptions => {
+      (newOptions, oldOptions) => {
         if (map && map.isLoaded()) {
           map.setOptions(newOptions);
+        }
+      },
+      { deep: true }
+    );
+
+    // 监听地图光照配置
+    watch(
+      () => props.lights,
+      (newLights, oldLights) => {
+        if (map && map.isLoaded()) {
+          map.setLights(newLights);
         }
       },
       { deep: true }
@@ -93,23 +145,29 @@ export default defineComponent({
       // 加载地图配置参数
       map = new Map(props.container, props.options);
       // 获取坐标系
-      const proj: String = map.getProjection().code;
+      const proj = map.getProjection().code;
       // 设置地图范围
       map.setSpatialReference({
         projection: proj ? proj : "EPSG:4326",
         resolutions: getResolutions(props.options.maxZoom)
       });
+      // 设置光照
+      map.setLights(props.lights);
+      // 向组件传送初始化完毕的map
+      context.emit("getMap", map);
+      // 存储全局属性和方法
+      provide("maptalks-map", map);
+      // 将地图对象存储在store
+      useMaptalksStoreHook().setMap(map);
       // 获取地图初始化状态来更新插槽状态
       if (map.isLoaded()) {
         mapload.value = true;
-        // 向父组件方法传送初始化完毕的map
-        provide("map", map);
       }
     };
 
     // 获取地图范围
     const getResolutions = num => {
-      const resolutions: Array = [];
+      const resolutions = [];
       let zoom = num > 0 ? num : 19;
       for (let i = 0; i < zoom; i++) {
         resolutions[i] = 180 / (Math.pow(2, i) * 128);
@@ -126,25 +184,28 @@ export default defineComponent({
         // 修改地图加载状态清除子组件
         if (map.isRemoved()) mapload.value = false;
         map = undefined;
+        // 清除地图状态中的值
+        useMaptalksStoreHook().clearAllState();
       }
     };
 
     return {
       map,
       mapload,
+      initMap,
       removeAll
     };
   }
 });
 </script>
 <style lang="scss" scoped>
-.map-content {
+.maptalks-content {
   position: absolute;
   width: 100%;
   height: 100%;
 }
 
-.maptalks-content {
+.maptalks-map {
   position: relative;
   width: 100%;
   height: 100%;
