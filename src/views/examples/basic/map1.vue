@@ -1,6 +1,6 @@
 <template>
-  <div class="map-content">
-    <mt-init-map>
+  <div v-loading="loading" class="map-content">
+    <mt-init-map ref="mapRef" @getMap="getMap">
       <mt-group-gl-layer
         :terrainSwitch="true"
         tk="ec89e7ba91633b147f76d47e08f9f1a1"
@@ -21,8 +21,28 @@
     </mt-init-map>
   </div>
 </template>
-import { ref } from "vue";
-<script setup></script>
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from "vue";
+
+const loading = ref(true);
+const mapRef = ref(null);
+let map = null;
+
+function getMap(e) {
+  map = e;
+  if (map.isLoaded()) {
+    setTimeout(() => {
+      loading.value = false;
+    }, 3000);
+  }
+}
+
+onMounted(() => {});
+
+onBeforeUnmount(() => {
+  map = undefined;
+});
+</script>
 
 <style lang="scss" scoped>
 .main-content {

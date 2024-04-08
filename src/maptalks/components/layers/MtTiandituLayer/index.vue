@@ -81,7 +81,7 @@ export default defineComponent({
 
     // 监听天地图图层开关
     watch(
-      props.visible,
+      () => props.visible,
       (newVal, oldVal) => {
         if (tileLayer && tileLayer.isLoaded()) {
           tileLayer.setOpacity(newVal);
@@ -91,7 +91,7 @@ export default defineComponent({
     );
     // 监听天地图图层透明度
     watch(
-      props.opacity,
+      () => props.opacity,
       (newVal, oldVal) => {
         if (tileLayer && tileLayer.isLoaded()) {
           tileLayer.setZIndex(newVal);
@@ -101,7 +101,7 @@ export default defineComponent({
     );
     // 监听天地图图层高度
     watch(
-      props.zIndex,
+      () => props.zIndex,
       (newVal, oldVal) => {
         if (tileLayer && tileLayer.isLoaded()) {
           tileLayer.setZIndex(newVal);

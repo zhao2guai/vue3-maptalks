@@ -1,12 +1,11 @@
 <template>
-  <div ref="mapRef" class="maptalks-content">
-    <!-- 地图加载区域 -->
-    <div :id="container" class="maptalks-map" />
+  <!-- 地图加载区域 -->
+  <div :id="container" ref="mapRef" class="maptalks-map">
     <!-- 地图子组件插槽区域 -->
     <slot v-if="mapload" />
   </div>
 </template>
-<script>
+<script lang="ts">
 import {
   ref,
   provide,
@@ -16,6 +15,7 @@ import {
   watch,
   defineComponent
 } from "vue";
+import "maptalks/dist/maptalks.css";
 import { Map } from "maptalks";
 import { useMaptalksStoreHook } from "@/store/modules/maptalks";
 export default defineComponent({
@@ -32,7 +32,7 @@ export default defineComponent({
       type: Object,
       default: () => ({
         center: [103.831741, 36.061685], // 甘肃省兰州市
-        zoom: 10,
+        zoom: 14,
         spatialReference: {
           projection: "EPSG:4326"
         },
@@ -98,7 +98,7 @@ export default defineComponent({
 
   setup(props, context) {
     // 地图对象
-    let map = undefined;
+    let map: Map = undefined;
     // 地图加载状态
     let mapload = ref(false);
 
@@ -145,7 +145,7 @@ export default defineComponent({
       // 加载地图配置参数
       map = new Map(props.container, props.options);
       // 获取坐标系
-      const proj = map.getProjection().code;
+      const proj: String = map.getProjection().code;
       // 设置地图范围
       map.setSpatialReference({
         projection: proj ? proj : "EPSG:4326",
@@ -155,8 +155,6 @@ export default defineComponent({
       map.setLights(props.lights);
       // 向组件传送初始化完毕的map
       context.emit("getMap", map);
-      // 存储全局属性和方法
-      provide("maptalks-map", map);
       // 将地图对象存储在store
       useMaptalksStoreHook().setMap(map);
       // 获取地图初始化状态来更新插槽状态
@@ -167,7 +165,7 @@ export default defineComponent({
 
     // 获取地图范围
     const getResolutions = num => {
-      const resolutions = [];
+      const resolutions: Array<any> = [];
       let zoom = num > 0 ? num : 19;
       for (let i = 0; i < zoom; i++) {
         resolutions[i] = 180 / (Math.pow(2, i) * 128);
@@ -189,6 +187,9 @@ export default defineComponent({
       }
     };
 
+    // 存储全局属性和方法
+    provide("maptalks-map", map);
+
     return {
       map,
       mapload,
@@ -199,12 +200,6 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-.maptalks-content {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
 .maptalks-map {
   position: relative;
   width: 100%;

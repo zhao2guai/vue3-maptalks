@@ -4,6 +4,7 @@
 <script>
 import {
   provide,
+  inject,
   onBeforeUnmount,
   onBeforeMount,
   watch,
