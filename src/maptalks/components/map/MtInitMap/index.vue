@@ -5,9 +5,10 @@
     <slot v-if="mapload" />
   </div>
 </template>
-<script lang="ts">
+<script>
 import {
   ref,
+  shallowRef,
   provide,
   nextTick,
   onBeforeUnmount,
@@ -98,9 +99,11 @@ export default defineComponent({
 
   setup(props, context) {
     // 地图对象
-    let map: Map = undefined;
+    let map = undefined;
     // 地图加载状态
     let mapload = ref(false);
+    // 地图对象存储
+    let maptalks = shallowRef(null);
 
     // 监听地图配置
     watch(
@@ -145,7 +148,7 @@ export default defineComponent({
       // 加载地图配置参数
       map = new Map(props.container, props.options);
       // 获取坐标系
-      const proj: String = map.getProjection().code;
+      const proj = map.getProjection().code;
       // 设置地图范围
       map.setSpatialReference({
         projection: proj ? proj : "EPSG:4326",
@@ -155,8 +158,8 @@ export default defineComponent({
       map.setLights(props.lights);
       // 向组件传送初始化完毕的map
       context.emit("getMap", map);
-      // 将地图对象存储在store
-      useMaptalksStoreHook().setMap(map);
+      // 将地图对象存储在maptalks
+      maptalks.value = map;
       // 获取地图初始化状态来更新插槽状态
       if (map.isLoaded()) {
         mapload.value = true;
@@ -165,7 +168,7 @@ export default defineComponent({
 
     // 获取地图范围
     const getResolutions = num => {
-      const resolutions: Array<any> = [];
+      const resolutions = [];
       let zoom = num > 0 ? num : 19;
       for (let i = 0; i < zoom; i++) {
         resolutions[i] = 180 / (Math.pow(2, i) * 128);
@@ -188,11 +191,12 @@ export default defineComponent({
     };
 
     // 存储全局属性和方法
-    provide("maptalks-map", map);
+    provide("maptalks", maptalks);
 
     return {
       map,
       mapload,
+      maptalks,
       initMap,
       removeAll
     };

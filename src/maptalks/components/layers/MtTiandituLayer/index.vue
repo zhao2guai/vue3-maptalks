@@ -11,7 +11,6 @@ import {
 } from "vue";
 import { v4 as uuidv4 } from "uuid";
 import { TileLayer } from "maptalks";
-import { useMaptalksStoreHook } from "@/store/modules/maptalks";
 import { tiandituApi } from "@/maptalks/config/tianditu.js";
 export default defineComponent({
   /** 初始化天地图图层组件 */
@@ -60,8 +59,9 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    // 获取地图对象
-    let map = useMaptalksStoreHook().getMap;
+    // 获取上级组件中的地图对象
+    let maptalks = inject("maptalks", null);
+    let map = maptalks.value;
     // 定义天地图图层组对象
     let tileLayer = null;
 
@@ -144,7 +144,7 @@ export default defineComponent({
         zIndex: props.zIndex
       });
       // 获取插槽的上级组件
-      const groupGLLayer = inject("maptalks-groupGLLayer");
+      const groupGLLayer = inject("groupGLLayer");
       // 若是GL图层存在则优先添加到它里面
       if (groupGLLayer) {
         groupGLLayer.addLayer(tileLayer);

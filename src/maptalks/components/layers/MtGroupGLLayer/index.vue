@@ -3,6 +3,7 @@
 </template>
 <script>
 import {
+  ref,
   provide,
   inject,
   onBeforeUnmount,
@@ -15,11 +16,14 @@ import "@maptalks/transcoders.draco";
 import "@maptalks/transcoders.crn";
 import "@maptalks/transcoders.ktx2";
 import { tiandituApi } from "@/maptalks/config/tianditu.js";
-import { useMaptalksStoreHook } from "@/store/modules/maptalks";
 export default defineComponent({
   /** 初始化webgl图层组件 */
   name: "mt-group-gl-layer",
   props: {
+    map: {
+      type: Object,
+      default: undefined
+    },
     // GL图层id
     groupId: {
       type: String,
@@ -73,8 +77,9 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    // 获取地图对象
-    let map = useMaptalksStoreHook().getMap;
+    // 获取上级组件中的地图对象
+    let maptalks = inject("maptalks", null);
+    let map = maptalks.value;
     // 定义GL图层组对象
     let groupGLLayer = null;
     // 监听GL场景配置
@@ -124,7 +129,7 @@ export default defineComponent({
       // 将GL图层组ID存储在map对象中
       map.config("groupId", props.groupId);
       // 将GL图层添加到注册组件中提供给子组件调用
-      provide("maptalks-groupGLLayer", groupGLLayer);
+      provide("groupGLLayer", groupGLLayer);
     };
 
     // 切换地形开关
@@ -166,8 +171,6 @@ export default defineComponent({
       if (map && map.isLoaded()) {
         let groupGLLayer = map.getLayer(map.config().groupId);
         if (groupGLLayer) map.removeLayer();
-        // 清除地图状态中的值
-        useMaptalksStoreHook().clearGroupGLLayer();
       }
     };
 

@@ -11,7 +11,6 @@ import {
 } from "vue";
 import { v4 as uuidv4 } from "uuid";
 import { TileLayer } from "maptalks";
-import { useMaptalksStoreHook } from "@/store/modules/maptalks";
 export default defineComponent({
   /** 初始化webgl图层组件 */
   name: "mt-tile-layer",
@@ -59,8 +58,9 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    // 获取地图对象
-    let map = useMaptalksStoreHook().getMap;
+    // 获取上级组件中的地图对象
+    let maptalks = inject("maptalks", null);
+    let map = maptalks.value;
     // 定义瓦片图层组对象
     let tileLayer = null;
     // 监听瓦片图层ID
@@ -138,8 +138,8 @@ export default defineComponent({
         zIndex: props.zIndex
       });
       // 判断更多图层...
-      const groupGLLayer = inject("maptalks-groupGLLayer");
-      // const groupTileLayer = inject("maptalks-groupTileLayer");
+      const groupGLLayer = inject("groupGLLayer");
+      // const groupTileLayer = inject("groupTileLayer");
       // 若是GL图层存在则优先添加到它里面
       if (groupGLLayer) {
         groupGLLayer.addLayer(tileLayer);
