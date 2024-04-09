@@ -9,6 +9,7 @@ import type { App } from "vue";
 import MtGroupGLLayer from "./MtGroupGLLayer/index.vue";
 import MtTileLayer from "./MtTileLayer/index.vue";
 import MtTiandituLayer from "./MtTiandituLayer/index.vue";
+import MtGroupTileLayer from "./MtGroupTileLayer/index.vue";
 
 function install(app: App) {
   // webgl图层集合的管理和融合类
@@ -17,8 +18,16 @@ function install(app: App) {
   app.component("mt-tile-layer", MtTileLayer);
   // 天地图图层组件
   app.component("mt-tianditu-layer", MtTiandituLayer);
+  // 瓦片图层组
+  app.component("mt-group-tile-layer", MtGroupTileLayer);
 }
 
 export default install;
 
-export { install, MtGroupGLLayer, MtTileLayer, MtTiandituLayer };
+export {
+  install,
+  MtGroupGLLayer,
+  MtTileLayer,
+  MtTiandituLayer,
+  MtGroupTileLayer
+};

@@ -62,9 +62,42 @@ export default defineComponent({
     // 获取上级组件中的地图对象
     let maptalks = inject("maptalks", null);
     let map = maptalks.value;
-    // 定义天地图图层组对象
+    // 定义瓦片图层对象
     let tileLayer = null;
-
+    // 获取坐标系
+    let proj = props.projection ? props.projection : "EPSG:4326";
+    // 获取图层类型
+    let type = props.layerType ? props.layerType : "img";
+    // 获取图层ID
+    let id = props.id ? props.id : uuidv4().replace(/-/g, "");
+    // 获取天地图URL
+    let url = "";
+    if (type === "vec") url = tiandituApi.getUrlByVecc(props.tk);
+    if (type === "cva") url = tiandituApi.getUrlByCvac(props.tk);
+    if (type === "ter") url = tiandituApi.getUrlByTerc(props.tk);
+    if (type === "cta") url = tiandituApi.getUrlByCtac(props.tk);
+    if (type === "img") url = tiandituApi.getUrlByImgc(props.tk);
+    if (type === "cia") url = tiandituApi.getUrlByCiac(props.tk);
+    if (type === "ibo") url = tiandituApi.getUrlByIboc(props.tk);
+    // 若图层url和id为空则返回
+    if (url) {
+      // 接收图层配置信息并初始化图层对象
+      tileLayer = new TileLayer(id, {
+        tileSystem: [1, -1, -180, 90],
+        spatialReference: {
+          projection: proj
+        },
+        urlTemplate: url,
+        maxAvailableZoom: 18,
+        subdomains: ["1", "2", "3", "4", "5"],
+        visible: props.visible,
+        minZoom: props.minZoom,
+        maxZoom: props.maxZoom,
+        zIndex: props.zIndex
+      });
+      // 向组件传送初始化完毕的layer
+      context.emit("getLayer", tileLayer);
+    }
     // 页面加载后执行
     onBeforeMount(() => {
       if (props.tk) {
@@ -112,51 +145,24 @@ export default defineComponent({
 
     // 添加天地图图层
     const addTileLayer = () => {
-      // 获取坐标系
-      let proj = props.projection ? props.projection : "EPSG:4326";
-      // 获取图层类型
-      let type = props.layerType ? props.layerType : "img";
-      // 获取图层ID
-      let id = props.id ? props.id : uuidv4().replace(/-/g, "");
-      // 获取天地图URL
-      let url = "";
-      if (type === "vec") url = tiandituApi.getUrlByVecc(props.tk);
-      if (type === "cva") url = tiandituApi.getUrlByCvac(props.tk);
-      if (type === "ter") url = tiandituApi.getUrlByTerc(props.tk);
-      if (type === "cta") url = tiandituApi.getUrlByCtac(props.tk);
-      if (type === "img") url = tiandituApi.getUrlByImgc(props.tk);
-      if (type === "cia") url = tiandituApi.getUrlByCiac(props.tk);
-      if (type === "ibo") url = tiandituApi.getUrlByIboc(props.tk);
-      // 若图层url和id为空则返回
-      if (!url) return;
-      // 接收图层配置信息并初始化图层对象
-      tileLayer = new TileLayer(id, {
-        tileSystem: [1, -1, -180, 90],
-        spatialReference: {
-          projection: proj
-        },
-        urlTemplate: url,
-        maxAvailableZoom: 18,
-        subdomains: ["1", "2", "3", "4", "5"],
-        visible: props.visible,
-        minZoom: props.minZoom,
-        maxZoom: props.maxZoom,
-        zIndex: props.zIndex
-      });
       // 获取插槽的上级组件
       const groupGLLayer = inject("groupGLLayer");
       // 若是GL图层存在则优先添加到它里面
       if (groupGLLayer) {
         groupGLLayer.addLayer(tileLayer);
-      } else {
-        // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
-        if (map && map.isLoaded()) {
-          tileLayer.addTo(map);
-        }
+        return;
       }
-      // 向组件传送初始化完毕的layer
-      if (tileLayer && tileLayer.isLoaded()) {
-        context.emit("getLayer", tileLayer);
+      const groupTileLayer = inject("groupTileLayer");
+      if (groupTileLayer) {
+        let layers = groupTileLayer.getLayers();
+        layers.push(tileLayer);
+        groupTileLayer.addLayer(layers);
+        return;
+      }
+      // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
+      if (map && map.isLoaded()) {
+        tileLayer.addTo(map);
+        return;
       }
     };
 

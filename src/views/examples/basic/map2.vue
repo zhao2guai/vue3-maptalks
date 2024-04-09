@@ -1,10 +1,20 @@
 <template>
   <div class="map-content">
     <mt-init-map tk="ec89e7ba91633b147f76d47e08f9f1a1">
-      <mt-group-gl-layer
-        :terrainSwitch="true"
-        tk="ec89e7ba91633b147f76d47e08f9f1a1"
-      />
+      <mt-group-tile-layer>
+        <mt-tianditu-layer
+          tk="ec89e7ba91633b147f76d47e08f9f1a1"
+          layerType="img"
+        />
+        <mt-tianditu-layer
+          tk="ec89e7ba91633b147f76d47e08f9f1a1"
+          layerType="cia"
+        />
+        <mt-tianditu-layer
+          tk="ec89e7ba91633b147f76d47e08f9f1a1"
+          layerType="ibo"
+        />
+      </mt-group-tile-layer>
     </mt-init-map>
   </div>
 </template>
