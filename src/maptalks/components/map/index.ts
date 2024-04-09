@@ -5,9 +5,10 @@
  * @LastEditors: 赵二乖
  * @LastEditTime: 2024-03-28 09:01:16
  */
+import type { App } from "vue";
 import MtInitMap from "./MtInitMap/index.vue";
 
-function install(app) {
+function install(app: App) {
   // 初始化地图组件
   app.component("mt-init-map", MtInitMap);
 }

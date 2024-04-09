@@ -5,12 +5,16 @@
  * @LastEditors: 赵二乖
  * @LastEditTime: 2024-03-28 09:01:16
  */
+import type { App, Plugin } from "vue";
 import * as Map from "./map";
 import * as Layers from "./layers";
 
-export default {
-  install(app) {
-    app.use(Map.install);
-    app.use(Layers.install);
-  }
+const install: Plugin = (app: App) => {
+  app.use(Map.install);
+  app.use(Layers.install);
 };
+
+const plugin = { install };
+
+export default plugin;
+export { install, Map, Layers };

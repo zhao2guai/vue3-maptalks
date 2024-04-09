@@ -33,7 +33,7 @@
     "vite",
     "esm"
   ],
-  "main": "src/maptalks/components/index.js",
+  "main": "src/maptalks/components/index",
   "homepage": "https://gitee.com/zhao2guai/vue3-maptalks",
   "repository": {
     "type": "git",
