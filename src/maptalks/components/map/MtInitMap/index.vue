@@ -18,7 +18,6 @@ import {
 } from "vue";
 import "maptalks/dist/maptalks.css";
 import { Map } from "maptalks";
-import { useMaptalksStoreHook } from "@/store/modules/maptalks";
 export default defineComponent({
   /** 初始化地图组件 */
   name: "mt-tianditu-map",
@@ -185,8 +184,6 @@ export default defineComponent({
         // 修改地图加载状态清除子组件
         if (map.isRemoved()) mapload.value = false;
         map = undefined;
-        // 清除地图状态中的值
-        useMaptalksStoreHook().clearAllState();
       }
     };
 
