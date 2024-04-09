@@ -1,5 +1,5 @@
 {
-  "name": "@zhao2guai/vue3-maptalks",
+  "name": "@zhao2guai-vue3-maptalks",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -33,7 +33,7 @@
     "vite",
     "esm"
   ],
-  "main": "src/maptalks/components/index.ts",
+  "main": "src/maptalks/components/index",
   "homepage": "https://gitee.com/zhao2guai/vue3-maptalks",
   "repository": {
     "type": "git",
