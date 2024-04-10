@@ -72,7 +72,7 @@ export default defineComponent({
     // 监听瓦片图层ID
     watch(() => props.id, (newId) => {
         if (wmsLayer && newId) {
-          wmsLayer.setId(newVal);
+          wmsLayer.setId(newId);
         }
       },
       { immediate: true }
@@ -81,7 +81,7 @@ export default defineComponent({
     // 监听瓦片图层透明度
     watch(() => props.opacity, (newOpacity) => {
         if (wmsLayer && newOpacity) {
-          wmsLayer.setOpacity(newVal);
+          wmsLayer.setOpacity(newOpacity);
         }
       },
       { immediate: true }
@@ -90,7 +90,7 @@ export default defineComponent({
     // 监听瓦片图层高度
     watch(() => props.zIndex, (newZIndex) => {
         if (wmsLayer && newZIndex) {
-          wmsLayer.setZIndex(newVal);
+          wmsLayer.setZIndex(newZIndex);
         }
       },
       { immediate: true }
