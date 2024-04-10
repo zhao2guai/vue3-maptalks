@@ -145,6 +145,11 @@ export default defineComponent({
 
     // 添加天地图图层
     const addTileLayer = () => {
+      // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
+      if (map && map.isLoaded()) {
+        tileLayer.addTo(map);
+        return;
+      }
       // 获取插槽的上级组件
       const groupGLLayer = inject("groupGLLayer");
       // 若是GL图层存在则优先添加到它里面
@@ -157,11 +162,6 @@ export default defineComponent({
         let layers = groupTileLayer.getLayers();
         layers.push(tileLayer);
         groupTileLayer.addLayer(layers);
-        return;
-      }
-      // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
-      if (map && map.isLoaded()) {
-        tileLayer.addTo(map);
         return;
       }
     };

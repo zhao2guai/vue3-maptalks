@@ -49,10 +49,6 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    // 获取上级组件中的地图对象
-    let maptalks = inject("maptalks", null);
-    // 获取地图对象
-    let map = maptalks.value;
     // 获取图层ID
     let id = props.id ? props.id : uuidv4().replace(/-/g, "");
     // 获取坐标系
@@ -75,6 +71,11 @@ export default defineComponent({
     // 将图层添加到注册组件中提供给子组件调用
     provide("groupTileLayer", groupTileLayer);
 
+    // 向组件传送初始化完毕的layer
+    if (groupTileLayer && groupTileLayer.isLoaded()) {
+      context.emit("getLayer", groupTileLayer);
+    }
+
     // 页面加载后执行
     onBeforeMount(() => {
       addGroupLayer();
@@ -87,20 +88,21 @@ export default defineComponent({
 
     // 添加图层组
     const addGroupLayer = () => {
+      // 获取上级组件中的地图对象
+      let maptalks = inject("maptalks", null);
+      // 获取地图对象
+      let map = maptalks.value;
       // 判断更多图层...
       const groupGLLayer = inject("groupGLLayer");
       // 若是GL图层存在则优先添加到它里面
       if (groupGLLayer) {
         groupGLLayer.addLayer(groupTileLayer);
-      } else {
-        // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
-        if (map && map.isLoaded()) {
-          groupTileLayer.addTo(map);
-        }
+        return;
       }
-      // 向组件传送初始化完毕的layer
-      if (groupTileLayer && groupTileLayer.isLoaded()) {
-        context.emit("getLayer", groupTileLayer);
+      // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
+      if (map && map.isLoaded()) {
+        groupTileLayer.addTo(map);
+        return;
       }
     };
 
@@ -114,8 +116,7 @@ export default defineComponent({
     };
 
     return {
-      groupTileLayer,
-      removeAll
+      groupTileLayer
     };
   }
 });
