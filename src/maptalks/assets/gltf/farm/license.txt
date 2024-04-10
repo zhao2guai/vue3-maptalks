@@ -1,0 +1,11 @@
+Model Information:
+* title:	Farm
+* source:	https://sketchfab.com/3d-models/farm-20a931c363ba4ef88c696e5f72b3a186
+* author:	Ker1full (https://sketchfab.com/ker1full)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Farm" (https://sketchfab.com/3d-models/farm-20a931c363ba4ef88c696e5f72b3a186) by Ker1full (https://sketchfab.com/ker1full) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
