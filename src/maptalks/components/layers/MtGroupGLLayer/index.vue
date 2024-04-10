@@ -83,7 +83,10 @@ export default defineComponent({
 
   setup(props, context) {
     // 定义GL图层组对象
-    let groupGLLayer = new GroupGLLayer(props.id, [], props.options);
+    let groupGLLayer = new GroupGLLayer(props.id, []);
+    if (props.options) {
+      groupGLLayer.setOptions(props.options);
+    }
     // 判断地形开关是否开启，天地图密匙是否存在
     if (props.terrainSwitch === true && props.tk) {
       // 设置天地图3D地形

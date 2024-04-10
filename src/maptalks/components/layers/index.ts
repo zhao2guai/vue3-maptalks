@@ -22,7 +22,7 @@ function install(app: App) {
   // 瓦片图层组
   app.component("mt-group-tile-layer", MtGroupTileLayer);
   // 服务图层
-  app.component('mt-wms-tile-layer', MtWMSTileLayer)
+  app.component('mt-wms-tile-layer', MtWMSTileLayer);
 }
 
 export default install;
@@ -32,5 +32,6 @@ export {
   MtGroupGLLayer,
   MtTileLayer,
   MtTiandituLayer,
-  MtGroupTileLayer
+  MtGroupTileLayer,
+  MtWMSTileLayer
 };
