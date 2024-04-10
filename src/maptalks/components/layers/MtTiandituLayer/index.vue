@@ -59,9 +59,6 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    // 获取上级组件中的地图对象
-    let maptalks = inject("maptalks", null);
-    let map = maptalks.value;
     // 定义瓦片图层对象
     let tileLayer = null;
     // 获取坐标系
@@ -95,9 +92,43 @@ export default defineComponent({
         maxZoom: props.maxZoom,
         zIndex: props.zIndex
       });
-      // 向组件传送初始化完毕的layer
-      context.emit("getLayer", tileLayer);
     }
+    // 向组件传送初始化完毕的layer
+    context.emit("getLayer", tileLayer);
+
+    // 监听瓦片图层ID
+    watch(
+      props.id,
+      (newVal, oldVal) => {
+        if (tileLayer && newVal) {
+          tileLayer.setId(newVal);
+        }
+      },
+      { immediate: true }
+    );
+
+    // 监听瓦片图层透明度
+    watch(
+      props.opacity,
+      (newVal, oldVal) => {
+        if (tileLayer && newVal) {
+          tileLayer.setOpacity(newVal);
+        }
+      },
+      { immediate: true }
+    );
+
+    // 监听瓦片图层高度
+    watch(
+      props.zIndex,
+      (newVal, oldVal) => {
+        if (tileLayer && newVal) {
+          tileLayer.setZIndex(newVal);
+        }
+      },
+      { immediate: true }
+    );
+
     // 页面加载后执行
     onBeforeMount(() => {
       if (props.tk) {
@@ -112,12 +143,12 @@ export default defineComponent({
       removeAll();
     });
 
-    // 监听天地图图层开关
+    // 监听天地图图层ID
     watch(
-      () => props.visible,
+      () => props.id,
       (newVal, oldVal) => {
-        if (tileLayer && tileLayer.isLoaded()) {
-          tileLayer.setOpacity(newVal);
+        if (tileLayer && newVal) {
+          tileLayer.setId(newVal);
         }
       },
       { immediate: true }
@@ -126,8 +157,8 @@ export default defineComponent({
     watch(
       () => props.opacity,
       (newVal, oldVal) => {
-        if (tileLayer && tileLayer.isLoaded()) {
-          tileLayer.setZIndex(newVal);
+        if (tileLayer && newVal) {
+          tileLayer.setOpacity(newVal);
         }
       },
       { immediate: true }
@@ -136,7 +167,7 @@ export default defineComponent({
     watch(
       () => props.zIndex,
       (newVal, oldVal) => {
-        if (tileLayer && tileLayer.isLoaded()) {
+        if (tileLayer && newVal) {
           tileLayer.setZIndex(newVal);
         }
       },
@@ -145,23 +176,27 @@ export default defineComponent({
 
     // 添加天地图图层
     const addTileLayer = () => {
-      // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
-      if (map && map.isLoaded()) {
-        tileLayer.addTo(map);
-        return;
-      }
-      // 获取插槽的上级组件
-      const groupGLLayer = inject("groupGLLayer");
+      // 获取插槽的上级组件 (groupGLLayer优先插入其次groupTileLayer最后才是map)
+      const groupGLLayer = inject("groupGLLayer", null);
       // 若是GL图层存在则优先添加到它里面
       if (groupGLLayer) {
         groupGLLayer.addLayer(tileLayer);
         return;
       }
-      const groupTileLayer = inject("groupTileLayer");
+      // 再次判断图层组
+      const groupTileLayer = inject("groupTileLayer", null);
       if (groupTileLayer) {
         let layers = groupTileLayer.getLayers();
         layers.push(tileLayer);
         groupTileLayer.addLayer(layers);
+        return;
+      }
+      // 获取上级组件中的地图对象
+      let maptalks = inject("maptalks", null);
+      let map = maptalks.value;
+      // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
+      if (map && map.isLoaded()) {
+        tileLayer.addTo(map);
         return;
       }
     };
@@ -176,8 +211,7 @@ export default defineComponent({
     };
 
     return {
-      tileLayer,
-      removeAll
+      tileLayer
     };
   }
 });

@@ -12,20 +12,13 @@ import {
   defineComponent
 } from "vue";
 import { GroupGLLayer } from "@maptalks/gl-layers";
-import "@maptalks/transcoders.draco";
-import "@maptalks/transcoders.crn";
-import "@maptalks/transcoders.ktx2";
 import { tiandituApi } from "@/maptalks/config/tianditu.js";
 export default defineComponent({
   /** 初始化webgl图层组件 */
   name: "mt-group-gl-layer",
   props: {
-    map: {
-      type: Object,
-      default: undefined
-    },
     // GL图层id
-    groupId: {
+    id: {
       type: String,
       default: "group"
     },
@@ -38,6 +31,18 @@ export default defineComponent({
     tk: {
       type: String,
       default: undefined
+    },
+    // 图层配置
+    options: {
+      type: Object,
+      default: () => ({
+        attribution: "",
+        minZoom: 1,
+        maxZoom: 20,
+        visible: true,
+        opacity: 1
+        // ... 更多参照GroupGLLayer文档
+      })
     },
     // 场景配置
     sceneConfig: {
@@ -77,18 +82,37 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    // 获取上级组件中的地图对象
-    let maptalks = inject("maptalks", null);
-    let map = maptalks.value;
     // 定义GL图层组对象
-    let groupGLLayer = null;
+    let groupGLLayer = new GroupGLLayer(props.id, [], props.options);
+    // 判断地形开关是否开启，天地图密匙是否存在
+    if (props.terrainSwitch === true && props.tk) {
+      // 设置天地图3D地形
+      const terrain = tiandituApi.getTerrain(props.tk);
+      groupGLLayer.setTerrain(terrain);
+    }
+    // 设置场景配置
+    if (props.sceneConfig) {
+      groupGLLayer.setSceneConfig(props.sceneConfig);
+    }
+    // 将GL图层添加到注册组件中提供给子组件调用
+    provide("groupGLLayer", groupGLLayer);
+
+    // 监听GL图层配置
+    watch(
+      () => props.options,
+      (newOptions, oldOptions) => {
+        if (groupGLLayer && newOptions) {
+          groupGLLayer.setOptions(newOptions);
+        }
+      },
+      { deep: true }
+    );
     // 监听GL场景配置
     watch(
       () => props.sceneConfig,
-      (newSceneConfig, oldSceneConfig) => {
-        let groupGLLayer = map.getLayer(props.groupId);
-        if (groupGLLayer) {
-          groupGLLayer.setSceneConfig(newSceneConfig);
+      (newConfig, oldConfig) => {
+        if (groupGLLayer && newConfig) {
+          groupGLLayer.setSceneConfig(newConfig);
         }
       },
       { deep: true }
@@ -96,11 +120,7 @@ export default defineComponent({
 
     // 页面加载后执行
     onBeforeMount(() => {
-      if (props.groupId) {
-        addGLLayer();
-      } else {
-        console.error("当前webgl图层组id为空, 无法添加图层!");
-      }
+      addGLLayer();
     });
 
     // 页面元素销毁之前执行
@@ -110,75 +130,65 @@ export default defineComponent({
 
     // 添加GL图层组
     const addGLLayer = () => {
-      // 首先检测地图中是否已经存在GL图层
-      if (map.config().groupId) return;
-      // 判断地形开关是否开启，天地图密匙是否存在
-      if (props.terrainSwitch === true && props.tk) {
-        // 设置天地图3D地形
-        const terrain = tiandituApi.getTerrain(props.tk);
-        groupGLLayer = new GroupGLLayer(props.groupId, [], { terrain });
-      } else {
-        // 添加图层组
-        groupGLLayer = new GroupGLLayer(props.groupId, [], {});
+      // 获取上级组件中的地图对象
+      let maptalks = inject("maptalks", null);
+      let map = maptalks.value;
+      // 判断地图是否存在
+      if (map && map.isLoaded()) {
+        // 首先检测地图中是否已经存在GL图层
+        if (map.config().groupId) return;
+        // 将GL图层添加至地图
+        groupGLLayer.addTo(map);
+        // 将GL图层组ID存储在map对象中
+        map.config("groupId", props.id);
+        // 回调方法
+        context.emit("getLayer", groupGLLayer);
       }
-      // 设置场景配置
-      if (props.sceneConfig) {
-        groupGLLayer.setSceneConfig(props.sceneConfig);
-      }
-      groupGLLayer.addTo(map);
-      // 将GL图层组ID存储在map对象中
-      map.config("groupId", props.groupId);
-      // 将GL图层添加到注册组件中提供给子组件调用
-      provide("groupGLLayer", groupGLLayer);
     };
 
     // 切换地形开关
-    const changeTerrain = status => {
-      if (map && map.isLoaded()) {
-        // 获取地图对象中存储的图层组ID
-        const id = map.config().groupId;
-        // 获取当前地图的GL图层组
-        let groupGLLayer = map.getLayer(id);
-        // 若没有的到图层则返回
-        if (!groupGLLayer) return;
-        // 打开后添加terrain对象关闭则是设置为空
-        if (status) {
-          // 设置天地图3D地形
-          const terrain = tiandituApi.getTerrain(props.tk);
-          groupGLLayer.setTerrain(terrain);
-        } else {
-          groupGLLayer.setTerrain(null);
-        }
+    const changeTerrain = e => {
+      // 若没有的到图层则返回
+      if (!groupGLLayer) return;
+      // 打开后添加terrain对象关闭则是设置为空
+      if (e && props.tk) {
+        // 设置天地图3D地形
+        const terrain = tiandituApi.getTerrain(props.tk);
+        groupGLLayer.setTerrain(terrain);
+      } else {
+        groupGLLayer.setTerrain(null);
       }
     };
 
     // 清除GL中的所有图层
     const clearAllLayer = () => {
-      if (map && map.isLoaded()) {
-        let groupGLLayer = map.getLayer(map.config().groupId);
-        let layers = groupGLLayer.getLayers();
-        if (layers && layers.length > 0) {
-          for (let i = 0; i < layers.length; i++) {
-            groupGLLayer.removeLayer(layers[i]);
-          }
+      let layers = groupGLLayer.getLayers();
+      if (layers && layers.length > 0) {
+        for (let i = 0; i < layers.length; i++) {
+          groupGLLayer.removeLayer(layers[i]);
         }
       }
     };
 
     // 移除地图所有图层销毁地图组件
     const removeAll = () => {
-      // 删除图层和地图对象
+      // 删除GL图层
+      if (groupGLLayer) {
+        groupGLLayer.remove();
+        groupGLLayer = undefined;
+      }
+      // 获取上级组件中的地图对象
+      let maptalks = inject("maptalks", null);
+      let map = maptalks.value;
       if (map && map.isLoaded()) {
-        let groupGLLayer = map.getLayer(map.config().groupId);
-        if (groupGLLayer) map.removeLayer();
+        map.config("groupId", undefined);
       }
     };
 
     return {
       groupGLLayer,
       changeTerrain,
-      clearAllLayer,
-      removeAll
+      clearAllLayer
     };
   }
 });
