@@ -70,10 +70,8 @@ export default defineComponent({
     let wmsLayer = new WMSTileLayer(id, props.options);
 
     // 监听瓦片图层ID
-    watch(
-      props.id,
-      (newVal, oldVal) => {
-        if (wmsLayer && wmsLayer.isLoaded()) {
+    watch(() => props.id, (newId) => {
+        if (wmsLayer && newId) {
           wmsLayer.setId(newVal);
         }
       },
@@ -81,10 +79,8 @@ export default defineComponent({
     );
 
     // 监听瓦片图层透明度
-    watch(
-      props.opacity,
-      (newVal, oldVal) => {
-        if (wmsLayer && wmsLayer.isLoaded()) {
+    watch(() => props.opacity, (newOpacity) => {
+        if (wmsLayer && newOpacity) {
           wmsLayer.setOpacity(newVal);
         }
       },
@@ -92,10 +88,8 @@ export default defineComponent({
     );
 
     // 监听瓦片图层高度
-    watch(
-      props.zIndex,
-      (newVal, oldVal) => {
-        if (wmsLayer && wmsLayer.isLoaded()) {
+    watch(() => props.zIndex, (newZIndex) => {
+        if (wmsLayer && newZIndex) {
           wmsLayer.setZIndex(newVal);
         }
       },
@@ -124,14 +118,20 @@ export default defineComponent({
      // 添加瓦片图层
     const addwmsLayer = () => {
       // 判断更多图层...
-      const groupGLLayer = inject("groupGLLayer");
-      // const groupwmsLayer = inject("groupwmsLayer");
+      const groupGLLayer = inject("groupGLLayer", null);
       // 若是GL图层存在则优先添加到它里面
       if (groupGLLayer) {
         groupGLLayer.addLayer(wmsLayer);
         return
       }
-      // console.log(groupGLLayer.getLayers());
+      // 再次判断图层组
+      const groupTileLayer = inject("groupTileLayer", null);
+      if (groupTileLayer) {
+        let layers = groupTileLayer.getLayers();
+        layers.push(wmsLayer);
+        groupTileLayer.addLayer(layers);
+        return;
+      }
       // 获取上级组件中的地图对象
       let maptalks = inject("maptalks", null);
       let map = maptalks.value;
@@ -150,17 +150,6 @@ export default defineComponent({
         wmsLayer = undefined;
       }
     };
-
-    const refsh = () => {
-      wmsLayer.getTileUrl = function (x, y, z) {
-          //replace with your own
-          //e.g. return a url pointing to your sqlite database
-          let url = WMSTileLayer.prototype.getTileUrl.call(this, x, y, z);
-          url += `&t=${new Date().getTime()}`;
-          // console.log(url);
-          return url;
-      }
-    }
 
     return {
       wmsLayer

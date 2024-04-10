@@ -58,9 +58,6 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    // 获取上级组件中的地图对象
-    let maptalks = inject("maptalks", null);
-    let map = maptalks.value;
     // 获取坐标系
     let proj = props.projection ? props.projection : "EPSG:4326";
     // 获取图层ID
@@ -79,36 +76,42 @@ export default defineComponent({
       maxZoom: props.maxZoom,
       zIndex: props.zIndex
     });
+    // 向组件传送初始化完毕的layer
+    context.emit("getLayer", tileLayer);
+
     // 监听瓦片图层ID
     watch(
       props.id,
       (newVal, oldVal) => {
-        if (tileLayer && tileLayer.isLoaded()) {
+        if (tileLayer && newVal) {
           tileLayer.setId(newVal);
         }
       },
       { immediate: true }
     );
+
     // 监听瓦片图层透明度
     watch(
       props.opacity,
       (newVal, oldVal) => {
-        if (tileLayer && tileLayer.isLoaded()) {
+        if (tileLayer && newVal) {
           tileLayer.setOpacity(newVal);
         }
       },
       { immediate: true }
     );
+
     // 监听瓦片图层高度
     watch(
       props.zIndex,
       (newVal, oldVal) => {
-        if (tileLayer && tileLayer.isLoaded()) {
+        if (tileLayer && newVal) {
           tileLayer.setZIndex(newVal);
         }
       },
       { immediate: true }
     );
+
     // 页面加载后执行
     onBeforeMount(() => {
       if (props.id && props.urlTemplate) {
@@ -126,20 +129,28 @@ export default defineComponent({
     // 添加瓦片图层
     const addTileLayer = () => {
       // 判断更多图层...
-      const groupGLLayer = inject("groupGLLayer");
+      const groupGLLayer = inject("groupGLLayer", null);
       // const groupTileLayer = inject("groupTileLayer");
       // 若是GL图层存在则优先添加到它里面
       if (groupGLLayer) {
         groupGLLayer.addLayer(tileLayer);
-      } else {
-        // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
-        if (map && map.isLoaded()) {
-          tileLayer.addTo(map);
-        }
+        return
+      } 
+      // 再次判断图层组
+      const groupTileLayer = inject("groupTileLayer", null);
+      if (groupTileLayer) {
+        let layers = groupTileLayer.getLayers();
+        layers.push(tileLayer);
+        groupTileLayer.addLayer(layers);
+        return;
       }
-      // 向组件传送初始化完毕的layer
-      if (tileLayer && tileLayer.isLoaded()) {
-        context.emit("getLayer", tileLayer);
+      // 获取上级组件中的地图对象
+      let maptalks = inject("maptalks", null);
+      let map = maptalks.value;
+      // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
+      if (map && map.isLoaded()) {
+        tileLayer.addTo(map);
+        return
       }
     };
 
