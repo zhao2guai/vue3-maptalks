@@ -93,7 +93,7 @@ export default defineComponent({
       // 获取地图对象
       let map = maptalks.value;
       // 判断更多图层...
-      const groupGLLayer = inject("groupGLLayer");
+      const groupGLLayer = inject("groupGLLayer", null);
       // 若是GL图层存在则优先添加到它里面
       if (groupGLLayer) {
         groupGLLayer.addLayer(groupTileLayer);
