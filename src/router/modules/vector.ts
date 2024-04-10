@@ -30,7 +30,15 @@ export default {
       component: () => import("@/views/examples/vector/index3.vue"),
       meta: {
         title: "白膜图层"
-      }
+      },
+    },
+    {
+      path: "/vector/index4",
+      name: "服务图层",
+      component: () => import("@/views/examples/vector/index4.vue"),
+      meta: {
+        title: "服务图层"
+      },
     }
   ]
 } satisfies RouteConfigsTable;
