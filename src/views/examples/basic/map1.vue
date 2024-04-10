@@ -1,23 +1,18 @@
 <template>
   <div v-loading="loading" class="map-content">
     <mt-init-map ref="mapRef" @getMap="getMap">
-      <mt-group-gl-layer
-        :terrainSwitch="true"
+      <mt-tianditu-layer
         tk="695a9bebe4c75d64d9cada2be2789425"
-      >
-        <mt-tianditu-layer
-          tk="695a9bebe4c75d64d9cada2be2789425"
-          layerType="img"
-        />
-        <mt-tianditu-layer
-          tk="695a9bebe4c75d64d9cada2be2789425"
-          layerType="cia"
-        />
-        <mt-tianditu-layer
-          tk="695a9bebe4c75d64d9cada2be2789425"
-          layerType="ibo"
-        />
-      </mt-group-gl-layer>
+        layerType="img"
+      />
+      <mt-tianditu-layer
+        tk="695a9bebe4c75d64d9cada2be2789425"
+        layerType="cia"
+      />
+      <mt-tianditu-layer
+        tk="695a9bebe4c75d64d9cada2be2789425"
+        layerType="ibo"
+      />
     </mt-init-map>
   </div>
 </template>

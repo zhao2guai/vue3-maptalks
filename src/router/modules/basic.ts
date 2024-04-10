@@ -10,10 +10,10 @@ export default {
   children: [
     {
       path: "/basic/map1",
-      name: "地图1",
+      name: "天地图",
       component: () => import("@/views/examples/basic/map1.vue"),
       meta: {
-        title: "地图1"
+        title: "天地图"
       }
     },
     {
