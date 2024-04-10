@@ -10,12 +10,12 @@
           layerType="img"
         />
         <mt-gltf-layer >
-          <mt-gltf-maker :point="[81.878822, 44.940405, 0]" :symbol="symbol" />
-          <mt-gltf-maker :point="[81.878822, 44.930405, 0]" :symbol="symbol1" />
-          <mt-gltf-maker :point="[81.878822, 44.950405, 0]" :symbol="symbol2" />
-          <mt-gltf-maker :point="[81.878822, 44.960405, 0]" :symbol="symbol3" />
-          <mt-gltf-maker :point="[81.868822, 44.940405, 0]" :symbol="symbol" />
-          <mt-gltf-maker :point="[81.858822, 44.940405, 0]" :symbol="symbol" />
+          <mt-gltf-maker :point="[81.878822, 44.940405]" :symbol="symbol" />
+          <mt-gltf-maker :point="[81.878822, 44.930405]" :symbol="symbol1" />
+          <mt-gltf-maker :point="[81.878822, 44.950405]" :symbol="symbol2" />
+          <mt-gltf-maker :point="[81.878822, 44.960405]" :symbol="symbol3" />
+          <mt-gltf-maker ref="houseMaker" :point="[81.868822, 44.940405]" :symbol="symbol4" />
+          <mt-gltf-maker :point="[81.858822, 44.940405]" :symbol="symbol" />
         </mt-gltf-layer>
       </mt-group-gl-layer>
     </mt-init-map>
@@ -112,13 +112,29 @@ let symbol3 = {
   scaleZ: 80
 }
 
+let symbol4 = {
+  url: new URL('@/maptalks/assets/gltf/farm/scene.gltf', import.meta.url), //模型的url	
+  visible: true, //模型是否可见	
+  translationL:	[0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+  rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+  scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数	
+  animation: true, //是否开启动画
+  loop: true, //是否开启动画循环
+  speed: 1, //动画速度倍数
+  fixSizeOnZoom: -1,//在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+  anchorZ: 'bottom', //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+  shadow: true, //是否开启阴影
+  bloom: true, //是否开启泛光	
+  shader: 'pbr', //模型绘制的shader，可选值：pbr, phong, wireframe
+  modelHeight: 40,
+  translationX: 280,
+  translationY: 80,
+  translationZ: 20,
+}
+
 function getMap(e) {
   map = e;
-  if (map.isLoaded()) {
-    setTimeout(() => {
-      loading.value = false;
-    }, 3000);
-  }
+  loading.value = false;
 }
 
 onMounted(() => {});

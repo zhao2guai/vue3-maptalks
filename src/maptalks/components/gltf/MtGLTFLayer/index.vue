@@ -25,7 +25,7 @@ export default defineComponent({
       default: () => ({
         attribution: "",
         minZoom: 1,
-        maxZoom: 20,
+        maxZoom: 18,
         visible: true,
         opacity: 1
         // ... 更多参照OverlayLayer文档
@@ -43,7 +43,7 @@ export default defineComponent({
     let id = props.id ? props.id : uuidv4().replace(/-/g, "");
 
     // 初始化gltf三维模型绘制图层
-    const gltfLayer = new GLTFLayer(props.id);
+    let gltfLayer = new GLTFLayer(props.id);
 
     // 判断如果含有图层配置
     if(props.options) {
@@ -83,7 +83,7 @@ export default defineComponent({
     const removeAll = () => {
       if(gltfLayer) {
         gltfLayer.clear();
-        gltfLayer.reomve();
+        gltfLayer.remove();
         gltfLayer = undefined;
       }
     };

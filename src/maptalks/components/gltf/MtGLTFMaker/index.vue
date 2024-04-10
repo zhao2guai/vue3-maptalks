@@ -38,12 +38,20 @@ export default defineComponent({
         shader: 'pbr', //模型绘制的shader，可选值：pbr, phong, wireframe
       })
     },
+    // 弹框
+    infoWindowOptions: {
+      type: Object,
+      default: () => ({
+        title    : 'This is a title',
+        content  : '<div style="color:#f00">This is content of the InfoWindow</div>'
+      })
+    }
   },
 
   setup(props, context) {
 
     // 初始化gltf三维模型绘制图层
-    const gltfMarker = new GLTFMarker(props.point, {
+    let gltfMarker = new GLTFMarker(props.point, {
       symbol: props.symbol
     });
 
@@ -80,7 +88,7 @@ export default defineComponent({
     // 移除地图gltf三维模型绘制图层
     const removeAll = () => {
       if(gltfMarker) {
-        gltfMarker.reomve();
+        gltfMarker.remove();
         gltfMarker = undefined;
       }
     };
