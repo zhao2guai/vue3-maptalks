@@ -1,6 +1,6 @@
 <template>
   <!-- 地图加载区域 -->
-  <div :id="container" ref="mapRef" class="maptalks-map">
+  <div :id="container" class="maptalks-map">
     <!-- 地图子组件插槽区域 -->
     <slot v-if="mapload" />
   </div>

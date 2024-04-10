@@ -97,12 +97,22 @@ export default defineComponent({
     // 将GL图层添加到注册组件中提供给子组件调用
     provide("groupGLLayer", groupGLLayer);
 
+    // 监听GL图层配置
+    watch(
+      () => props.options,
+      (newOptions, oldOptions) => {
+        if (groupGLLayer && newOptions) {
+          groupGLLayer.setOptions(newOptions);
+        }
+      },
+      { deep: true }
+    );
     // 监听GL场景配置
     watch(
       () => props.sceneConfig,
-      (newSceneConfig, oldSceneConfig) => {
-        if (groupGLLayer && newSceneConfig) {
-          groupGLLayer.setSceneConfig(newSceneConfig);
+      (newConfig, oldConfig) => {
+        if (groupGLLayer && newConfig) {
+          groupGLLayer.setSceneConfig(newConfig);
         }
       },
       { deep: true }
@@ -163,7 +173,10 @@ export default defineComponent({
     // 移除地图所有图层销毁地图组件
     const removeAll = () => {
       // 删除GL图层
-      if (groupGLLayer) groupGLLayer.remove();
+      if (groupGLLayer) {
+        groupGLLayer.remove();
+        groupGLLayer = undefined;
+      }
       // 获取上级组件中的地图对象
       let maptalks = inject("maptalks", null);
       let map = maptalks.value;

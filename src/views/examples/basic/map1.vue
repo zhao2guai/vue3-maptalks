@@ -9,6 +9,14 @@
           tk="695a9bebe4c75d64d9cada2be2789425"
           layerType="img"
         />
+        <mt-tianditu-layer
+          tk="695a9bebe4c75d64d9cada2be2789425"
+          layerType="cia"
+        />
+        <mt-tianditu-layer
+          tk="695a9bebe4c75d64d9cada2be2789425"
+          layerType="ibo"
+        />
       </mt-group-gl-layer>
     </mt-init-map>
   </div>
