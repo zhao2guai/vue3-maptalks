@@ -21,11 +21,6 @@ export default defineComponent({
       type: String,
       default: ""
     },
-    // 图层坐标系
-    projection: {
-      type: String,
-      default: "EPSG:4326"
-    },
     // 图层最小缩放距离
     minZoom: {
       type: Number,
@@ -45,36 +40,30 @@ export default defineComponent({
     zIndex: {
       type: Number,
       default: undefined
+    },
+    // 服务配置信息
+    options: {
+      type: Object,
+      default: () => ({
+        tileSystem: [1, -1, -180, 90],
+        spatialReference: {
+          projection: "EPSG:4326"
+        },
+        urlTemplate: "",
+        maxAvailableZoom: 18,
+        subdomains: ["1", "2", "3", "4", "5"]
+      })
     }
   },
 
   setup(props, context) {
     // 获取图层ID
     let id = props.id ? props.id : uuidv4().replace(/-/g, "");
-    // 获取坐标系
-    let proj = props.projection ? props.projection : "EPSG:4326";
     // 定义图层组组对象
-    let groupTileLayer = new GroupTileLayer(id, [], {
-      tileSystem: [1, -1, -180, 90],
-      spatialReference: {
-        projection: proj
-      },
-      maxAvailableZoom: 18,
-      subdomains: ["1", "2", "3", "4", "5"],
-      visible: props.visible,
-      opacity: props.opacity,
-      minZoom: props.minZoom,
-      maxZoom: props.maxZoom,
-      zIndex: props.zIndex
-    });
+    let groupTileLayer = new GroupTileLayer(id, [], props.options);
 
     // 将图层添加到注册组件中提供给子组件调用
     provide("groupTileLayer", groupTileLayer);
-
-    // 向组件传送初始化完毕的layer
-    if (groupTileLayer && groupTileLayer.isLoaded()) {
-      context.emit("getLayer", groupTileLayer);
-    }
 
     // 页面加载后执行
     onBeforeMount(() => {
@@ -97,11 +86,13 @@ export default defineComponent({
       // 若是GL图层存在则优先添加到它里面
       if (groupGLLayer) {
         groupGLLayer.addLayer(groupTileLayer);
+        context.emit("getLayer", groupTileLayer);
         return;
       }
       // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
       if (map && map.isLoaded()) {
         groupTileLayer.addTo(map);
+        context.emit("getLayer", groupTileLayer);
         return;
       }
     };

@@ -1,7 +1,7 @@
 <template>
   <div class="map-content">
     <mt-init-map tk="ec89e7ba91633b147f76d47e08f9f1a1">
-      <mt-group-tile-layer>
+      <mt-group-tile-layer @getLayer="getGroupLayer">
         <mt-tianditu-layer
           tk="ec89e7ba91633b147f76d47e08f9f1a1"
           layerType="img"
@@ -19,7 +19,22 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from "vue";
+
+let group = null;
+
+function getGroupLayer(e) {
+  group = e;
+  console.log(e);
+}
+
+onMounted(() => {});
+
+onBeforeUnmount(() => {
+  group = undefined;
+});
+</script>
 
 <style lang="scss" scoped>
 .map-content {

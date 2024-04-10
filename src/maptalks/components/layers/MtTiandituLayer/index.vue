@@ -145,23 +145,24 @@ export default defineComponent({
 
     // 添加天地图图层
     const addTileLayer = () => {
-      // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
-      if (map && map.isLoaded()) {
-        tileLayer.addTo(map);
-        return;
-      }
-      // 获取插槽的上级组件
-      const groupGLLayer = inject("groupGLLayer");
+      // 获取插槽的上级组件 (groupGLLayer优先插入其次groupTileLayer最后才是map)
+      const groupGLLayer = inject("groupGLLayer", null);
       // 若是GL图层存在则优先添加到它里面
       if (groupGLLayer) {
         groupGLLayer.addLayer(tileLayer);
         return;
       }
-      const groupTileLayer = inject("groupTileLayer");
+      // 再次判断图层组
+      const groupTileLayer = inject("groupTileLayer", null);
       if (groupTileLayer) {
         let layers = groupTileLayer.getLayers();
         layers.push(tileLayer);
         groupTileLayer.addLayer(layers);
+        return;
+      }
+      // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
+      if (map && map.isLoaded()) {
+        tileLayer.addTo(map);
         return;
       }
     };

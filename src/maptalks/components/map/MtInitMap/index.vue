@@ -39,7 +39,7 @@ export default defineComponent({
         minZoom: 1,
         maxZoom: 18,
         bearing: 0,
-        pitch: 0,
+        pitch: 45,
         // 是否显示中心十字
         centerCross: false,
         // 是否使用无缝缩放模式

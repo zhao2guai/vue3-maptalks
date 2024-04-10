@@ -3,19 +3,11 @@
     <mt-init-map ref="mapRef" @getMap="getMap">
       <mt-group-gl-layer
         :terrainSwitch="true"
-        tk="ec89e7ba91633b147f76d47e08f9f1a1"
+        tk="695a9bebe4c75d64d9cada2be2789425"
       >
         <mt-tianditu-layer
-          tk="ec89e7ba91633b147f76d47e08f9f1a1"
+          tk="695a9bebe4c75d64d9cada2be2789425"
           layerType="img"
-        />
-        <mt-tianditu-layer
-          tk="ec89e7ba91633b147f76d47e08f9f1a1"
-          layerType="cia"
-        />
-        <mt-tianditu-layer
-          tk="ec89e7ba91633b147f76d47e08f9f1a1"
-          layerType="ibo"
         />
       </mt-group-gl-layer>
     </mt-init-map>
