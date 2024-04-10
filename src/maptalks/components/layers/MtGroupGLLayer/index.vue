@@ -12,6 +12,7 @@ import {
   defineComponent
 } from "vue";
 import { GroupGLLayer } from "@maptalks/gl-layers";
+import { v4 as uuidv4 } from "uuid";
 import { tiandituApi } from "@/maptalks/config/tianditu.js";
 export default defineComponent({
   /** 初始化webgl图层组件 */
@@ -82,8 +83,10 @@ export default defineComponent({
   },
 
   setup(props, context) {
+    // 获取图层ID
+    let id = props.id ? props.id : uuidv4().replace(/-/g, "");
     // 定义GL图层组对象
-    let groupGLLayer = new GroupGLLayer(props.id, []);
+    let groupGLLayer = new GroupGLLayer(id, []);
     if (props.options) {
       groupGLLayer.setOptions(props.options);
     }
@@ -143,7 +146,7 @@ export default defineComponent({
         // 将GL图层添加至地图
         groupGLLayer.addTo(map);
         // 将GL图层组ID存储在map对象中
-        map.config("groupId", props.id);
+        map.config("groupId", id);
         // 回调方法
         context.emit("getLayer", groupGLLayer);
       }
