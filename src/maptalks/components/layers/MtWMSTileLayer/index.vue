@@ -7,7 +7,7 @@
 <script>
 import { defineComponent, inject, onBeforeUnmount, onBeforeMount, watch } from "vue";
 import { v4 as uuidv4 } from "uuid";
-import { WMSTileLayer } from "maptalks";
+import { WMSTileLayer, ui } from "maptalks";
 
 export default defineComponent({
   /** 初始化webgl图层组件 */

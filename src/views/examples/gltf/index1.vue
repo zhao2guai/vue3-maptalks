@@ -14,7 +14,7 @@
           <mt-gltf-maker :point="[81.878822, 44.930405]" :symbol="symbol1" />
           <mt-gltf-maker :point="[81.878822, 44.950405]" :symbol="symbol2" />
           <mt-gltf-maker :point="[81.878822, 44.960405]" :symbol="symbol3" />
-          <mt-gltf-maker ref="houseMaker" :point="[81.868822, 44.940405]" :symbol="symbol4" />
+          <mt-gltf-maker ref="houseMaker" :point="[81.868822, 44.940405]" :symbol="symbol4" :infoWindowOptions="infoWindowOptions"/>
           <mt-gltf-maker :point="[81.858822, 44.940405]" :symbol="symbol" />
         </mt-gltf-layer>
       </mt-group-gl-layer>
@@ -127,9 +127,17 @@ let symbol4 = {
   bloom: true, //是否开启泛光	
   shader: 'pbr', //模型绘制的shader，可选值：pbr, phong, wireframe
   modelHeight: 40,
-  translationX: 280,
-  translationY: 80,
   translationZ: 20,
+}
+
+let infoWindowOptions = {
+  custom : true,
+  content: '<div class="infocontent" ref="infoWindowRef">' +
+        '<div class="infopop_title">Custom InfoWindow</div>' +
+        '<div class="infopop_time">' + new Date().toLocaleTimeString() + '</div><br>' +
+        '<div class="infopop_dept">' + '</div>' +
+        '<div class="infoarrow"></div>' +
+        '</div>'
 }
 
 function getMap(e) {
@@ -155,6 +163,5 @@ onBeforeUnmount(() => {
   width: 100%;
   height: calc(100vh - 86px);
   overflow: hidden;
-  
 }
 </style>
