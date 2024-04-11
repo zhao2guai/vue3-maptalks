@@ -13,7 +13,7 @@ import {
 } from "vue";
 import { GroupGLLayer } from "@maptalks/gl-layers";
 import { v4 as uuidv4 } from "uuid";
-import { tiandituApi } from "@/maptalks/config/tianditu.js";
+import { tiandituApi } from "./tianditu.ts";
 export default defineComponent({
   /** 初始化webgl图层组件 */
   name: "mt-group-gl-layer",

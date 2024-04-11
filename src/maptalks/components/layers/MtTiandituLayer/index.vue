@@ -11,7 +11,7 @@ import {
 } from "vue";
 import { v4 as uuidv4 } from "uuid";
 import { TileLayer } from "maptalks";
-import { tiandituApi } from "@/maptalks/config/tianditu.js";
+import { tiandituApi } from "./tianditu.ts";
 export default defineComponent({
   /** 初始化天地图图层组件 */
   name: "mt-tianditu-layer",
