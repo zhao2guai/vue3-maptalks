@@ -5,14 +5,19 @@
 </template>
 
 <script>
-import { defineComponent, inject, onBeforeUnmount, onBeforeMount, watch } from "vue";
+import {
+  defineComponent,
+  inject,
+  onBeforeUnmount,
+  onBeforeMount,
+  watch
+} from "vue";
 import { v4 as uuidv4 } from "uuid";
-import { WMSTileLayer, ui } from "maptalks";
-
+import { WMSTileLayer } from "maptalks";
+import TileLayerModel from "./TileLayerModel.js";
 export default defineComponent({
-  /** 初始化webgl图层组件 */
+  /** 初始化WMS图层组件 */
   name: "mt-wms-tile-layer",
-
   props: {
     // tile图层id
     id: {
@@ -56,7 +61,7 @@ export default defineComponent({
         version: "1.1.0",
         format: "image/png",
         transparent: true,
-        uppercase: true,
+        uppercase: true
       })
     }
   },
@@ -68,9 +73,36 @@ export default defineComponent({
     let id = props.id ? props.id : uuidv4().replace(/-/g, "");
     // 接收图层配置信息并初始化图层对象
     let wmsLayer = new WMSTileLayer(id, props.options);
-
+    // 设置ol数据源参数
+    let properties = {
+      url: props.options.urlTemplate,
+      params: {
+        CQL_FILTER: "1=1"
+      },
+      layers: props.options.layers,
+      styles: props.options.styles,
+      projection: proj
+    };
+    // 同步创建一个ol的图层对象
+    let olTileLayer = new TileLayerModel({
+      // 设置图层主键
+      id: uuidv4().replace(/-/g, ""),
+      // 载入地图默认启用
+      visible: true,
+      // 设置图层透明度
+      opacity: 1,
+      // 此层可见的最小视图缩放级别（独占）
+      minZoom: 1,
+      // 此层可见的最大视图缩放级别（独占）
+      maxZoom: 18,
+      // 设置图层扩展参数
+      properties: properties
+    });
+    console.log(olTileLayer);
     // 监听瓦片图层ID
-    watch(() => props.id, (newId) => {
+    watch(
+      () => props.id,
+      newId => {
         if (wmsLayer && newId) {
           wmsLayer.setId(newId);
         }
@@ -79,7 +111,9 @@ export default defineComponent({
     );
 
     // 监听瓦片图层透明度
-    watch(() => props.opacity, (newOpacity) => {
+    watch(
+      () => props.opacity,
+      newOpacity => {
         if (wmsLayer && newOpacity) {
           wmsLayer.setOpacity(newOpacity);
         }
@@ -88,7 +122,9 @@ export default defineComponent({
     );
 
     // 监听瓦片图层高度
-    watch(() => props.zIndex, (newZIndex) => {
+    watch(
+      () => props.zIndex,
+      newZIndex => {
         if (wmsLayer && newZIndex) {
           wmsLayer.setZIndex(newZIndex);
         }
@@ -97,17 +133,20 @@ export default defineComponent({
     );
 
     // 监听服务配置信息
-    watch(() => props.options, (newOptions) => {
-      if(wmsLayer && newOptions) {
-        wmsLayer.setOptions(newOptions);
-        wmsLayer.forceReload();
-      }
-    }, {deep: true})
+    watch(
+      () => props.options,
+      newOptions => {
+        if (wmsLayer && newOptions) {
+          wmsLayer.setOptions(newOptions);
+          wmsLayer.forceReload();
+        }
+      },
+      { deep: true }
+    );
 
     // 页面加载后执行
     onBeforeMount(() => {
       addwmsLayer();
-
     });
 
     // 页面元素销毁之前执行
@@ -115,14 +154,14 @@ export default defineComponent({
       removeAll();
     });
 
-     // 添加瓦片图层
+    // 添加瓦片图层
     const addwmsLayer = () => {
       // 判断更多图层...
       const groupGLLayer = inject("groupGLLayer", null);
       // 若是GL图层存在则优先添加到它里面
       if (groupGLLayer) {
         groupGLLayer.addLayer(wmsLayer);
-        return
+        return;
       }
       // 再次判断图层组
       const groupTileLayer = inject("groupTileLayer", null);
@@ -138,7 +177,7 @@ export default defineComponent({
       // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
       if (map && map.isLoaded()) {
         wmsLayer.addTo(map);
-        return
+        return;
       }
     };
 
@@ -149,15 +188,18 @@ export default defineComponent({
         wmsLayer.remove();
         wmsLayer = undefined;
       }
+      // 销毁ol图层对象和参数
+      if (olTileLayer) {
+        properties = undefined;
+        olTileLayer = undefined;
+      }
     };
 
     return {
       wmsLayer
-    }
+    };
   }
-})
+});
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
