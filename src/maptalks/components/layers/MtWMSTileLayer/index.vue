@@ -10,11 +10,12 @@ import {
   inject,
   onBeforeUnmount,
   onBeforeMount,
-  watch
+  watch,
+  ref
 } from "vue";
 import { v4 as uuidv4 } from "uuid";
-import { WMSTileLayer } from "maptalks";
-import TileLayerModel from "./TileLayerModel.js";
+import { WMSTileLayer, ui } from "maptalks";
+import TileLayerModel from "./TileLayerModel.js"
 export default defineComponent({
   /** 初始化WMS图层组件 */
   name: "mt-wms-tile-layer",
@@ -63,6 +64,11 @@ export default defineComponent({
         transparent: true,
         uppercase: true
       })
+    },
+    // 是否开启要素识别
+    isFeatureInfo: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -73,6 +79,7 @@ export default defineComponent({
     let id = props.id ? props.id : uuidv4().replace(/-/g, "");
     // 接收图层配置信息并初始化图层对象
     let wmsLayer = new WMSTileLayer(id, props.options);
+
     // 设置ol数据源参数
     let properties = {
       url: props.options.urlTemplate,
@@ -83,22 +90,12 @@ export default defineComponent({
       styles: props.options.styles,
       projection: proj
     };
-    // 同步创建一个ol的图层对象
-    let olTileLayer = new TileLayerModel({
-      // 设置图层主键
-      id: uuidv4().replace(/-/g, ""),
-      // 载入地图默认启用
-      visible: true,
-      // 设置图层透明度
-      opacity: 1,
-      // 此层可见的最小视图缩放级别（独占）
-      minZoom: 1,
-      // 此层可见的最大视图缩放级别（独占）
-      maxZoom: 18,
-      // 设置图层扩展参数
-      properties: properties
-    });
-    console.log(olTileLayer);
+    let olTileLayer = ref(null);
+
+    // 获取上级组件中的地图对象
+    let maptalks = inject("maptalks", null);
+    let map = maptalks.value;
+
     // 监听瓦片图层ID
     watch(
       () => props.id,
@@ -147,6 +144,7 @@ export default defineComponent({
     // 页面加载后执行
     onBeforeMount(() => {
       addwmsLayer();
+      initOlTileLayer();
     });
 
     // 页面元素销毁之前执行
@@ -171,13 +169,30 @@ export default defineComponent({
         groupTileLayer.addLayer(layers);
         return;
       }
-      // 获取上级组件中的地图对象
-      let maptalks = inject("maptalks", null);
-      let map = maptalks.value;
       // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
       if (map && map.isLoaded()) {
         wmsLayer.addTo(map);
         return;
+      }
+    };
+
+    const initOlTileLayer = () => {
+      if(props.isFeatureInfo && wmsLayer) {
+        // 同步创建一个ol的图层对象
+        olTileLayer.value = new TileLayerModel({
+          // 设置图层主键
+          id: uuidv4().replace(/-/g, ""),
+          // 载入地图默认启用
+          visible: true,
+          // 设置图层透明度
+          opacity: 1,
+          // 此层可见的最小视图缩放级别（独占）
+          minZoom: 1,
+          // 此层可见的最大视图缩放级别（独占）
+          maxZoom: 18,
+          // 设置图层扩展参数
+          properties: properties
+        });
       }
     };
 
@@ -189,14 +204,20 @@ export default defineComponent({
         wmsLayer = undefined;
       }
       // 销毁ol图层对象和参数
-      if (olTileLayer) {
+      if (olTileLayer.value) {
         properties = undefined;
-        olTileLayer = undefined;
+        olTileLayer.value = undefined;
       }
     };
 
+    const getOlLayer = () => {
+      return olTileLayer.value;
+    }
+
     return {
-      wmsLayer
+      wmsLayer,
+      getOlLayer,
+      proj
     };
   }
 });
