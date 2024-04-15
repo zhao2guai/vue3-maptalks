@@ -98,10 +98,10 @@ export default defineComponent({
 
     // 监听瓦片图层ID
     watch(
-      props.id,
-      (newVal, oldVal) => {
-        if (tileLayer && newVal) {
-          tileLayer.setId(newVal);
+      () => props.id,
+      newId => {
+        if (tileLayer && newId) {
+          tileLayer.setId(newId);
         }
       },
       { immediate: true }
@@ -109,21 +109,21 @@ export default defineComponent({
 
     // 监听瓦片图层透明度
     watch(
-      props.opacity,
-      (newVal, oldVal) => {
-        if (tileLayer && newVal) {
-          tileLayer.setOpacity(newVal);
+      () => props.opacity, 
+      newOpacity => {
+        if (tileLayer && newOpacity) {
+          tileLayer.setOpacity(newOpacity);
         }
       },
       { immediate: true }
-    );
+    )
 
     // 监听瓦片图层高度
     watch(
-      props.zIndex,
-      (newVal, oldVal) => {
-        if (tileLayer && newVal) {
-          tileLayer.setZIndex(newVal);
+      () => props.zIndex,
+      newZIndex => {
+        if (tileLayer && newZIndex) {
+          tileLayer.setZIndex(newZIndex);
         }
       },
       { immediate: true }
