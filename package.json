@@ -1,5 +1,5 @@
 {
-  "name": "vue3-maptalks-plugin",
+  "name": "@zhao2guai/vue3-maptalks",
   "version": "0.1.0",
   "private": true,
   "type": "module",
