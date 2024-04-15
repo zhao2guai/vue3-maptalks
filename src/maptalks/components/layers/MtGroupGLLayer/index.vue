@@ -12,7 +12,7 @@ import {
   defineComponent
 } from "vue";
 import { GroupGLLayer } from "@maptalks/gl-layers";
-import { v4 as uuidv4 } from "uuid";
+import { buildUUID } from "@pureadmin/utils";
 import { tiandituApi } from "./tianditu.ts";
 export default defineComponent({
   /** 初始化webgl图层组件 */
@@ -84,7 +84,7 @@ export default defineComponent({
 
   setup(props, context) {
     // 获取图层ID
-    let id = props.id ? props.id : uuidv4().replace(/-/g, "");
+    let id = props.id ? props.id : buildUUID();
     // 定义GL图层组对象
     let groupGLLayer = new GroupGLLayer(id, []);
     if (props.options) {

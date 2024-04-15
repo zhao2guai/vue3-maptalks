@@ -13,9 +13,9 @@ import {
   watch,
   ref
 } from "vue";
-import { v4 as uuidv4 } from "uuid";
+import { buildUUID } from "@pureadmin/utils";
 import { WMSTileLayer, ui } from "maptalks";
-import TileLayerModel from "./TileLayerModel.js"
+import TileLayerModel from "./TileLayerModel.js";
 export default defineComponent({
   /** 初始化WMS图层组件 */
   name: "mt-wms-tile-layer",
@@ -76,7 +76,7 @@ export default defineComponent({
     // 获取坐标系
     let proj = props.options.crs ? props.options.crs : "EPSG:4326";
     // 获取图层ID
-    let id = props.id ? props.id : uuidv4().replace(/-/g, "");
+    let id = props.id ? props.id : buildUUID();
     // 接收图层配置信息并初始化图层对象
     let wmsLayer = new WMSTileLayer(id, props.options);
 
@@ -90,6 +90,7 @@ export default defineComponent({
       styles: props.options.styles,
       projection: proj
     };
+    // openlayers图层对象
     let olTileLayer = ref(null);
 
     // 获取上级组件中的地图对象
@@ -177,11 +178,11 @@ export default defineComponent({
     };
 
     const initOlTileLayer = () => {
-      if(props.isFeatureInfo && wmsLayer) {
+      if (props.isFeatureInfo && wmsLayer) {
         // 同步创建一个ol的图层对象
         olTileLayer.value = new TileLayerModel({
           // 设置图层主键
-          id: uuidv4().replace(/-/g, ""),
+          id: buildUUID(),
           // 载入地图默认启用
           visible: true,
           // 设置图层透明度
@@ -210,12 +211,14 @@ export default defineComponent({
       }
     };
 
+    // 获取openlayers瓦片图层方法
     const getOlLayer = () => {
       return olTileLayer.value;
-    }
+    };
 
     return {
       wmsLayer,
+      olTileLayer,
       getOlLayer,
       proj
     };

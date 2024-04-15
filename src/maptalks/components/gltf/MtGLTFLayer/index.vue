@@ -5,8 +5,15 @@
 </template>
 
 <script>
-import { defineComponent, inject, onBeforeUnmount, onBeforeMount, watch, provide } from "vue";
-import { v4 as uuidv4 } from "uuid";
+import {
+  defineComponent,
+  inject,
+  onBeforeUnmount,
+  onBeforeMount,
+  watch,
+  provide
+} from "vue";
+import { buildUUID } from "@pureadmin/utils";
 import { GLTFLayer } from "@maptalks/gl-layers";
 
 export default defineComponent({
@@ -40,18 +47,18 @@ export default defineComponent({
 
   setup(props, context) {
     // 获取图层ID
-    let id = props.id ? props.id : uuidv4().replace(/-/g, "");
+    let id = props.id ? props.id : buildUUID();
 
     // 初始化gltf三维模型绘制图层
     let gltfLayer = new GLTFLayer(props.id);
 
     // 判断如果含有图层配置
-    if(props.options) {
+    if (props.options) {
       gltfLayer.setOptions(props.options);
     }
 
     // 判断是否含有图层样式
-    if(props.style.length > 0) {
+    if (props.style.length > 0) {
       gltfLayer.setStyle(props.style);
     }
 
@@ -75,13 +82,13 @@ export default defineComponent({
       // 若是GL图层存在则优先添加到它里面
       if (groupGLLayer) {
         groupGLLayer.addLayer(gltfLayer);
-        return
+        return;
       }
     };
 
     // 移除地图gltf三维模型绘制图层
     const removeAll = () => {
-      if(gltfLayer) {
+      if (gltfLayer) {
         gltfLayer.clear();
         gltfLayer.remove();
         gltfLayer = undefined;
@@ -90,12 +97,9 @@ export default defineComponent({
 
     return {
       gltfLayer
-    }
+    };
   }
-})
-
+});
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

@@ -15,7 +15,7 @@ import {
   nextTick
 } from "vue";
 import { GLTFMarker } from "@maptalks/gl-layers";
-import { v4 as uuidv4 } from "uuid";
+import { buildUUID } from "@pureadmin/utils";
 
 export default defineComponent({
   /** 初始化webgl图层组件 */
@@ -64,7 +64,7 @@ export default defineComponent({
 
   setup(props, context) {
     // 获取点ID
-    let id = props.id ? props.id : uuidv4().replace(/-/g, "");
+    let id = props.id ? props.id : buildUUID();
 
     // 初始化gltf三维模型绘制图层
     let gltfMarker = new GLTFMarker(props.point, {

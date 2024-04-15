@@ -9,7 +9,7 @@ import {
   watch,
   defineComponent
 } from "vue";
-import { v4 as uuidv4 } from "uuid";
+import { buildUUID } from "@pureadmin/utils";
 import { TileLayer } from "maptalks";
 import { tiandituApi } from "./tianditu.ts";
 export default defineComponent({
@@ -66,7 +66,7 @@ export default defineComponent({
     // 获取图层类型
     let type = props.layerType ? props.layerType : "img";
     // 获取图层ID
-    let id = props.id ? props.id : uuidv4().replace(/-/g, "");
+    let id = props.id ? props.id : buildUUID();
     // 获取天地图URL
     let url = "";
     if (type === "vec") url = tiandituApi.getUrlByVecc(props.tk);
@@ -109,14 +109,14 @@ export default defineComponent({
 
     // 监听瓦片图层透明度
     watch(
-      () => props.opacity, 
+      () => props.opacity,
       newOpacity => {
         if (tileLayer && newOpacity) {
           tileLayer.setOpacity(newOpacity);
         }
       },
       { immediate: true }
-    )
+    );
 
     // 监听瓦片图层高度
     watch(

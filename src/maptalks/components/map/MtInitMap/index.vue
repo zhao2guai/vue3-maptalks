@@ -5,19 +5,20 @@
     <slot v-if="mapload" />
   </div>
 </template>
-<script>
+<script lang="ts">
 import {
   ref,
   shallowRef,
+  watch,
   provide,
   nextTick,
-  onBeforeUnmount,
-  onBeforeMount,
-  watch,
+  onMounted,
+  onUnmounted,
   defineComponent
 } from "vue";
 import "maptalks/dist/maptalks.css";
 import { Map } from "maptalks";
+import { buildUUID } from "@pureadmin/utils";
 export default defineComponent({
   /** 初始化地图组件 */
   name: "mt-tianditu-map",
@@ -97,12 +98,17 @@ export default defineComponent({
   },
 
   setup(props, context) {
+    // 获取图层ID
+    const container: String = props.container ? props.container : buildUUID();
     // 地图对象
-    let map = undefined;
+    let map: Map = undefined;
     // 地图加载状态
     let mapload = ref(false);
     // 地图对象存储
     let maptalks = shallowRef(null);
+
+    // 存储全局属性和方法
+    provide("maptalks", maptalks);
 
     // 监听地图配置
     watch(
@@ -126,28 +132,24 @@ export default defineComponent({
       { deep: true }
     );
 
-    // 页面加载后执行
-    onBeforeMount(() => {
+    // 页面组件挂载完成后执行
+    onMounted(() => {
       nextTick(() => {
-        if (props.container) {
-          initMap();
-        } else {
-          console.error("当前地图绑定的HTMLElement容器的ID为空！");
-        }
+        initMap();
       });
     });
 
     // 页面元素销毁之前执行
-    onBeforeUnmount(() => {
+    onUnmounted(() => {
       removeAll();
     });
 
     // 初始化地图容器
     const initMap = () => {
       // 加载地图配置参数
-      map = new Map(props.container, props.options);
+      map = new Map(container, props.options);
       // 获取坐标系
-      const proj = map.getProjection().code;
+      const proj: String = map.getProjection().code;
       // 设置地图范围
       map.setSpatialReference({
         projection: proj ? proj : "EPSG:4326",
@@ -166,8 +168,8 @@ export default defineComponent({
     };
 
     // 获取地图范围
-    const getResolutions = num => {
-      const resolutions = [];
+    const getResolutions = (num: number) => {
+      const resolutions = <Array[any]>[];
       let zoom = num > 0 ? num : 19;
       for (let i = 0; i < zoom; i++) {
         resolutions[i] = 180 / (Math.pow(2, i) * 128);
@@ -187,15 +189,10 @@ export default defineComponent({
       }
     };
 
-    // 存储全局属性和方法
-    provide("maptalks", maptalks);
-
     return {
       map,
       mapload,
-      maptalks,
-      initMap,
-      removeAll
+      maptalks
     };
   }
 });

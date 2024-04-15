@@ -13,11 +13,11 @@ import {
   watch,
   ref
 } from "vue";
-import { VectorTileLayer } from '@maptalks/gl-layers';
-import { v4 as uuidv4 } from "uuid";
+import { VectorTileLayer } from "@maptalks/gl-layers";
+import { buildUUID } from "@pureadmin/utils";
 export default defineComponent({
   // 初始化矢量瓦片图层
-  name: 'mt-vector-tile-layer',
+  name: "mt-vector-tile-layer",
 
   props: {
     // 矢量瓦片图层id
@@ -29,16 +29,15 @@ export default defineComponent({
     options: {
       type: Object,
       default: () => ({
-        urlTemplate: '',
+        urlTemplate: "",
         style: []
       })
     }
   },
 
-
   setup(props, context) {
     // 获取图层ID
-    let id = props.id ? props.id : uuidv4().replace(/-/g, "");
+    let id = props.id ? props.id : buildUUID();
 
     // 接收图层配置信息并初始化图层对象
     let layer = new VectorTileLayer(id, props.options);
@@ -57,7 +56,7 @@ export default defineComponent({
     watch(
       () => props.options,
       newOptions => {
-        if(layer && newOptions) {
+        if (layer && newOptions) {
           layer.setOptions(newOptions);
         }
       },
@@ -86,15 +85,15 @@ export default defineComponent({
     };
 
     const removeAll = () => {
-      if(layer) {
+      if (layer) {
         layer.reomve();
         layer = undefined;
       }
-    }
+    };
 
     return {
       layer
-    }
+    };
   }
-})
+});
 </script>

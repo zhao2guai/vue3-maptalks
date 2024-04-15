@@ -10,7 +10,7 @@ import {
   watch,
   defineComponent
 } from "vue";
-import { v4 as uuidv4 } from "uuid";
+import { buildUUID } from "@pureadmin/utils";
 import { GroupTileLayer } from "maptalks";
 export default defineComponent({
   /** 初始化图层组件 */
@@ -58,7 +58,7 @@ export default defineComponent({
 
   setup(props, context) {
     // 获取图层ID
-    let id = props.id ? props.id : uuidv4().replace(/-/g, "");
+    let id = props.id ? props.id : buildUUID();
     // 定义图层组组对象
     let groupTileLayer = new GroupTileLayer(id, [], props.options);
 

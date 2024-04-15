@@ -9,7 +9,7 @@ import {
   watch,
   defineComponent
 } from "vue";
-import { v4 as uuidv4 } from "uuid";
+import { buildUUID } from "@pureadmin/utils";
 import { TileLayer } from "maptalks";
 export default defineComponent({
   /** 初始化webgl图层组件 */
@@ -61,7 +61,7 @@ export default defineComponent({
     // 获取坐标系
     let proj = props.projection ? props.projection : "EPSG:4326";
     // 获取图层ID
-    let id = props.id ? props.id : uuidv4().replace(/-/g, "");
+    let id = props.id ? props.id : buildUUID();
     // 接收图层配置信息并初始化图层对象
     let tileLayer = new TileLayer(id, {
       tileSystem: [1, -1, -180, 90],
@@ -134,8 +134,8 @@ export default defineComponent({
       // 若是GL图层存在则优先添加到它里面
       if (groupGLLayer) {
         groupGLLayer.addLayer(tileLayer);
-        return
-      } 
+        return;
+      }
       // 再次判断图层组
       const groupTileLayer = inject("groupTileLayer", null);
       if (groupTileLayer) {
@@ -150,7 +150,7 @@ export default defineComponent({
       // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
       if (map && map.isLoaded()) {
         tileLayer.addTo(map);
-        return
+        return;
       }
     };
 

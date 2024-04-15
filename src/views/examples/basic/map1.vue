@@ -26,9 +26,7 @@ let map = null;
 function getMap(e) {
   map = e;
   if (map.isLoaded()) {
-    setTimeout(() => {
-      loading.value = false;
-    }, 3000);
+    loading.value = false;
   }
 }
 
