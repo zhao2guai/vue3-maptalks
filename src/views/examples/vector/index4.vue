@@ -91,6 +91,10 @@ onBeforeUnmount(() => {
 
 // 图层点击事件
 const singleclick = (e) => {
+  if(infoWindow) {
+    infoWindow.remove();
+    infoWindow = undefined;
+  }
     let coordinate = {};
     coordinate.x = e.coordinate.x;
     coordinate.y = e.coordinate.y;
@@ -119,9 +123,6 @@ const getMapServeData = (url, coordinate) => {
         content: "所属地区：" + properties.region_code + '</br>项目编号：' + properties.xmbh + '</br>项目面积（亩）：' + properties.xmmj_m
       });
       infoWindow.addTo(map).show(coordinate);
-    } else {
-      infoWindow.remove();
-      infoWindow = undefined;
     }
   })
 }
