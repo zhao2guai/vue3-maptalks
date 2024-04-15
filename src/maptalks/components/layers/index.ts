@@ -11,6 +11,7 @@ import MtTileLayer from "./MtTileLayer/index.vue";
 import MtTiandituLayer from "./MtTiandituLayer/index.vue";
 import MtGroupTileLayer from "./MtGroupTileLayer/index.vue";
 import MtWMSTileLayer from "./MtWMSTileLayer/index.vue";
+import MtVectorTileLayer from "./MtVectorTileLayer/index.vue";
 
 function install(app: App) {
   // webgl图层集合的管理和融合类
@@ -23,6 +24,8 @@ function install(app: App) {
   app.component("mt-group-tile-layer", MtGroupTileLayer);
   // 服务图层
   app.component('mt-wms-tile-layer', MtWMSTileLayer);
+  // 矢量瓦片图层
+  app.component('mt-vector-tile-layer', MtVectorTileLayer);
 }
 
 export default install;
@@ -33,5 +36,6 @@ export {
   MtTileLayer,
   MtTiandituLayer,
   MtGroupTileLayer,
-  MtWMSTileLayer
+  MtWMSTileLayer,
+  MtVectorTileLayer
 };
