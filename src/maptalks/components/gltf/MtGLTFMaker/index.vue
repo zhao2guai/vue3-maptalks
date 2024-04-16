@@ -124,31 +124,30 @@ export default defineComponent({
       // 若是GLTF图层存在则添加到它里面
       if (gltfLayer) {
         gltfLayer.addGeometry(gltfMarker);
-        addMouseenter();
-        addMouseout();
-        addClick();
         return;
       }
     };
 
-    // 获取
-
     // 给点添加鼠标点击事件
-    const addClick = () => {
-      gltfMarker.on("click", () => {
-        gltfMarker.openInfoWindow(gltfMarker.getCoordinates());
-      });
-    };
+    gltfMarker.on("click", () => {
+      gltfMarker.openInfoWindow(gltfMarker.getCoordinates());
+      context.emit("click");
+    });
 
     // 给点添加鼠标移入事件
-    const addMouseenter = () => {
-      gltfMarker.on("mouseenter", gltfMarkerMouseenter);
-    };
+    gltfMarker.on("mouseenter", () => {
+      gltfMarker.setUniform("polygonFill", [0, 1, 1, 1.0]);
+      context.emit("mouseenter");
+    });
 
     // 给点添加鼠标移出事件
-    const addMouseout = () => {
-      gltfMarker.on("mouseout", gltfMarkerMouseout);
-    };
+    gltfMarker.on("mouseout", () => {
+      gltfMarker.setUniform("polygonFill", [1, 1, 1, 1.0]);
+      context.emit("mouseout");
+    });
+
+    // 添加load事件
+    gltfMarker.on("load", event => context.emit("load", event));
 
     // 移除地图gltf三维模型绘制图层
     const removeAll = () => {
@@ -156,16 +155,6 @@ export default defineComponent({
         gltfMarker.remove();
         gltfMarker = undefined;
       }
-    };
-
-    // 点的鼠标移入事件
-    const gltfMarkerMouseenter = e => {
-      gltfMarker.setUniform("polygonFill", [0, 1, 1, 1.0]);
-    };
-
-    // 点的鼠标移出事件
-    const gltfMarkerMouseout = e => {
-      gltfMarker.setUniform("polygonFill", [1, 1, 1, 1.0]);
     };
 
     return {
