@@ -1,7 +1,7 @@
 {
   "name": "@zhao2guai/vue3-maptalks",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "private": false,
   "type": "module",
   "scripts": {
     "dev": "NODE_OPTIONS=--max-old-space-size=4096 vite",
@@ -22,10 +22,10 @@
     "preinstall": "npx only-allow pnpm"
   },
   "keywords": [
-    "vue-pure-admin",
-    "element-plus",
+    "@zhao2guai/vue3-maptalks",
+    "maptalks",
+    "vue3-maptalks",
     "tailwindcss",
-    "pure-admin",
     "typescript",
     "pinia",
     "vue3",
@@ -42,11 +42,7 @@
     "url": "https://https://gitee.com/zhao2guai/vue3-maptalks/issues"
   },
   "license": "MIT",
-  "author": {
-    "name": "zhao2guai",
-    "email": "1090685714@qq.com",
-    "url": "https://gitee.com/zhao2guai"
-  },
+  "author": "zhao2guai <1090685714@qq.com> (https://gitee.com/zhao2guai)",
   "dependencies": {
     "@maptalks/gl-layers": "^0.34.1",
     "@maptalks/transcoders.crn": "^0.97.4",
@@ -146,5 +142,6 @@
       "stable": "*",
       "abab": "*"
     }
-  }
+  },
+  "description": "<h1>基于maptalks api开发的 vue3 地图组件</h1>"
 }
