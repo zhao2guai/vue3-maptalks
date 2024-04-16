@@ -21,7 +21,7 @@ import { Map } from "maptalks";
 import { buildUUID } from "@pureadmin/utils";
 export default defineComponent({
   /** 初始化地图组件 */
-  name: "mt-tianditu-map",
+  name: "mt-init-map",
   props: {
     // 绑定地图dom的id
     container: {
@@ -48,7 +48,9 @@ export default defineComponent({
         // 是否启用地图缩放
         zoomable: true,
         // 是否禁用贴图拖动
-        draggable: true
+        draggable: true,
+        // 地图左下角署名
+        attribution: false
       })
     },
     // 光照配置
@@ -113,7 +115,7 @@ export default defineComponent({
     // 监听地图配置
     watch(
       () => props.options,
-      (newOptions, oldOptions) => {
+      (newOptions: any) => {
         if (map && map.isLoaded()) {
           map.setOptions(newOptions);
         }
@@ -124,7 +126,7 @@ export default defineComponent({
     // 监听地图光照配置
     watch(
       () => props.lights,
-      (newLights, oldLights) => {
+      (newLights: any) => {
         if (map && map.isLoaded()) {
           map.setLights(newLights);
         }
@@ -169,7 +171,7 @@ export default defineComponent({
 
     // 获取地图范围
     const getResolutions = (num: number) => {
-      const resolutions = <Array[any]>[];
+      const resolutions: Array<any> = [];
       let zoom = num > 0 ? num : 19;
       for (let i = 0; i < zoom; i++) {
         resolutions[i] = 180 / (Math.pow(2, i) * 128);
