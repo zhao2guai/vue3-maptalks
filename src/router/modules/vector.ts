@@ -10,10 +10,10 @@ export default {
   children: [
     {
       path: "/vector/index1",
-      name: "矢量图层",
+      name: "点聚合图层",
       component: () => import("@/views/examples/vector/index1.vue"),
       meta: {
-        title: "矢量图层"
+        title: "点聚合图层"
       }
     },
     {
