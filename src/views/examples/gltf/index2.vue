@@ -245,7 +245,6 @@ onBeforeUnmount(() => {
     width: 15px;
     height: 24px;
     line-height: 24px;
-    background: url(arrow.png) no-repeat center center;
   }
 }
 </style>
