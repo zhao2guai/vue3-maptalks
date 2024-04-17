@@ -83,9 +83,7 @@ export default defineComponent({
     // 设置ol数据源参数
     let properties = {
       url: props.options.urlTemplate,
-      params: {
-        CQL_FILTER: "1=1"
-      },
+      params: props.options.params,
       layers: props.options.layers,
       styles: props.options.styles,
       projection: proj
