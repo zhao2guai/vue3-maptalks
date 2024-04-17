@@ -5,12 +5,18 @@
  * @LastEditors: 赵二乖
  * @LastEditTime: 2024-03-28 09:01:16
  */
-import Map from "./map";
-import Layers from "./layers";
-import GLTF from './gltf';
+import type { App, Plugin } from "vue";
+import * as Map from "./map";
+import * as Layers from "./layers";
+import * as GLTF from './gltf';
 
-const plugin = { Map, Layers, GLTF  };
+const install: Plugin = (app: App) => {
+  app.use(Map.install);
+  app.use(Layers.install);
+  app.use(GLTF.install);
+};
+
+const plugin = { install };
 
 export default plugin;
-
-export { Map, Layers, GLTF };
+export { install, Map, Layers, GLTF };
