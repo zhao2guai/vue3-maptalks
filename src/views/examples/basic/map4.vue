@@ -11,21 +11,19 @@ import { onMounted, onUnmounted } from "vue";
 
 let map = null;
 let mapOptions = {
-  center: [103.831741, 48.061685],
-  zoom: 6,
-  spatialReference: {
-    projection: "EPSG:4326"
-  },
+  center: [105.08052356963802, 36.04231948670001],
+  zoom: 5,
   minZoom: 1,
-  maxZoom: 18,
-  bearing: 0,
-  pitch: 0
+  maxZoom: 19,
+  spatialReference: {
+    projection: "baidu"
+  }
 };
 let options = {
-  urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-  subdomains: ["a", "b", "c", "d"],
-  attribution:
-    "&copy; <a href='http://osm.org'>OpenStreetMap</a> contributors, &copy; <a href='https://carto.com/'>CARTO</a>"
+  urlTemplate:
+    "https://gss{s}.bdstatic.com/8bo_dTSlRsgBo1vgoIiO_jowehsv/tile/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&udt=20170927",
+  subdomains: [0, 1, 2, 3],
+  attribution: '&copy; <a target="_blank" href="http://map.baidu.com">Baidu</a>'
 };
 
 function getMap(e) {

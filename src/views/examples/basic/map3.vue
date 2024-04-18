@@ -1,30 +1,50 @@
-<script setup lang="ts"></script>
-
 <template>
-  <div class="w-full h-full text-center">
-    <h1>业务内容模块</h1>
-    <p>使用场景：需要外嵌平台某个页面，不需要展示菜单导航以及额外模块</p>
+  <div class="map-content">
+    <mt-init-map :options="mapOptions" @getMap="getMap">
+      <mt-tile-layer :options="options"></mt-tile-layer>
+    </mt-init-map>
   </div>
 </template>
 
-<style lang="scss" scoped>
-.back {
-  position: relative;
-  top: 50%;
-  left: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 200px;
-  height: 200px;
-  cursor: pointer;
-  background: rgb(138 150 160 / 8%);
-  border-radius: 18px;
-  transform: translate(-50%, -50%);
+<script setup>
+import { onMounted, onUnmounted } from "vue";
 
-  &:hover {
-    background: rgb(138 150 160 / 20%);
-    transition: background 0.6s;
-  }
+let map = null;
+let mapOptions = {
+  center: [103.831741, 48.061685],
+  zoom: 6,
+  spatialReference: {
+    projection: "EPSG:4326"
+  },
+  minZoom: 1,
+  maxZoom: 18,
+  bearing: 0,
+  pitch: 0
+};
+let options = {
+  urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
+  subdomains: ["a", "b", "c", "d"]
+};
+
+function getMap(e) {
+  map = e;
+}
+
+onMounted(() => {});
+
+onUnmounted(() => {
+  if (map) map = undefined;
+});
+</script>
+
+<style lang="scss" scoped>
+.main-content {
+  margin: 2px 0 0 !important;
+}
+.map-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 </style>

@@ -82,8 +82,9 @@ let wmsOptions2 = reactive({
   uppercase: true
 });
 
+// ol图层查询参数限制
 let params = {
-  CQL_FILTER: "data_year = '2016'"
+  // CQL_FILTER: "data_year = '2016'"
 };
 
 function getMap(e) {

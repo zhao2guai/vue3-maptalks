@@ -18,18 +18,26 @@ export default {
     },
     {
       path: "/basic/map2",
-      name: "地图2",
+      name: "OpenStreetMap",
       component: () => import("@/views/examples/basic/map2.vue"),
       meta: {
-        title: "地图2"
+        title: "OpenStreetMap"
       }
     },
     {
       path: "/basic/map3",
-      name: "地图3",
+      name: "OpenStreetMapDark",
       component: () => import("@/views/examples/basic/map3.vue"),
       meta: {
-        title: "地图3"
+        title: "OpenStreetMapDark"
+      }
+    },
+    {
+      path: "/basic/map4",
+      name: "百度地图",
+      component: () => import("@/views/examples/basic/map4.vue"),
+      meta: {
+        title: "百度地图"
       }
     }
   ]
