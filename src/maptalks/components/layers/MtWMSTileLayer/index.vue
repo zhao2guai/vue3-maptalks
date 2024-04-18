@@ -65,6 +65,11 @@ export default defineComponent({
         uppercase: true
       })
     },
+    // ol服务请求参数
+    params: {
+      type: Object,
+      default: () => ({})
+    },
     // 是否开启要素识别
     isFeatureInfo: {
       type: Boolean,
@@ -79,13 +84,13 @@ export default defineComponent({
     let id = props.id ? props.id : buildUUID();
     // 接收图层配置信息并初始化图层对象
     let wmsLayer = new WMSTileLayer(id, props.options);
-
+    console.log(props.params);
     // 设置ol数据源参数
     let properties = {
       url: props.options.urlTemplate,
-      params: props.options.params,
       layers: props.options.layers,
       styles: props.options.styles,
+      params: props.params,
       projection: proj
     };
     // openlayers图层对象
@@ -135,6 +140,20 @@ export default defineComponent({
         if (wmsLayer && newOptions) {
           wmsLayer.setOptions(newOptions);
           wmsLayer.forceReload();
+        }
+      },
+      { deep: true }
+    );
+
+    // 监听ol图层查询参数
+    watch(
+      () => props.params,
+      newVal => {
+        // 判断SQL和ol图层是否存在
+        if (newVal && olTileLayer.value) {
+          alert(111);
+          let layer = olTileLayer.value;
+          layer.getSource().updateParams(newVal);
         }
       },
       { deep: true }

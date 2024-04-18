@@ -14,8 +14,6 @@ import {getTopLeft, getWidth} from 'ol/extent.js';
 export default class TileLayerModel extends TileLayer {
   constructor(options) {
     super(options);
-    // 获取瓦片服务图层Tile对象
-    const tileLayer = this;
     // 设置数据源信息
     this.getWMSource(options);
   }
@@ -25,13 +23,15 @@ export default class TileLayerModel extends TileLayer {
     const properties = options.properties;
     // 默认坐标系
     const proj = properties.projection ? properties.projection : "EPSG:4326";
+    // 默认参数
+    const params = properties.params;
     // 创建数据源并添到图层中
     this.setSource(new TileWMS({
       url: properties.url,
       params: {
-        ...properties.params,
         LAYERS: properties.layers,
         STYLES: properties.styles,
+        ...params
       },
       projection: proj,
       tileGrid: this.getTileGrid("WMS", proj, 18),

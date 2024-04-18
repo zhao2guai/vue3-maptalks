@@ -19,6 +19,7 @@
         />
         <mt-wms-tile-layer
           ref="wmstilelayer1"
+          :params="params"
           :options="wmsOptions"
           :isFeatureInfo="true"
         ></mt-wms-tile-layer>
@@ -80,6 +81,10 @@ let wmsOptions2 = reactive({
   transparent: true,
   uppercase: true
 });
+
+let params = {
+  CQL_FILTER: "data_year = '2016'"
+};
 
 function getMap(e) {
   map = e;
