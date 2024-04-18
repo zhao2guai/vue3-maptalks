@@ -97,9 +97,11 @@ function getMap(e) {
 onMounted(() => {});
 
 onBeforeUnmount(() => {
-  map = undefined;
-  infoWindow.remove();
-  infoWindow = undefined;
+  if (map) map = undefined;
+  if (infoWindow) {
+    infoWindow.remove();
+    infoWindow = undefined;
+  }
 });
 
 // 图层点击事件
