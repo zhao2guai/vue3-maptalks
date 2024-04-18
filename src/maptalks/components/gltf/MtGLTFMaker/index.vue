@@ -11,7 +11,6 @@ import {
   onBeforeUnmount,
   onBeforeMount,
   watch,
-  ref,
   nextTick
 } from "vue";
 import { GLTFMarker } from "@maptalks/gl-layers";
@@ -129,21 +128,21 @@ export default defineComponent({
     };
 
     // 给点添加鼠标点击事件
-    gltfMarker.on("click", () => {
+    gltfMarker.on("click", event => {
+      context.emit("click", event);
       gltfMarker.openInfoWindow(gltfMarker.getCoordinates());
-      context.emit("click");
     });
 
     // 给点添加鼠标移入事件
-    gltfMarker.on("mouseenter", () => {
+    gltfMarker.on("mouseenter", event => {
       gltfMarker.setUniform("polygonFill", [0, 1, 1, 1.0]);
-      context.emit("mouseenter");
+      context.emit("mouseenter", event);
     });
 
     // 给点添加鼠标移出事件
-    gltfMarker.on("mouseout", () => {
+    gltfMarker.on("mouseout", event => {
       gltfMarker.setUniform("polygonFill", [1, 1, 1, 1.0]);
-      context.emit("mouseout");
+      context.emit("mouseout", event);
     });
 
     // 添加load事件

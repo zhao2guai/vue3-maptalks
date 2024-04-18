@@ -33,16 +33,19 @@
             ref="sheepRef1"
             :point="[81.881422, 44.940405]"
             :symbol="sheep1"
+            @click="handlerClick()"
           />
           <mt-gltf-maker
             ref="sheepRef2"
             :point="[81.884222, 44.944405]"
             :symbol="sheep2"
+            @click="handlerClick()"
           />
           <mt-gltf-maker
             ref="sheepRef3"
             :point="[81.884222, 44.940405]"
             :symbol="sheep3"
+            @click="handlerClick()"
           />
           <mt-gltf-maker
             ref="jiRef"
@@ -375,6 +378,11 @@ function cowLoad() {
   cowRef1.value.gltfMarker.setMenu(options);
   // 为该模型添加右键菜单
   cowRef2.value.gltfMarker.setMenu(options);
+}
+
+// 点击事件
+function handlerClick(e) {
+  alert("这是一只小绵羊！");
 }
 
 onMounted(() => {});
