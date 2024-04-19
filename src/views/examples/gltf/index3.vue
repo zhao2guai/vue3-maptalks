@@ -355,7 +355,9 @@ let cowOptions = {
     '<div class="infopop_title">耳标号: A103JHR89Y20</div>' +
     '<div class="infopop_title">牛只品种: 平凉红牛</div>' +
     '<div class="infopop_title">生长阶段: 青年牛</div>' +
+    '<div class="infopop_title">上次饲喂: 48小时以前</div>' +
     '<div class="infopop_title">健康状况: 良好</div>' +
+    '<div class="infopop_title">当前状态: 正常</div>' +
     "</div>"
 };
 
@@ -409,7 +411,7 @@ onBeforeUnmount(() => {
   .infocontent {
     color: #fff;
     width: 20vw;
-    height: 20vh;
+    height: 28vh;
     background-color: #051127;
     border: 1px solid #0c2c45;
   }

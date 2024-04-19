@@ -50,6 +50,14 @@ export default defineComponent({
         bloom: true, //是否开启泛光
         shader: "pbr" //模型绘制的shader，可选值：pbr, phong, wireframe
       })
+    },
+    // 弹框
+    infoWindowOptions: {
+      type: Object,
+      default: () => ({
+        custom: true,
+        content: ""
+      })
     }
   },
 
@@ -71,6 +79,19 @@ export default defineComponent({
         if (gltfMarker && newSymbol) {
           gltfMarker.setSymbol(newSymbol);
         }
+      },
+      { immediate: true, deep: true }
+    );
+
+    // 监听打点样式
+    watch(
+      () => props.infoWindowOptions,
+      newVal => {
+        nextTick(() => {
+          if (gltfMarker && newVal) {
+            gltfMarker.setInfoWindow(newVal);
+          }
+        });
       },
       { immediate: true, deep: true }
     );
@@ -107,6 +128,7 @@ export default defineComponent({
     // 给点添加鼠标点击事件
     gltfMarker.on("click", event => {
       context.emit("click", event);
+      gltfMarker.openInfoWindow(gltfMarker.getCoordinates());
     });
 
     // 给点添加鼠标移入事件

@@ -161,11 +161,11 @@ let infoWindowOptions = {
   custom: true,
   content:
     '<div class="infocontent" ref="infoWindowRef">' +
+    '<i class="info-close"/>' +
     '<div class="infopop_title">这是一个摄像头</div>' +
     '<div class="infopop_time">当前时间: ' +
     new Date().toLocaleTimeString() +
     "</div><br>" +
-    '<div class="infopop_dept">' +
     "</div>"
 };
 
@@ -177,6 +177,7 @@ let cfOptions = {
     '<div class="infopop_title">青年牛2号圈舍</div>' +
     '<div class="infopop_title">圈舍编号: A103JHR89Y20</div>' +
     '<div class="infopop_title">圈舍容量: 30 (头)</div>' +
+    '<div class="infopop_title">圈舍负责任: 林星宇</div>' +
     '<div class="infopop_dept">=> 点击进入 <=' +
     "</div>"
 };
@@ -233,11 +234,10 @@ onBeforeUnmount(() => {
   .infopop_dept {
     padding: 5px;
     line-height: 15px;
-    text-align: center;
     border: 1px solid #192b41;
-    margin: 0 10px;
     position: absolute;
-    bottom: 2vh;
+    bottom: 1vh;
+    width: 100%;
     text-align: center;
   }
   .infopop_arrow {
@@ -245,6 +245,17 @@ onBeforeUnmount(() => {
     width: 15px;
     height: 24px;
     line-height: 24px;
+  }
+  .icon-close {
+    position: absolute;
+    top: 0.2vh;
+    right: 0.5vh;
+    display: inline-block;
+    width: 1.8519vh;
+    height: 1.8519vh;
+    background: url("../maptalksclone/assets/images/close-icon.png") no-repeat
+      center/100% 100%;
+    cursor: pointer;
   }
 }
 </style>
