@@ -80,7 +80,7 @@ export default defineComponent({
           gltfMarker.setSymbol(newSymbol);
         }
       },
-      { immediate: true }
+      { immediate: true, deep: true }
     );
 
     // 监听打点样式
@@ -90,6 +90,7 @@ export default defineComponent({
         nextTick(() => {
           if (gltfMarker && newVal) {
             gltfMarker.setInfoWindow(newVal);
+            gltfMarker.openInfoWindow(gltfMarker.getCoordinates());
           }
         });
       },
@@ -129,8 +130,8 @@ export default defineComponent({
 
     // 给点添加鼠标点击事件
     gltfMarker.on("click", event => {
-      context.emit("click", event);
       gltfMarker.openInfoWindow(gltfMarker.getCoordinates());
+      context.emit("click", event);
     });
 
     // 给点添加鼠标移入事件

@@ -51,10 +51,10 @@ export default defineComponent({
       type: Number,
       default: 18
     },
-    // 图层服务地址
+    // 图层高度
     zIndex: {
       type: Number,
-      default: 0
+      default: undefined
     }
   },
 
