@@ -7,19 +7,19 @@
             ref="camera1"
             :point="[81.863822, 44.940405]"
             :symbol="symbol1"
-            :infoWindowOptions="infoWindowOptions"
+            :content="content"
           />
           <mt-gltf-maker
             ref="camera2"
             :point="[81.873822, 44.940405]"
             :symbol="symbol2"
-            :infoWindowOptions="infoWindowOptions"
+            :content="content"
           />
           <mt-gltf-maker
             ref="camera3"
             :point="[81.868822, 44.945405]"
             :symbol="symbol3"
-            :infoWindowOptions="cfOptions"
+            :content="content2"
           />
         </mt-gltf-layer>
       </mt-group-gl-layer>
@@ -157,30 +157,24 @@ let symbol3 = {
   translationZ: -120
 };
 // 自定义弹窗内容
-let infoWindowOptions = {
-  custom: true,
-  content:
-    '<div class="infocontent" ref="infoWindowRef">' +
-    '<i class="info-close"/>' +
-    '<div class="infopop_title">这是一个摄像头</div>' +
-    '<div class="infopop_time">当前时间: ' +
-    new Date().toLocaleTimeString() +
-    "</div><br>" +
-    "</div>"
-};
+let content =
+  '<div class="infocontent" ref="infoWindowRef">' +
+  '<i class="info-close"/>' +
+  '<div class="infopop_title">这是一个摄像头</div>' +
+  '<div class="infopop_time">当前时间: ' +
+  new Date().toLocaleTimeString() +
+  "</div><br>" +
+  "</div>";
 
 // 自定义弹窗内容
-let cfOptions = {
-  custom: true,
-  content:
-    '<div class="infocontent" ref="infoWindowRef">' +
-    '<div class="infopop_title">青年牛2号圈舍</div>' +
-    '<div class="infopop_title">圈舍编号: A103JHR89Y20</div>' +
-    '<div class="infopop_title">圈舍容量: 30 (头)</div>' +
-    '<div class="infopop_title">圈舍负责任: 林星宇</div>' +
-    '<div class="infopop_dept">=> 点击进入 <=' +
-    "</div>"
-};
+let content2 =
+  '<div class="infocontent" ref="infoWindowRef">' +
+  '<div class="infopop_title">青年牛2号圈舍</div>' +
+  '<div class="infopop_title">圈舍编号: A103JHR89Y20</div>' +
+  '<div class="infopop_title">圈舍容量: 30 (头)</div>' +
+  '<div class="infopop_title">圈舍负责任: 林星宇</div>' +
+  '<div class="infopop_dept">=> 点击进入 <=' +
+  "</div>";
 
 function getMap(e) {
   map = e;

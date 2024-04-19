@@ -17,14 +17,14 @@
             ref="cowRef1"
             :point="[81.857522, 44.944405]"
             :symbol="cow1"
-            :infoWindowOptions="cowOptions"
+            :content="cowContent"
             @load="cowLoad"
           />
           <mt-gltf-maker
             ref="cowRef2"
             :point="[81.857522, 44.936805]"
             :symbol="cow2"
-            :infoWindowOptions="cowOptions"
+            :content="cowContent"
             @load="cowLoad"
           />
           <mt-gltf-maker :point="[81.870522, 44.944405]" :symbol="pig1" />
@@ -347,19 +347,16 @@ function getMap(e) {
   loading.value = false;
 }
 
-let cowOptions = {
-  custom: true,
-  content:
-    '<div class="infocontent" ref="infoWindowRef">' +
-    '<div class="infopop_title">牛只信息</div>' +
-    '<div class="infopop_title">耳标号: A103JHR89Y20</div>' +
-    '<div class="infopop_title">牛只品种: 平凉红牛</div>' +
-    '<div class="infopop_title">生长阶段: 青年牛</div>' +
-    '<div class="infopop_title">上次饲喂: 48小时以前</div>' +
-    '<div class="infopop_title">健康状况: 良好</div>' +
-    '<div class="infopop_title">当前状态: 正常</div>' +
-    "</div>"
-};
+let cowContent =
+  '<div class="infocontent" ref="infoWindowRef">' +
+  '<div class="infopop_title">牛只信息</div>' +
+  '<div class="infopop_title">耳标号: A103JHR89Y20</div>' +
+  '<div class="infopop_title">牛只品种: 平凉红牛</div>' +
+  '<div class="infopop_title">生长阶段: 青年牛</div>' +
+  '<div class="infopop_title">上次饲喂: 48小时以前</div>' +
+  '<div class="infopop_title">健康状况: 良好</div>' +
+  '<div class="infopop_title">当前状态: 正常</div>' +
+  "</div>";
 
 // 模型加载完成后执行
 function cowLoad() {
