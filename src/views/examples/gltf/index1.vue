@@ -4,34 +4,13 @@
       <mt-group-gl-layer :sceneConfig="defaultSceneConfig">
         <mt-gltf-layer>
           <mt-gltf-maker
-            ref="camera1"
-            :point="[81.863822, 44.940405]"
-            :symbol="symbol1"
-            :infoWindowOptions="infoWindowOptions"
-          />
-          <mt-gltf-maker
-            ref="camera2"
-            :point="[81.873822, 44.940405]"
-            :symbol="symbol2"
-            :infoWindowOptions="infoWindowOptions"
-          />
-          <mt-gltf-maker
-            ref="camera4"
-            :point="[81.863822, 44.950405]"
-            :symbol="symbol4"
-            :infoWindowOptions="infoWindowOptions"
-          />
-          <mt-gltf-maker
-            ref="camera5"
-            :point="[81.873822, 44.950405]"
-            :symbol="symbol5"
-            :infoWindowOptions="infoWindowOptions"
-          />
-          <mt-gltf-maker
-            ref="camera3"
-            :point="[81.868822, 44.945405]"
-            :symbol="symbol3"
-            :infoWindowOptions="cfOptions"
+            v-for="(item, index) in makerList"
+            :key="index"
+            :ref="el => setPointRef(el, index)"
+            :point="item.point"
+            :symbol="item.symbol"
+            :content="item.content"
+            @click="changeMaker(item, index)"
           />
         </mt-gltf-layer>
       </mt-group-gl-layer>
@@ -111,7 +90,157 @@ let defaultSceneConfig = {
     }
   }
 };
-// 摄像头杆子35
+// 模型数组
+let makerList = [
+  {
+    name: "厂房",
+    point: [81.868822, 44.945405],
+    symbol: {
+      url: new URL("@/maptalks/assets/gltf/farm/scene.gltf", import.meta.url), //模型的url
+      visible: true, //模型是否可见
+      translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+      rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+      scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+      animation: true, //是否开启动画
+      loop: true, //是否开启动画循环
+      speed: 1, //动画速度倍数
+      fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+      anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+      shadow: true, //是否开启阴影
+      bloom: true, //是否开启泛光
+      shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+      modelHeight: 300,
+      translationZ: 125,
+      rotationZ: 180
+    },
+    content:
+      '<div class="infocontent" ref="infoWindowRef">' +
+      '<div class="infopop_title">2号种植大棚</div>' +
+      '<div class="infopop_title">大棚编号: A103JHR89Y20</div>' +
+      '<div class="infopop_title">大棚占地（亩）: 10</div>' +
+      '<div class="infopop_title">种植作物: 辣椒</div>' +
+      '<div class="infopop_title">作物苗量（株）: 2000</div>' +
+      '<div class="infopop_dept">=> 点击进入 <=' +
+      "</div>"
+  },
+  {
+    name: "摄像头监测设备",
+    point: [81.863822, 44.940405],
+    symbol: {
+      url: new URL("@/maptalks/assets/gltf/equipment/01.gltf", import.meta.url), //模型的url
+      visible: true, //模型是否可见
+      translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+      rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+      scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+      animation: true, //是否开启动画
+      loop: true, //是否开启动画循环
+      speed: 1, //动画速度倍数
+      fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+      anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+      shadow: true, //是否开启阴影
+      bloom: true, //是否开启泛光
+      shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+      modelHeight: 240,
+      translationZ: -120
+    },
+    content:
+      '<div class="infocontent" ref="infoWindowRef">' +
+      '<div class="infopop_title">这是一个虫情设备</div>' +
+      '<div class="infopop_time">当前时间: ' +
+      new Date().toLocaleTimeString() +
+      "</div><br>" +
+      '<div class="infopop_dept">' +
+      "</div>"
+  },
+  {
+    name: "气象监测设备",
+    point: [81.873822, 44.940405],
+    symbol: {
+      url: new URL("@/maptalks/assets/gltf/equipment/02.gltf", import.meta.url), //模型的url
+      visible: true, //模型是否可见
+      translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+      rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+      scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+      animation: true, //是否开启动画
+      loop: true, //是否开启动画循环
+      speed: 1, //动画速度倍数
+      fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+      anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+      shadow: true, //是否开启阴影
+      bloom: true, //是否开启泛光
+      shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+      modelHeight: 240,
+      translationZ: -120
+    },
+    content:
+      '<div class="infocontent" ref="infoWindowRef">' +
+      '<div class="infopop_title">这是一个虫情设备</div>' +
+      '<div class="infopop_time">当前时间: ' +
+      new Date().toLocaleTimeString() +
+      "</div><br>" +
+      '<div class="infopop_dept">' +
+      "</div>"
+  },
+  {
+    name: "虫情设备",
+    point: [81.863822, 44.950405],
+    symbol: {
+      url: new URL("@/maptalks/assets/gltf/equipment/02.gltf", import.meta.url), //模型的url
+      visible: true, //模型是否可见
+      translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+      rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+      scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+      animation: true, //是否开启动画
+      loop: true, //是否开启动画循环
+      speed: 1, //动画速度倍数
+      fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+      anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+      shadow: true, //是否开启阴影
+      bloom: true, //是否开启泛光
+      shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+      modelHeight: 240,
+      translationZ: -120
+    },
+    content:
+      '<div class="infocontent" ref="infoWindowRef">' +
+      '<div class="infopop_title">这是一个虫情设备</div>' +
+      '<div class="infopop_time">当前时间: ' +
+      new Date().toLocaleTimeString() +
+      "</div><br>" +
+      '<div class="infopop_dept">' +
+      "</div>"
+  },
+  {
+    name: "水肥一体机",
+    point: [81.873822, 44.950405],
+    symbol: {
+      url: new URL("@/maptalks/assets/gltf/equipment/04.gltf", import.meta.url), //模型的url
+      visible: true, //模型是否可见
+      translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+      rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+      scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+      animation: true, //是否开启动画
+      loop: true, //是否开启动画循环
+      speed: 1, //动画速度倍数
+      fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+      anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+      shadow: true, //是否开启阴影
+      bloom: true, //是否开启泛光
+      shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+      modelHeight: 240,
+      translationZ: -120
+    },
+    content:
+      '<div class="infocontent" ref="infoWindowRef">' +
+      '<div class="infopop_title">这是一个虫情设备</div>' +
+      '<div class="infopop_time">当前时间: ' +
+      new Date().toLocaleTimeString() +
+      "</div><br>" +
+      '<div class="infopop_dept">' +
+      "</div>"
+  }
+];
+// 摄像头监测设备
 let symbol1 = {
   url: new URL("@/maptalks/assets/gltf/equipment/01.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
@@ -129,7 +258,7 @@ let symbol1 = {
   modelHeight: 240,
   translationZ: -120
 };
-// 摄像头杆子37
+// 气象监测设备
 let symbol2 = {
   url: new URL("@/maptalks/assets/gltf/equipment/02.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
@@ -147,7 +276,7 @@ let symbol2 = {
   modelHeight: 240,
   translationZ: -120
 };
-// 摄像头杆子35
+// 虫情设备
 let symbol4 = {
   url: new URL("@/maptalks/assets/gltf/equipment/03.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
@@ -165,7 +294,7 @@ let symbol4 = {
   modelHeight: 240,
   translationZ: -120
 };
-// 摄像头杆子37
+// 水肥一体机
 let symbol5 = {
   url: new URL("@/maptalks/assets/gltf/equipment/04.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
@@ -185,10 +314,7 @@ let symbol5 = {
 };
 // 厂房
 let symbol3 = {
-  url: new URL(
-    "@/maptalks/assets/gltf/farm/scene.gltf",
-    import.meta.url
-  ), //模型的url
+  url: new URL("@/maptalks/assets/gltf/farm/scene.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -203,7 +329,7 @@ let symbol3 = {
   shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
   modelHeight: 300,
   translationZ: 125,
-  rotationZ: 180,
+  rotationZ: 180
 };
 // 自定义弹窗内容
 let infoWindowOptions = {
@@ -217,7 +343,6 @@ let infoWindowOptions = {
     '<div class="infopop_dept">' +
     "</div>"
 };
-
 // 自定义弹窗内容
 let cfOptions = {
   custom: true,
@@ -237,10 +362,33 @@ function getMap(e) {
   loading.value = false;
 }
 
+// 定义ref存储数组
+let swipeCellRefList = ref([]);
+// 动态设置ref
+function setPointRef(el, index) {
+  if (el) {
+    swipeCellRefList.value[index] = el;
+  }
+}
+function changeMaker(item, index) {
+  const gltfMarker = swipeCellRefList.value[index].gltfMarker;
+  const infoWindow = gltfMarker.getInfoWindow();
+  infoWindow.setContent(
+    '<div class="infocontent" ref="infoWindowRef">' +
+      '<div class="infopop_title">2号种植大棚</div>' +
+      '<div class="infopop_title">大棚编号: A103JHR89Y20</div>' +
+      '<div class="infopop_title">大棚占地（亩）: 10</div>' +
+      '<div class="infopop_title">种植作物: 辣椒</div>' +
+      '<div class="infopop_title">作物苗量（株）: 2000</div>' +
+      '<div class="infopop_dept">=> 新内容 <=' +
+      "</div>"
+  );
+}
 onMounted(() => {});
 
 onBeforeUnmount(() => {
   map = undefined;
+  swipeCellRefList.value = undefined;
 });
 </script>
 

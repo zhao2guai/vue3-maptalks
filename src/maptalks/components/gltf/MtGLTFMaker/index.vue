@@ -52,12 +52,9 @@ export default defineComponent({
       })
     },
     // 弹框
-    infoWindowOptions: {
-      type: Object,
-      default: () => ({
-        custom: true,
-        content: ""
-      })
+    content: {
+      type: String,
+      default: ""
     }
   },
 
@@ -71,6 +68,12 @@ export default defineComponent({
       cursor: "pointer",
       symbol: props.symbol
     });
+    // 设置弹窗内容
+    gltfMarker.setInfoWindow({
+      // autoOpenOn: "", // 解除click绑定
+      custom: true,
+      content: props.content
+    });
 
     // 监听打点样式
     watch(
@@ -83,22 +86,10 @@ export default defineComponent({
       { immediate: true, deep: true }
     );
 
-    // 监听打点样式
-    watch(
-      () => props.infoWindowOptions,
-      newVal => {
-        nextTick(() => {
-          if (gltfMarker && newVal) {
-            gltfMarker.setInfoWindow(newVal);
-          }
-        });
-      },
-      { immediate: true, deep: true }
-    );
-
     // 页面加载后执行
     onBeforeMount(() => {
       addGLTFMakerToGLTFLayer();
+      initEvents();
     });
 
     // 页面元素销毁之前执行
@@ -125,26 +116,29 @@ export default defineComponent({
       }
     };
 
-    // 给点添加鼠标点击事件
-    gltfMarker.on("click", event => {
-      context.emit("click", event);
-      gltfMarker.openInfoWindow(gltfMarker.getCoordinates());
-    });
+    const initEvents = () => {
+      if (gltfMarker) {
+        // 给点添加鼠标点击事件
+        gltfMarker.on("click", event => {
+          context.emit("click", event);
+        });
 
-    // 给点添加鼠标移入事件
-    gltfMarker.on("mouseenter", event => {
-      gltfMarker.setUniform("polygonFill", [0, 1, 1, 1.0]);
-      context.emit("mouseenter", event);
-    });
+        // 给点添加鼠标移入事件
+        gltfMarker.on("mouseenter", event => {
+          gltfMarker.setUniform("polygonFill", [0, 1, 1, 1.0]);
+          context.emit("mouseenter", event);
+        });
 
-    // 给点添加鼠标移出事件
-    gltfMarker.on("mouseout", event => {
-      gltfMarker.setUniform("polygonFill", [1, 1, 1, 1.0]);
-      context.emit("mouseout", event);
-    });
+        // 给点添加鼠标移出事件
+        gltfMarker.on("mouseout", event => {
+          gltfMarker.setUniform("polygonFill", [1, 1, 1, 1.0]);
+          context.emit("mouseout", event);
+        });
 
-    // 添加load事件
-    gltfMarker.on("load", event => context.emit("load", event));
+        // 添加load事件
+        gltfMarker.on("load", event => context.emit("load", event));
+      }
+    };
 
     // 移除地图gltf三维模型绘制图层
     const removeAll = () => {
@@ -154,7 +148,14 @@ export default defineComponent({
       }
     };
 
-    // 关闭mark的弹窗
+    // 打开模型的弹窗
+    const open = () => {
+      if (gltfMarker && gltfMarker.getInfoWindow()) {
+        gltfMarker.openInfoWindow(gltfMarker.getCoordinates());
+      }
+    };
+
+    // 关闭模型的弹窗
     const close = () => {
       if (gltfMarker && gltfMarker.getInfoWindow()) {
         gltfMarker.closeInfoWindow();
@@ -163,7 +164,8 @@ export default defineComponent({
 
     return {
       gltfMarker,
-      close
+      close,
+      open
     };
   }
 });
