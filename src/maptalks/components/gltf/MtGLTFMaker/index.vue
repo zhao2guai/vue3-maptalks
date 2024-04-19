@@ -50,14 +50,6 @@ export default defineComponent({
         bloom: true, //是否开启泛光
         shader: "pbr" //模型绘制的shader，可选值：pbr, phong, wireframe
       })
-    },
-    // 弹框
-    infoWindowOptions: {
-      type: Object,
-      default: () => ({
-        custom: true,
-        content: ""
-      })
     }
   },
 
@@ -83,20 +75,6 @@ export default defineComponent({
       { immediate: true, deep: true }
     );
 
-    // 监听打点样式
-    watch(
-      () => props.infoWindowOptions,
-      newVal => {
-        nextTick(() => {
-          if (gltfMarker && newVal) {
-            gltfMarker.setInfoWindow(newVal);
-            gltfMarker.openInfoWindow(gltfMarker.getCoordinates());
-          }
-        });
-      },
-      { immediate: true, deep: true }
-    );
-
     // 页面加载后执行
     onBeforeMount(() => {
       addGLTFMakerToGLTFLayer();
@@ -114,9 +92,7 @@ export default defineComponent({
       let map = maptalks.value;
       if (map && map.isLoaded()) {
         map.on("click", () => {
-          if (gltfMarker && gltfMarker.getInfoWindow()) {
-            gltfMarker.closeInfoWindow();
-          }
+          close();
         });
       }
       // 判断更多图层...
@@ -130,7 +106,6 @@ export default defineComponent({
 
     // 给点添加鼠标点击事件
     gltfMarker.on("click", event => {
-      gltfMarker.openInfoWindow(gltfMarker.getCoordinates());
       context.emit("click", event);
     });
 
@@ -157,8 +132,16 @@ export default defineComponent({
       }
     };
 
+    // 关闭mark的弹窗
+    const close = () => {
+      if (gltfMarker && gltfMarker.getInfoWindow()) {
+        gltfMarker.closeInfoWindow();
+      }
+    };
+
     return {
-      gltfMarker
+      gltfMarker,
+      close
     };
   }
 });
