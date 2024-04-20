@@ -11,19 +11,19 @@ import { onMounted, onUnmounted } from "vue";
 
 let map = null;
 let mapOptions = {
-  center: [105.08052356963802, 36.04231948670001],
-  zoom: 5,
-  minZoom: 1,
-  maxZoom: 19,
+  center: [103.831741, 48.061685],
+  zoom: 6,
   spatialReference: {
-    projection: "baidu"
-  }
+    projection: "EPSG:4326"
+  },
+  minZoom: 1,
+  maxZoom: 18,
+  bearing: 0,
+  pitch: 0
 };
 let options = {
-  urlTemplate:
-    "https://gss{s}.bdstatic.com/8bo_dTSlRsgBo1vgoIiO_jowehsv/tile/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&udt=20170927",
-  subdomains: [0, 1, 2, 3],
-  attribution: '&copy; <a target="_blank" href="http://map.baidu.com">Baidu</a>'
+  urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
+  subdomains: ["a", "b", "c", "d"]
 };
 
 function getMap(e) {
@@ -44,7 +44,7 @@ onUnmounted(() => {
 .map-content {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 86px);
   overflow: hidden;
 }
 </style>

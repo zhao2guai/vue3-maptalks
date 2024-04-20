@@ -11,7 +11,7 @@ const TITLE = getConfig("Title");
     Copyright © 2020-present
     <a
       class="hover:text-primary"
-      href="https://github.com/pure-admin"
+      href="https://gitee.com/zhao2guai/vue3-maptalks"
       target="_blank"
     >
       &nbsp;{{ TITLE }}

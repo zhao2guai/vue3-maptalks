@@ -1,8 +1,9 @@
+import position from "@/assets/svg/gis/position.svg?component";
 export default {
   path: "/gltf",
   redirect: "/gltf/index1",
   meta: {
-    icon: "ri:map-pin-range-fill",
+    icon: position,
     // showLink: false,
     title: "GLTF模型",
     rank: 12

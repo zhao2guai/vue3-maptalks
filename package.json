@@ -1,6 +1,6 @@
 {
   "name": "@zhao2guai/vue3-maptalks",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "type": "module",
   "scripts": {
@@ -143,5 +143,5 @@
       "abab": "*"
     }
   },
-  "description": "<h1>基于maptalks api开发的 vue3 地图组件</h1>"
+  "description": "基于Vue3的Maptalks地图组件"
 }

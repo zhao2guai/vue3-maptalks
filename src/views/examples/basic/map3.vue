@@ -22,8 +22,10 @@ let mapOptions = {
   pitch: 0
 };
 let options = {
-  urlTemplate: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
-  subdomains: ["a", "b", "c", "d"]
+  urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+  subdomains: ["a", "b", "c", "d"],
+  attribution:
+    "&copy; <a href='http://osm.org'>OpenStreetMap</a> contributors, &copy; <a href='https://carto.com/'>CARTO</a>"
 };
 
 function getMap(e) {
@@ -44,7 +46,7 @@ onUnmounted(() => {
 .map-content {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 86px);
   overflow: hidden;
 }
 </style>

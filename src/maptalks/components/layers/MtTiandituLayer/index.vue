@@ -55,6 +55,11 @@ export default defineComponent({
     zIndex: {
       type: Number,
       default: undefined
+    },
+    // 图层的样式过滤器开关
+    cssFilter: {
+      type: String,
+      default: null
     }
   },
 
@@ -67,6 +72,8 @@ export default defineComponent({
     let type = props.layerType ? props.layerType : "img";
     // 获取图层ID
     let id = props.id ? props.id : buildUUID();
+    // 是否开启图层滤镜
+    let cssFilter = props.cssFilter ? props.cssFilter : null;
     // 获取天地图URL
     let url = "";
     if (type === "vec") url = tiandituApi.getUrlByVecc(props.tk);
@@ -90,7 +97,8 @@ export default defineComponent({
         visible: props.visible,
         minZoom: props.minZoom,
         maxZoom: props.maxZoom,
-        zIndex: props.zIndex
+        zIndex: props.zIndex,
+        cssFilter: cssFilter
       });
     }
     // 向组件传送初始化完毕的layer
