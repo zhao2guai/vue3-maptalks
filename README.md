@@ -1,4 +1,4 @@
-<h1>VUE3-MAPTALKS 基于Vue3的Maptalks地图组件</h1>
+<h1>基于Vue3的Maptalks地图组件</h1>
 
 <!-- [![license](https://img.shields.io/github/license/pure-admin/vue-pure-admin.svg)](LICENSE) -->
 
@@ -30,8 +30,12 @@ MapTalks github首页](https://github.com/maptalks)以及[maptalks官网](https:
 ## 维护者
 
 [zhao2guai blog](https://zhao2guai.gitee.io/blog/)
+
 [zhao2guai by github](https://github.com/zhao2guai)
+
 [zhao2guai by gitee](https://gitee.com/zhao2guai)
+
+[zhao2guai by bilibili](https://space.bilibili.com/12418582)
 
 ## ⚠️ 注意
 
