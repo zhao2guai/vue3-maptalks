@@ -14,7 +14,7 @@ declare global {
       version: string;
       engines: {
         node: string;
-        pnpm: string;
+        npm: string;
       };
       dependencies: Recordable<string>;
       devDependencies: Recordable<string>;
