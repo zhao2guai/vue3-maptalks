@@ -6,6 +6,12 @@
  * @LastEditTime: 2024-03-28 09:01:16
  */
 import type { App, Plugin } from "vue";
+import "maptalks/dist/maptalks.css";
+import 'maptalks';
+import '@maptalks/gl-layers';
+import '@maptalks/transcoders.draco';
+import '@maptalks/transcoders.crn';
+import '@maptalks/transcoders.ktx2';
 import * as Map from "./map";
 import * as Layers from "./layers";
 import * as GLTF from './gltf';

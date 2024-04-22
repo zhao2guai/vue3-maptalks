@@ -91,10 +91,10 @@ export default defineComponent({
       groupGLLayer.setOptions(props.options);
     }
     // 判断地形开关是否开启，天地图密匙是否存在
-    if (props.terrainSwitch === true && props.tk) {
+    if (props.terrainSwitch === true) {
       // 设置天地图3D地形
       const terrain = tiandituApi.getTerrain(props.tk);
-      groupGLLayer.setTerrain(terrain);
+      if (terrain) groupGLLayer.setTerrain(terrain);
     }
     // 设置场景配置
     if (props.sceneConfig) {
@@ -119,6 +119,16 @@ export default defineComponent({
       (newConfig, oldConfig) => {
         if (groupGLLayer && newConfig) {
           groupGLLayer.setSceneConfig(newConfig);
+        }
+      },
+      { deep: true }
+    );
+    // 监听地形开关
+    watch(
+      () => props.terrainSwitch,
+      newVal => {
+        if (groupGLLayer) {
+          changeTerrain(newVal);
         }
       },
       { deep: true }
@@ -152,15 +162,15 @@ export default defineComponent({
       }
     };
 
-    // 切换地形开关
+    // 切换天地图地形开关
     const changeTerrain = e => {
       // 若没有的到图层则返回
       if (!groupGLLayer) return;
       // 打开后添加terrain对象关闭则是设置为空
-      if (e && props.tk) {
+      if (e === true) {
         // 设置天地图3D地形
         const terrain = tiandituApi.getTerrain(props.tk);
-        groupGLLayer.setTerrain(terrain);
+        if (terrain) groupGLLayer.setTerrain(terrain);
       } else {
         groupGLLayer.setTerrain(null);
       }

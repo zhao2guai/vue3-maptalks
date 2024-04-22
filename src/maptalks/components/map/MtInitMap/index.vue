@@ -16,7 +16,6 @@ import {
   onUnmounted,
   defineComponent
 } from "vue";
-import "maptalks/dist/maptalks.css";
 import { Map } from "maptalks";
 import { buildUUID } from "@pureadmin/utils";
 export default defineComponent({
@@ -96,6 +95,11 @@ export default defineComponent({
           orientation: 0
         }
       })
+    },
+    // 暗角开关
+    darkAngleSwitch: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -134,6 +138,17 @@ export default defineComponent({
       { deep: true }
     );
 
+    // 监听地图暗角配置
+    watch(
+      () => props.darkAngleSwitch,
+      (newVal: Boolean) => {
+        if (map && map.isLoaded()) {
+          changePostProcess(newVal);
+        }
+      },
+      { deep: true }
+    );
+
     // 页面组件挂载完成后执行
     onMounted(() => {
       nextTick(() => {
@@ -165,7 +180,11 @@ export default defineComponent({
       maptalks.value = map;
       // 获取地图初始化状态来更新插槽状态
       if (map.isLoaded()) {
+        // 初始化地图事件
         initMapEvents();
+        // 判断地图暗角
+        changePostProcess(props.darkAngleSwitch);
+        // 修改地图加载状态
         mapload.value = true;
       }
     };
@@ -178,6 +197,30 @@ export default defineComponent({
         resolutions[i] = 180 / (Math.pow(2, i) * 128);
       }
       return resolutions;
+    };
+
+    interface mapPostProcess {
+      enable: Boolean;
+      vignette: {
+        enable: Boolean;
+      };
+    }
+
+    // 屏幕暗角开关
+    const changePostProcess = (e: Boolean) => {
+      if (!map) return;
+      // 设置地图映射后处理参数
+      const mapPostProcess = <mapPostProcess>{
+        enable: true,
+        vignette: {
+          enable: false
+        }
+      };
+      mapPostProcess.vignette.enable = e;
+      map.setPostProcessConfig(mapPostProcess);
+      const zoom = map.getZoom();
+      map.setZoom(zoom + 0.001);
+      map.setZoom(zoom - 0.001);
     };
 
     // 移除地图所有图层销毁地图组件
@@ -279,7 +322,8 @@ export default defineComponent({
     return {
       map,
       mapload,
-      maptalks
+      maptalks,
+      changePostProcess
     };
   }
 });
