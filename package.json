@@ -77,7 +77,8 @@
     "vue-demi": "^0.14.7",
     "vue-router": "^4.3.0",
     "vue-tippy": "^6.4.1",
-    "vue-types": "^5.1.1"
+    "vue-types": "^5.1.1",
+    "zousan": "^3.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^8.57.0",
