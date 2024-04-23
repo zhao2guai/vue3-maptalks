@@ -5,7 +5,7 @@
     <slot v-if="mapload" />
   </div>
 </template>
-<script lang="ts">
+<script>
 import {
   ref,
   shallowRef,
@@ -105,9 +105,9 @@ export default defineComponent({
 
   setup(props, context) {
     // 获取图层ID
-    const container: String = props.container ? props.container : buildUUID();
+    const container = props.container ? props.container : buildUUID();
     // 地图对象
-    let map: Map = undefined;
+    let map = undefined;
     // 地图加载状态
     let mapload = ref(false);
     // 地图对象存储
@@ -119,7 +119,7 @@ export default defineComponent({
     // 监听地图配置
     watch(
       () => props.options,
-      (newOptions: any) => {
+      newOptions => {
         if (map && map.isLoaded()) {
           map.setOptions(newOptions);
         }
@@ -130,7 +130,7 @@ export default defineComponent({
     // 监听地图光照配置
     watch(
       () => props.lights,
-      (newLights: any) => {
+      newLights => {
         if (map && map.isLoaded()) {
           map.setLights(newLights);
         }
@@ -141,7 +141,7 @@ export default defineComponent({
     // 监听地图暗角配置
     watch(
       () => props.darkAngleSwitch,
-      (newVal: Boolean) => {
+      newVal => {
         if (map && map.isLoaded()) {
           changePostProcess(newVal);
         }
@@ -166,7 +166,7 @@ export default defineComponent({
       // 加载地图配置参数
       map = new Map(container, props.options);
       // 获取坐标系
-      const proj: String = map.getProjection().code;
+      const proj = map.getProjection().code;
       // 设置地图范围
       map.setSpatialReference({
         projection: proj ? proj : "EPSG:4326",
@@ -190,8 +190,8 @@ export default defineComponent({
     };
 
     // 获取地图范围
-    const getResolutions = (num: number) => {
-      const resolutions: Array<any> = [];
+    const getResolutions = num => {
+      const resolutions = [];
       let zoom = num > 0 ? num : 19;
       for (let i = 0; i < zoom; i++) {
         resolutions[i] = 180 / (Math.pow(2, i) * 128);
@@ -199,18 +199,11 @@ export default defineComponent({
       return resolutions;
     };
 
-    interface mapPostProcess {
-      enable: Boolean;
-      vignette: {
-        enable: Boolean;
-      };
-    }
-
     // 屏幕暗角开关
-    const changePostProcess = (e: Boolean) => {
+    const changePostProcess = e => {
       if (!map) return;
       // 设置地图映射后处理参数
-      const mapPostProcess = <mapPostProcess>{
+      const mapPostProcess = {
         enable: true,
         vignette: {
           enable: false
