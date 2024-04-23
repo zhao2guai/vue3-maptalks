@@ -14,6 +14,7 @@ import simplify from 'simplify-js';
 import * as intersectsBox from 'frustum-intersects';
 import * as fusiongl from '@maptalks/fusiongl';
 import createREGL from '@maptalks/regl';
+import * as color from "color";
 // maptalks webgl 图层的汇总包
 import '@maptalks/gl-layers';
 // 可选的draco插件
@@ -36,6 +37,7 @@ const install: Plugin = (app: App) => {
   app.use(fusiongl);
   app.use(intersectsBox);
   app.use(createREGL);
+  app.use(color);
   app.use(Map.install);
   app.use(Layers.install);
   app.use(GLTF.install);
