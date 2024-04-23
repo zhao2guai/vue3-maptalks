@@ -9,8 +9,8 @@ import type { App, Plugin } from "vue";
 import "maptalks/dist/maptalks.css";
 // 引入第三方插件库
 import * as Zousan from 'zousan';
-import rbush from 'rbush';
-import simplify from 'simplify-js';
+import * as rbush from 'rbush';
+import * as simplify from 'simplify-js';
 import { intersectsBox } from 'frustum-intersects';
 // maptalks webgl 图层的汇总包
 import '@maptalks/gl-layers';
