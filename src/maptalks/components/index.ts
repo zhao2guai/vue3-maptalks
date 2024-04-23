@@ -7,6 +7,11 @@
  */
 import type { App, Plugin } from "vue";
 import "maptalks/dist/maptalks.css";
+// 引入第三方插件库
+import * as Zousan from 'zousan';
+import * as rbush from 'rbush';
+import * as simplify from 'simplify-js';
+import * as intersectsBox from 'frustum-intersects';
 // maptalks webgl 图层的汇总包
 import '@maptalks/gl-layers';
 // 可选的draco插件
@@ -15,11 +20,18 @@ import '@maptalks/transcoders.draco';
 import '@maptalks/transcoders.crn';
 // 可选的ktx2纹理解析插件
 import '@maptalks/transcoders.ktx2';
+// 地图基础组件
 import * as Map from "./map";
+// 图层类组件
 import * as Layers from "./layers";
+// 模型类组件
 import * as GLTF from './gltf';
 
 const install: Plugin = (app: App) => {
+  app.use(Zousan);
+  app.use(rbush);
+  app.use(simplify);
+  app.use(intersectsBox);
   app.use(Map.install);
   app.use(Layers.install);
   app.use(GLTF.install);
