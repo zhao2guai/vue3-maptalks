@@ -1,8 +1,9 @@
 {
   "name": "@zhao2guai/vue3-maptalks",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": false,
   "type": "module",
+  "description": "基于Vue3的Maptalks地图组件",
   "scripts": {
     "dev": "cross-env --max-old-space-size=4096 vite",
     "serve": "npm dev",
@@ -143,6 +144,5 @@
       "stable": "*",
       "abab": "*"
     }
-  },
-  "description": "基于Vue3的Maptalks地图组件"
+  }
 }
