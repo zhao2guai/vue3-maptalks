@@ -8,14 +8,6 @@
 import type { App, Plugin } from "vue";
 // 引入maptalks官方样式
 import "maptalks/dist/maptalks.css";
-// maptalks webgl 图层的汇总包
-import '@maptalks/gl-layers';
-// 可选的draco插件
-import '@maptalks/transcoders.draco';
-// 可选的crn纹理解析插件
-import '@maptalks/transcoders.crn';
-// 可选的ktx2纹理解析插件
-import '@maptalks/transcoders.ktx2';
 // 地图基础组件
 import * as Map from "./map";
 // 图层类组件
