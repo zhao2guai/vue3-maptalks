@@ -9,7 +9,7 @@
     "experimentalDecorators": true,
     "strictFunctionTypes": false,
     "skipLibCheck": true,
-    "esModuleInterop": true,
+    "esModuleInterop": false,
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
