@@ -9,9 +9,9 @@ import type { App, Plugin } from "vue";
 import "maptalks/dist/maptalks.css";
 // 引入第三方插件库
 import * as Zousan from 'zousan';
-import * as rbush from 'rbush';
-import * as simplify from 'simplify-js';
-import * as intersectsBox from 'frustum-intersects';
+import rbush from 'rbush';
+import simplify from 'simplify-js';
+import { intersectsBox } from 'frustum-intersects';
 // maptalks webgl 图层的汇总包
 import '@maptalks/gl-layers';
 // 可选的draco插件
@@ -31,7 +31,7 @@ const install: Plugin = (app: App) => {
   app.use(Zousan);
   app.use(rbush);
   app.use(simplify);
-  app.use(intersectsBox);
+  app.use(intersectsBox.install);
   app.use(Map.install);
   app.use(Layers.install);
   app.use(GLTF.install);
@@ -40,4 +40,13 @@ const install: Plugin = (app: App) => {
 const plugin = { install };
 
 export default plugin;
-export { install, Map, Layers, GLTF };
+export {
+  install,
+  Zousan,
+  rbush,
+  simplify,
+  intersectsBox,
+  Map,
+  Layers,
+  GLTF
+};
