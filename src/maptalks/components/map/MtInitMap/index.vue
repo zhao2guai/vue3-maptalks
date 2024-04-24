@@ -18,6 +18,14 @@ import {
 } from "vue";
 import { Map } from "maptalks";
 import { buildUUID } from "@pureadmin/utils";
+import {
+  getFrontImg,
+  getbackImg,
+  getLeftImg,
+  getRightImg,
+  getTopImg,
+  getBottomImg
+} from "../../../utils/base64";
 export default defineComponent({
   /** 初始化地图组件 */
   name: "mt-init-map",
@@ -63,30 +71,12 @@ export default defineComponent({
         ambient: {
           resource: {
             url: {
-              front: new URL(
-                "@/maptalks/assets/imgs/weather/446/front.jpg",
-                import.meta.url
-              ),
-              back: new URL(
-                "@/maptalks/assets/imgs/weather/446/back.jpg",
-                import.meta.url
-              ),
-              left: new URL(
-                "@/maptalks/assets/imgs/weather/446/left.jpg",
-                import.meta.url
-              ),
-              right: new URL(
-                "@/maptalks/assets/imgs/weather/446/right.jpg",
-                import.meta.url
-              ),
-              top: new URL(
-                "@/maptalks/assets/imgs/weather/446/top.jpg",
-                import.meta.url
-              ),
-              bottom: new URL(
-                "@/maptalks/assets/imgs/weather/446/bottom.jpg",
-                import.meta.url
-              )
+              front: getFrontImg(),
+              back: getbackImg(),
+              left: getLeftImg(),
+              right: getRightImg(),
+              top: getTopImg(),
+              bottom: getBottomImg()
             },
             prefilterCubeSize: 1024
           },
