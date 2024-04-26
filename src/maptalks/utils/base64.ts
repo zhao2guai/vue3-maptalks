@@ -30,25 +30,25 @@ export function onlineImgToBase64(url: string) {
 };
 
 export function getFrontImg() { 
-  return new URL("@/maptalks/assets/imgs/weather/446/front.jpg", import.meta.url);
+  return new URL("../assets/imgs/weather/446/front.jpg", import.meta.url);
 };
 
 export function getbackImg() { 
-  return new URL("@/maptalks/assets/imgs/weather/446/back.jpg", import.meta.url);
+  return new URL("../assets/imgs/weather/446/back.jpg", import.meta.url);
 };
 
 export function getLeftImg() { 
-  return new URL("@/maptalks/assets/imgs/weather/446/left.jpg", import.meta.url);
+  return new URL("../assets/imgs/weather/446/left.jpg", import.meta.url);
 };
 
 export function getRightImg() { 
-  return new URL("@/maptalks/assets/imgs/weather/446/right.jpg", import.meta.url);
+  return new URL("../assets/imgs/weather/446/right.jpg", import.meta.url);
 };
 
 export function getTopImg() { 
-  return new URL("@/maptalks/assets/imgs/weather/446/top.jpg", import.meta.url);
+  return new URL("../assets/imgs/weather/446/top.jpg", import.meta.url);
 };
 
 export function getBottomImg() { 
-  return new URL("@/maptalks/assets/imgs/weather/446/bottom.jpg", import.meta.url);
+  return new URL("../assets/imgs/weather/446/bottom.jpg", import.meta.url);
 };
