@@ -8,12 +8,14 @@ import { urlToBase64 } from "@pureadmin/utils";
  * @param encoderOptions `0` 到 `1` 之间的取值，主要用来选定图片的质量，默认值是 `0.92`，超出范围也会选择默认值
  * @returns 
  */
-export function localImgToBase64(path: string, mineType?: string, encoderOptions?: number) {
-  let resUrl = "";
-  urlToBase64(path, mineType, encoderOptions).then(res => {
-    resUrl = res;
+export async function localImgToBase64(path: string, mineType?: string, encoderOptions?: number) {
+  let res = "";
+  await urlToBase64(path, mineType, encoderOptions).then(res => {
+    res = res;
+  }).catch((error) => {
+    console.error(error);
   });
-  return resUrl;
+  return res;
 };
 
 /**
@@ -21,12 +23,14 @@ export function localImgToBase64(path: string, mineType?: string, encoderOptions
  * @param url 
  * @returns 
  */
-export function onlineImgToBase64(url: string) {
-  let resUrl = "";
-  urlToBase64(url).then(res => {
-    resUrl = res;
+export async function onlineImgToBase64(url: string) {
+  let res = "";
+  await urlToBase64(url).then(res => {
+    res = res;
+  }).catch((error) => {
+    console.error(error);
   });
-  return resUrl;
+  return res;
 };
 
 export function getFrontImg() { 
