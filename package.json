@@ -44,6 +44,7 @@
   "license": "MIT",
   "author": "zhao2guai <1090685714@qq.com> (https://gitee.com/zhao2guai)",
   "dependencies": {
+    "@esmjs/geo": "^1.0.0",
     "@maptalks/gl-layers": "^0.34.1",
     "@maptalks/transcoders.crn": "^0.97.4",
     "@maptalks/transcoders.draco": "^0.97.4",
