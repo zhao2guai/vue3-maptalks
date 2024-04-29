@@ -28,6 +28,11 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    // 地形配置
+    terrain: {
+      type: Object,
+      default: undefined
+    },
     // 天地图密匙
     tk: {
       type: String,
@@ -93,7 +98,9 @@ export default defineComponent({
     // 判断地形开关是否开启，天地图密匙是否存在
     if (props.terrainSwitch === true) {
       // 设置天地图3D地形
-      const terrain = tiandituApi.getTerrain(props.tk);
+      const terrain = props.tk
+        ? tiandituApi.getTerrain(props.tk)
+        : props.terrain;
       if (terrain) groupGLLayer.setTerrain(terrain);
     }
     // 设置场景配置
