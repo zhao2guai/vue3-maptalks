@@ -40,14 +40,14 @@ export default defineComponent({
     let id = props.id ? props.id : buildUUID();
 
     // 接收图层配置信息并初始化图层对象
-    let layer = new VectorTileLayer(id, props.options);
+    let vectorTileLayer = new VectorTileLayer(id, props.options);
 
     // 监听矢量瓦片图层ID
     watch(
       () => props.id,
       newId => {
-        if (layer && newId) {
-          layer.setId(newId);
+        if (vectorTileLayer && newId) {
+          vectorTileLayer.setId(newId);
         }
       },
       { immediate: true }
@@ -56,8 +56,8 @@ export default defineComponent({
     watch(
       () => props.options,
       newOptions => {
-        if (layer && newOptions) {
-          layer.setOptions(newOptions);
+        if (vectorTileLayer && newOptions) {
+          vectorTileLayer.setOptions(newOptions);
         }
       },
       { immediate: true, deep: true }
@@ -79,20 +79,21 @@ export default defineComponent({
       const groupGLLayer = inject("groupGLLayer", null);
       // 若是GL图层存在则优先添加到它里面
       if (groupGLLayer) {
-        groupGLLayer.addLayer(layer);
+        groupGLLayer.addLayer(vectorTileLayer);
         return;
       }
     };
 
+    // 移除并销毁图层对象
     const removeAll = () => {
-      if (layer) {
-        layer.reomve();
-        layer = undefined;
+      if (vectorTileLayer) {
+        vectorTileLayer.reomve();
+        vectorTileLayer = undefined;
       }
     };
 
     return {
-      layer
+      vectorTileLayer
     };
   }
 });

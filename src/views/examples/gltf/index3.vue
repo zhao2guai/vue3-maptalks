@@ -58,8 +58,7 @@
   </div>
 </template>
 <script setup>
-import { title } from "process";
-import { ref, onMounted, onBeforeUnmount, reactive } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 
 const loading = ref(true);
 
@@ -134,10 +133,7 @@ let defaultSceneConfig = {
 };
 // 大角牛
 let cow1 = {
-  url: new URL(
-    "@/maptalks/assets/gltf/texas_longhorn/scene.gltf",
-    import.meta.url
-  ), //模型的url
+  url: new URL("@/assets/gltf/texas_longhorn/scene.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -155,10 +151,7 @@ let cow1 = {
   rotationZ: 90
 };
 let cow2 = {
-  url: new URL(
-    "@/maptalks/assets/gltf/texas_longhorn/scene.gltf",
-    import.meta.url
-  ), //模型的url
+  url: new URL("@/assets/gltf/texas_longhorn/scene.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -177,7 +170,7 @@ let cow2 = {
 };
 // 黑猪
 let pig1 = {
-  url: new URL("@/maptalks/assets/gltf/black_pig/scene.gltf", import.meta.url), //模型的url
+  url: new URL("@/assets/gltf/black_pig/scene.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -196,7 +189,7 @@ let pig1 = {
 };
 // 白猪
 let pig2 = {
-  url: new URL("@/maptalks/assets/gltf/animal/pig.gltf", import.meta.url), //模型的url
+  url: new URL("@/assets/gltf/animal/pig.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -215,10 +208,7 @@ let pig2 = {
 };
 // 牛围栏
 let barn = {
-  url: new URL(
-    "@/maptalks/assets/gltf/farm_cow_barn/scene.gltf",
-    import.meta.url
-  ), //模型的url
+  url: new URL("@/assets/gltf/farm_cow_barn/scene.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -237,10 +227,7 @@ let barn = {
 };
 // 棚子
 let farm = {
-  url: new URL(
-    "@/maptalks/assets/gltf/farm_pigsty/scene.gltf",
-    import.meta.url
-  ), //模型的url
+  url: new URL("@/assets/gltf/farm_pigsty/scene.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -258,10 +245,7 @@ let farm = {
 };
 // 鸡
 let chicken = {
-  url: new URL(
-    "@/maptalks/assets/gltf/chicken_rig/scene.gltf",
-    import.meta.url
-  ), //模型的url
+  url: new URL("@/assets/gltf/chicken_rig/scene.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -281,7 +265,7 @@ let chicken = {
 
 let sheep1 = {
   url: new URL(
-    "@/maptalks/assets/gltf/sheep-test_non-commercial/scene.gltf",
+    "@/assets/gltf/sheep-test_non-commercial/scene.gltf",
     import.meta.url
   ), //模型的url
   visible: true, //模型是否可见
@@ -302,7 +286,7 @@ let sheep1 = {
 
 let sheep2 = {
   url: new URL(
-    "@/maptalks/assets/gltf/sheep-test_non-commercial/scene.gltf",
+    "@/assets/gltf/sheep-test_non-commercial/scene.gltf",
     import.meta.url
   ), //模型的url
   visible: true, //模型是否可见
@@ -323,7 +307,7 @@ let sheep2 = {
 
 let sheep3 = {
   url: new URL(
-    "@/maptalks/assets/gltf/sheep-test_non-commercial/scene.gltf",
+    "@/assets/gltf/sheep-test_non-commercial/scene.gltf",
     import.meta.url
   ), //模型的url
   visible: true, //模型是否可见

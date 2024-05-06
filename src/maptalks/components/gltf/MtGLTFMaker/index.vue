@@ -23,7 +23,7 @@ export default defineComponent({
   props: {
     // 点的id
     id: {
-      type: String,
+      type: [String, Number],
       default: ""
     },
     // 坐标
@@ -51,7 +51,7 @@ export default defineComponent({
         shader: "pbr" //模型绘制的shader，可选值：pbr, phong, wireframe
       })
     },
-    // 弹框
+    // 弹框HTML内容
     content: {
       type: String,
       default: ""

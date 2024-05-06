@@ -101,7 +101,7 @@ let defaultSceneConfig = {
 };
 // 摄像头杆子35
 let symbol1 = {
-  url: new URL("@/maptalks/assets/gltf/camera/pole35.gltf", import.meta.url), //模型的url
+  url: new URL("@/assets/gltf/camera/pole35.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -119,7 +119,7 @@ let symbol1 = {
 };
 // 摄像头杆子37
 let symbol2 = {
-  url: new URL("@/maptalks/assets/gltf/camera/pole37.gltf", import.meta.url), //模型的url
+  url: new URL("@/assets/gltf/camera/pole37.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -138,7 +138,7 @@ let symbol2 = {
 // 厂房
 let symbol3 = {
   url: new URL(
-    "@/maptalks/assets/gltf/factory/changfang.gltf",
+    "@/assets/gltf/factory/changfang.gltf",
     import.meta.url
   ), //模型的url
   visible: true, //模型是否可见
@@ -233,23 +233,6 @@ onBeforeUnmount(() => {
     bottom: 1vh;
     width: 100%;
     text-align: center;
-  }
-  .infopop_arrow {
-    float: left;
-    width: 15px;
-    height: 24px;
-    line-height: 24px;
-  }
-  .icon-close {
-    position: absolute;
-    top: 0.2vh;
-    right: 0.5vh;
-    display: inline-block;
-    width: 1.8519vh;
-    height: 1.8519vh;
-    background: url("../maptalksclone/assets/images/close-icon.png") no-repeat
-      center/100% 100%;
-    cursor: pointer;
   }
 }
 </style>

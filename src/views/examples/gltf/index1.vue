@@ -7,6 +7,7 @@
             v-for="(item, index) in makerList"
             :key="index"
             :ref="el => setPointRef(el, index)"
+            :id="item.id"
             :point="item.point"
             :symbol="item.symbol"
             :content="item.content"
@@ -93,10 +94,11 @@ let defaultSceneConfig = {
 // 模型数组
 let makerList = [
   {
+    id: 10,
     name: "厂房",
     point: [81.868822, 44.945405],
     symbol: {
-      url: new URL("@/maptalks/assets/gltf/farm/scene.gltf", import.meta.url), //模型的url
+      url: new URL("@/assets/gltf/farm/scene.gltf", import.meta.url), //模型的url
       visible: true, //模型是否可见
       translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
       rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -124,10 +126,11 @@ let makerList = [
       "</div>"
   },
   {
+    id: 11,
     name: "摄像头监测设备",
     point: [81.863822, 44.940405],
     symbol: {
-      url: new URL("@/maptalks/assets/gltf/equipment/01.gltf", import.meta.url), //模型的url
+      url: new URL("@/assets/gltf/equipment/01.gltf", import.meta.url), //模型的url
       visible: true, //模型是否可见
       translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
       rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -153,10 +156,11 @@ let makerList = [
       "</div>"
   },
   {
+    id: 12,
     name: "气象监测设备",
     point: [81.873822, 44.940405],
     symbol: {
-      url: new URL("@/maptalks/assets/gltf/equipment/02.gltf", import.meta.url), //模型的url
+      url: new URL("@/assets/gltf/equipment/02.gltf", import.meta.url), //模型的url
       visible: true, //模型是否可见
       translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
       rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -182,10 +186,11 @@ let makerList = [
       "</div>"
   },
   {
+    id: 13,
     name: "虫情设备",
     point: [81.863822, 44.950405],
     symbol: {
-      url: new URL("@/maptalks/assets/gltf/equipment/02.gltf", import.meta.url), //模型的url
+      url: new URL("@/assets/gltf/equipment/02.gltf", import.meta.url), //模型的url
       visible: true, //模型是否可见
       translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
       rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -211,10 +216,11 @@ let makerList = [
       "</div>"
   },
   {
+    id: 14,
     name: "水肥一体机",
     point: [81.873822, 44.950405],
     symbol: {
-      url: new URL("@/maptalks/assets/gltf/equipment/04.gltf", import.meta.url), //模型的url
+      url: new URL("@/assets/gltf/equipment/04.gltf", import.meta.url), //模型的url
       visible: true, //模型是否可见
       translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
       rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -242,7 +248,7 @@ let makerList = [
 ];
 // 摄像头监测设备
 let symbol1 = {
-  url: new URL("@/maptalks/assets/gltf/equipment/01.gltf", import.meta.url), //模型的url
+  url: new URL("@/assets/gltf/equipment/01.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -260,7 +266,7 @@ let symbol1 = {
 };
 // 气象监测设备
 let symbol2 = {
-  url: new URL("@/maptalks/assets/gltf/equipment/02.gltf", import.meta.url), //模型的url
+  url: new URL("@/assets/gltf/equipment/02.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -278,7 +284,7 @@ let symbol2 = {
 };
 // 虫情设备
 let symbol4 = {
-  url: new URL("@/maptalks/assets/gltf/equipment/03.gltf", import.meta.url), //模型的url
+  url: new URL("@/assets/gltf/equipment/03.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -296,7 +302,7 @@ let symbol4 = {
 };
 // 水肥一体机
 let symbol5 = {
-  url: new URL("@/maptalks/assets/gltf/equipment/04.gltf", import.meta.url), //模型的url
+  url: new URL("@/assets/gltf/equipment/04.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -314,7 +320,7 @@ let symbol5 = {
 };
 // 厂房
 let symbol3 = {
-  url: new URL("@/maptalks/assets/gltf/farm/scene.gltf", import.meta.url), //模型的url
+  url: new URL("@/assets/gltf/farm/scene.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -343,20 +349,7 @@ let infoWindowOptions = {
     '<div class="infopop_dept">' +
     "</div>"
 };
-// 自定义弹窗内容
-let cfOptions = {
-  custom: true,
-  content:
-    '<div class="infocontent" ref="infoWindowRef">' +
-    '<div class="infopop_title">2号种植大棚</div>' +
-    '<div class="infopop_title">大棚编号: A103JHR89Y20</div>' +
-    '<div class="infopop_title">大棚占地（亩）: 10</div>' +
-    '<div class="infopop_title">种植作物: 辣椒</div>' +
-    '<div class="infopop_title">作物苗量（株）: 2000</div>' +
-    '<div class="infopop_dept">=> 点击进入 <=' +
-    "</div>"
-};
-
+// 获取组件返回的地图对象
 function getMap(e) {
   map = e;
   loading.value = false;
@@ -370,19 +363,25 @@ function setPointRef(el, index) {
     swipeCellRefList.value[index] = el;
   }
 }
+// 添加点击弹窗事件
 function changeMaker(item, index) {
   const gltfMarker = swipeCellRefList.value[index].gltfMarker;
   const infoWindow = gltfMarker.getInfoWindow();
-  infoWindow.setContent(
-    '<div class="infocontent" ref="infoWindowRef">' +
-      '<div class="infopop_title">2号种植大棚</div>' +
-      '<div class="infopop_title">大棚编号: A103JHR89Y20</div>' +
-      '<div class="infopop_title">大棚占地（亩）: 10</div>' +
-      '<div class="infopop_title">种植作物: 辣椒</div>' +
-      '<div class="infopop_title">作物苗量（株）: 2000</div>' +
-      '<div class="infopop_dept">=> 新内容 <=' +
-      "</div>"
-  );
+  // id为10就是大棚房子
+  if (item.id === 10) {
+    infoWindow.setContent(
+      '<div class="infocontent" ref="infoWindowRef">' +
+        '<div class="infopop_title">2号种植大棚</div>' +
+        '<div class="infopop_title">大棚编号: A103JHR89Y20</div>' +
+        '<div class="infopop_title">大棚占地（亩）: 10</div>' +
+        '<div class="infopop_title">种植作物: 辣椒</div>' +
+        '<div class="infopop_title">作物苗量（株）: 2000</div>' +
+        '<div class="infopop_dept">=> 点击进入 <=' +
+        "</div>"
+    );
+  } else {
+    infoWindow.setContent(infoWindowOptions.content);
+  }
 }
 onMounted(() => {});
 

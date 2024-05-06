@@ -10,10 +10,10 @@ export default {
   children: [
     {
       path: "/layers/index1",
-      name: "webgl图层",
+      name: "WebGL图层",
       component: () => import("@/views/examples/layers/index1.vue"),
       meta: {
-        title: "webgl图层"
+        title: "WebGL图层"
       }
     },
     {
