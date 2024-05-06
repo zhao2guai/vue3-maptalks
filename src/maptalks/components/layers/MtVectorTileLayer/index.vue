@@ -8,10 +8,9 @@
 import {
   defineComponent,
   inject,
-  onBeforeUnmount,
+  onUnmounted,
   onBeforeMount,
-  watch,
-  ref
+  watch
 } from "vue";
 import { VectorTileLayer } from "@maptalks/gl-layers";
 import { buildUUID } from "@pureadmin/utils";
@@ -69,7 +68,7 @@ export default defineComponent({
     });
 
     // 页面元素销毁之前执行
-    onBeforeUnmount(() => {
+    onUnmounted(() => {
       removeAll();
     });
 

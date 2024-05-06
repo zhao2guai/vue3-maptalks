@@ -45,7 +45,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
 // 地图加载状态
-const loading = ref(true);
+let loading = ref(true);
 // 地图组件名称
 const mapRef = ref(null);
 // webGL图层地形开关

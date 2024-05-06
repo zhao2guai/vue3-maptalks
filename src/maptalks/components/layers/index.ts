@@ -12,6 +12,8 @@ import MtTiandituLayer from "./MtTiandituLayer/index.vue";
 import MtGroupTileLayer from "./MtGroupTileLayer/index.vue";
 import MtWMSTileLayer from "./MtWMSTileLayer/index.vue";
 import MtVectorTileLayer from "./MtVectorTileLayer/index.vue";
+import MtGeoJSONVectorTileLayer from "./MtGeoJSONVectorTileLayer/index.vue";
+import MtGeo3DTilesLayer from "./MtGeo3DTilesLayer/index.vue";
 
 function install(app: App) {
   // webgl图层集合的管理和融合类
@@ -26,6 +28,10 @@ function install(app: App) {
   app.component('mt-wms-tile-layer', MtWMSTileLayer);
   // 矢量瓦片图层
   app.component('mt-vector-tile-layer', MtVectorTileLayer);
+  // GEOJSON矢量瓦片图层
+  app.component('mt-geojson-vector-tile-layer', MtGeoJSONVectorTileLayer);
+  // GEO3D矢量瓦片图层
+  app.component('mt-geo3d-tile-layer', MtGeo3DTilesLayer);
 }
 
 export default install;
@@ -37,5 +43,7 @@ export {
   MtTiandituLayer,
   MtGroupTileLayer,
   MtWMSTileLayer,
-  MtVectorTileLayer
+  MtVectorTileLayer,
+  MtGeoJSONVectorTileLayer,
+  MtGeo3DTilesLayer
 };
