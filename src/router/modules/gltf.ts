@@ -32,6 +32,14 @@ export default {
       meta: {
         title: "动物模型"
       }
+    },
+    {
+      path: "/gltf/index4",
+      name: "批量模型",
+      component: () => import("@/views/examples/gltf/index4.vue"),
+      meta: {
+        title: "批量模型"
+      }
     }
   ]
 } satisfies RouteConfigsTable;

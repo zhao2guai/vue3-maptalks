@@ -10,8 +10,7 @@ import {
   inject,
   onBeforeUnmount,
   onBeforeMount,
-  watch,
-  nextTick
+  watch
 } from "vue";
 import { GLTFMarker } from "@maptalks/gl-layers";
 import { buildUUID } from "@pureadmin/utils";
