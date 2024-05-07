@@ -68,6 +68,7 @@ export default defineComponent({
     // 页面加载后执行
     onBeforeMount(() => {
       addGLTFLayer();
+      initEvents();
     });
 
     // 页面元素销毁之前执行
@@ -84,6 +85,67 @@ export default defineComponent({
         groupGLLayer.addLayer(gltfLayer);
         return;
       }
+    };
+
+    // 初始化图层事件
+    const initEvents = () => {
+      if (!gltfLayer) return;
+      // 更新Layer的style中序号为index的symbol的updatesymbol事件
+      gltfLayer.on("updatesymbol", event => {
+        context.emit("updatesymbol", event);
+      });
+      // worker准备就绪事件
+      gltfLayer.on("workerready", event => {
+        context.emit("workerready", event);
+      });
+      // 模型加载错误事件
+      gltfLayer.on("modelerror", event => {
+        context.emit("modelerror", event);
+      });
+      // 模型加载成功事件
+      gltfLayer.on("modelload", event => {
+        context.emit("modelload", event);
+      });
+      // 添加Geometry事件
+      gltfLayer.on("addgeo", event => {
+        context.emit("addgeo", event);
+      });
+      // 移除Geometry事件
+      gltfLayer.on("removegeo", event => {
+        context.emit("removegeo", event);
+      });
+      // 调用图层setStyle设置图层样式后的事件
+      gltfLayer.on("setstyle", event => {
+        context.emit("setstyle", event);
+      });
+      // 调用图层removeStyle清除图层样式后的事件
+      gltfLayer.on("removestyle", event => {
+        context.emit("removestyle", event);
+      });
+      // 图层被清除事件
+      gltfLayer.on("clear", event => {
+        context.emit("clear", event);
+      });
+      // 图层id变化事件
+      gltfLayer.on("idchange", event => {
+        context.emit("idchange", event);
+      });
+      // renderer创建事件
+      gltfLayer.on("renderercreate", event => {
+        context.emit("renderercreate", event);
+      });
+      // canvas创建事件
+      gltfLayer.on("canvascreate", event => {
+        context.emit("canvascreate", event);
+      });
+      // 开始渲染事件
+      gltfLayer.on("renderstart", event => {
+        context.emit("renderstart", event);
+      });
+      // 结束渲染事件
+      gltfLayer.on("renderend", event => {
+        context.emit("renderend", event);
+      });
     };
 
     // 移除地图gltf三维模型绘制图层

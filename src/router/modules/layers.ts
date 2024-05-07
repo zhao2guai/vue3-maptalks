@@ -39,6 +39,14 @@ export default {
       meta: {
         title: "服务图层"
       },
+    },
+    {
+      path: "/layers/index5",
+      name: "3dtiles图层",
+      component: () => import("@/views/examples/layers/index5.vue"),
+      meta: {
+        title: "3dtiles图层"
+      },
     }
   ]
 } satisfies RouteConfigsTable;

@@ -163,6 +163,7 @@ export default defineComponent({
     onBeforeMount(() => {
       addwmsLayer();
       initOlTileLayer();
+      initEvents();
     });
 
     // 页面元素销毁之前执行
@@ -194,6 +195,7 @@ export default defineComponent({
       }
     };
 
+    // 初始化openlayers图层对象
     const initOlTileLayer = () => {
       if (props.isFeatureInfo && wmsLayer) {
         // 同步创建一个ol的图层对象
@@ -212,6 +214,59 @@ export default defineComponent({
           properties: properties
         });
       }
+    };
+
+    // 初始化图层事件
+    const initEvents = () => {
+      if (!wmsLayer) return;
+      // 监听clear事件
+      wmsLayer.on("clear", event => {
+        context.emit("clear", event);
+      });
+      // 监听id改变事件
+      wmsLayer.on("idchange", event => {
+        context.emit("idchange", event);
+      });
+      // 图层高度改变事件
+      wmsLayer.on("setzindex", event => {
+        context.emit("setzindex", event);
+      });
+      // 图层透明度改变事件
+      wmsLayer.on("setopacity", event => {
+        context.emit("setopacity", event);
+      });
+      // 图层显示时候触发事件
+      wmsLayer.on("show", event => {
+        context.emit("show", event);
+      });
+      // 图层显示时候触发事件
+      wmsLayer.on("hide", event => {
+        context.emit("hide", event);
+      });
+      // renderer创建事件
+      wmsLayer.on("renderercreate", event => {
+        context.emit("renderercreate", event);
+      });
+      // 关闭图层触发事件
+      wmsLayer.on("visiblechange", event => {
+        context.emit("visiblechange", event);
+      });
+      // 数据源加载时候触发事件。
+      wmsLayer.on("resourceload", event => {
+        context.emit("resourceload", event);
+      });
+      // canvas创建时候触发事件。
+      wmsLayer.on("canvascreate", event => {
+        context.emit("canvascreate", event);
+      });
+      // 开始渲染事件
+      wmsLayer.on("renderstart", event => {
+        context.emit("renderstart", event);
+      });
+      // 结束渲染事件
+      wmsLayer.on("renderend", event => {
+        context.emit("renderend", event);
+      });
     };
 
     // 移除地图所有图层销毁地图组件
@@ -236,8 +291,7 @@ export default defineComponent({
     return {
       wmsLayer,
       olTileLayer,
-      getOlLayer,
-      proj
+      getOlLayer
     };
   }
 });

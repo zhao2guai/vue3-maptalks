@@ -70,6 +70,7 @@ export default defineComponent({
     // 页面加载后执行
     onBeforeMount(() => {
       addGroupLayer();
+      initEvents();
     });
 
     // 页面元素销毁之前执行
@@ -95,6 +96,59 @@ export default defineComponent({
         groupTileLayer.addTo(map);
         return;
       }
+    };
+
+    // 初始化图层事件
+    const initEvents = () => {
+      if (!groupTileLayer) return;
+      // 监听clear事件
+      groupTileLayer.on("clear", event => {
+        context.emit("clear", event);
+      });
+      // 监听id改变事件
+      groupTileLayer.on("idchange", event => {
+        context.emit("idchange", event);
+      });
+      // 图层高度改变事件
+      groupTileLayer.on("setzindex", event => {
+        context.emit("setzindex", event);
+      });
+      // 图层透明度改变事件
+      groupTileLayer.on("setopacity", event => {
+        context.emit("setopacity", event);
+      });
+      // 图层显示时候触发事件
+      groupTileLayer.on("show", event => {
+        context.emit("show", event);
+      });
+      // 图层显示时候触发事件
+      groupTileLayer.on("hide", event => {
+        context.emit("hide", event);
+      });
+      // renderer创建事件
+      groupTileLayer.on("renderercreate", event => {
+        context.emit("renderercreate", event);
+      });
+      // 关闭图层触发事件
+      groupTileLayer.on("visiblechange", event => {
+        context.emit("visiblechange", event);
+      });
+      // 数据源加载时候触发事件。
+      groupTileLayer.on("resourceload", event => {
+        context.emit("resourceload", event);
+      });
+      // canvas创建时候触发事件。
+      groupTileLayer.on("canvascreate", event => {
+        context.emit("canvascreate", event);
+      });
+      // 开始渲染事件
+      groupTileLayer.on("renderstart", event => {
+        context.emit("renderstart", event);
+      });
+      // 结束渲染事件
+      groupTileLayer.on("renderend", event => {
+        context.emit("renderend", event);
+      });
     };
 
     // 移除地图所有图层销毁地图组件

@@ -144,6 +144,7 @@ export default defineComponent({
     // 页面加载后执行
     onBeforeMount(() => {
       addGLLayer();
+      initEvents();
     });
 
     // 页面元素销毁之前执行
@@ -191,6 +192,51 @@ export default defineComponent({
           groupGLLayer.removeLayer(layers[i]);
         }
       }
+    };
+
+    // 初始化图层事件
+    const initEvents = () => {
+      if (!groupGLLayer) return;
+      // 后处理开始事件
+      groupGLLayer.on("postprocessstart", event => {
+        context.emit("postprocessstart", event);
+      });
+      // 后处理结束事件
+      groupGLLayer.on("postprocessend", event => {
+        context.emit("postprocessend", event);
+      });
+      // TAA抗锯齿开始事件
+      groupGLLayer.on("taastart", event => {
+        context.emit("taastart", event);
+      });
+      // TAA抗锯齿结束事件
+      groupGLLayer.on("taaend", event => {
+        context.emit("taaend", event);
+      });
+      // 监听clear事件
+      groupGLLayer.on("clear", event => {
+        context.emit("clear", event);
+      });
+      // 监听id改变事件
+      groupGLLayer.on("idchange", event => {
+        context.emit("idchange", event);
+      });
+      // renderer创建事件
+      groupGLLayer.on("renderercreate", event => {
+        context.emit("renderercreate", event);
+      });
+      // canvas创建时候触发事件。
+      groupGLLayer.on("canvascreate", event => {
+        context.emit("canvascreate", event);
+      });
+      // 开始渲染事件
+      groupGLLayer.on("renderstart", event => {
+        context.emit("renderstart", event);
+      });
+      // 结束渲染事件
+      groupGLLayer.on("renderend", event => {
+        context.emit("renderend", event);
+      });
     };
 
     // 移除地图所有图层销毁地图组件
