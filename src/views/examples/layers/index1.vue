@@ -7,20 +7,13 @@
       @getMap="getMap"
     >
       <mt-group-gl-layer
+        :sceneConfig="sceneConfig"
         :terrainSwitch="terrainSwitch"
         tk="ec89e7ba91633b147f76d47e08f9f1a1"
       >
         <mt-tianditu-layer
           tk="ec89e7ba91633b147f76d47e08f9f1a1"
           layerType="img"
-        />
-        <mt-tianditu-layer
-          tk="ec89e7ba91633b147f76d47e08f9f1a1"
-          layerType="cia"
-        />
-        <mt-tianditu-layer
-          tk="ec89e7ba91633b147f76d47e08f9f1a1"
-          layerType="ibo"
         />
       </mt-group-gl-layer>
     </mt-init-map>
@@ -63,8 +56,38 @@ let options = {
   },
   minZoom: 1,
   maxZoom: 18,
-  bearing: 0,
-  pitch: 0
+  bearing: -15,
+  pitch: 75
+};
+// 场景配置
+let sceneConfig = {
+  environment: {
+    enable: true,
+    mode: 1,
+    level: 0,
+    brightness: 0.489
+  },
+  shadow: {
+    type: "esm",
+    enable: true,
+    quality: "high",
+    opacity: 0.5,
+    color: [0, 0, 0],
+    blurOffset: 1
+  },
+  postProcess: {
+    enable: true
+  },
+  ground: {
+    enable: true, // 开启地面配置
+    renderPlugin: {
+      type: "fill"
+    },
+    symbol: {
+      polygonFill: [0.803921568627451, 0.803921568627451, 0.803921568627451, 1],
+      polygonOpacity: 1
+    }
+  }
 };
 // 地图加载完毕回调
 function getMap(e) {

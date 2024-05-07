@@ -144,7 +144,7 @@ export default defineComponent({
     // 移除并销毁图层对象
     const removeAll = () => {
       if (geo3DTilesLayer) {
-        geo3DTilesLayer.reomve();
+        geo3DTilesLayer.remove();
         geo3DTilesLayer = undefined;
       }
     };

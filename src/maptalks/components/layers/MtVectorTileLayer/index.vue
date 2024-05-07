@@ -86,7 +86,7 @@ export default defineComponent({
     // 移除并销毁图层对象
     const removeAll = () => {
       if (vectorTileLayer) {
-        vectorTileLayer.reomve();
+        vectorTileLayer.remove();
         vectorTileLayer = undefined;
       }
     };
