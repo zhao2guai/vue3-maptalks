@@ -14,6 +14,8 @@ import MtWMSTileLayer from "./MtWMSTileLayer/index.vue";
 import MtVectorTileLayer from "./MtVectorTileLayer/index.vue";
 import MtGeoJSONVectorTileLayer from "./MtGeoJSONVectorTileLayer/index.vue";
 import MtGeo3DTilesLayer from "./MtGeo3DTilesLayer/index.vue";
+import MtThreeLayer from "./MtThreeLayer/index.vue";
+import MtVectorLayer from "./MtVectorLayer/index.vue";
 
 function install(app: App) {
   // webgl图层集合的管理和融合类
@@ -32,6 +34,10 @@ function install(app: App) {
   app.component('mt-geojson-vector-tile-layer', MtGeoJSONVectorTileLayer);
   // GEO3D矢量瓦片图层
   app.component('mt-geo3d-tile-layer', MtGeo3DTilesLayer);
+  // ThreeJS图层
+  app.component('mt-three-layer', MtThreeLayer);
+  // 矢量数据图层
+  app.component('mt-vector-layer', MtVectorLayer);
 }
 
 export default install;
@@ -45,5 +51,7 @@ export {
   MtWMSTileLayer,
   MtVectorTileLayer,
   MtGeoJSONVectorTileLayer,
-  MtGeo3DTilesLayer
+  MtGeo3DTilesLayer,
+  MtThreeLayer,
+  MtVectorLayer
 };

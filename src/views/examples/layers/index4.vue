@@ -118,7 +118,7 @@ const singleclick = e => {
     wmstilelayer1.value.getOlLayer(),
     wmstilelayer2.value.getOlLayer()
   ];
-  console.log(map.getExtent());
+  // console.log(map.getExtent());
   for (let i = 0; i < wmstilelayerRefList.length; i++) {
     if (wmstilelayerRefList[i]) {
       let url = wmstilelayerRefList[i]

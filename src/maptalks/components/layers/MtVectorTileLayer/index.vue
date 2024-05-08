@@ -21,7 +21,7 @@ export default defineComponent({
   props: {
     // 矢量瓦片图层id
     id: {
-      type: String,
+      type: [String, Number],
       default: ""
     },
     // 矢量瓦片图层配置信息

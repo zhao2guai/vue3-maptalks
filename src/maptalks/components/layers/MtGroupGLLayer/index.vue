@@ -107,6 +107,8 @@ export default defineComponent({
     if (props.sceneConfig) {
       groupGLLayer.setSceneConfig(props.sceneConfig);
     }
+    // 图层创建后的回调
+    context.emit("layerCreated", groupGLLayer);
     // 将GL图层添加到注册组件中提供给子组件调用
     provide("groupGLLayer", groupGLLayer);
 
