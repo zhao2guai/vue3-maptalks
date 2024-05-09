@@ -16,11 +16,7 @@
         layerType="ibo"
         cssFilter="sepia(100%) invert(90%)"
       />
-      <mt-group-gl-layer
-        ref="glRef"
-        :sceneConfig="sceneConfig"
-        @getLayer="getLayer"
-      >
+      <mt-group-gl-layer ref="glRef" :sceneConfig="sceneConfig">
         <mt-three-layer
           ref="geoRef"
           id="threeLayerId"
@@ -28,26 +24,30 @@
           @layerCreated="loadData"
         ></mt-three-layer>
       </mt-group-gl-layer>
-      <!-- <mt-vector-layer id="vectorId" :options="vectorOptions"></mt-vector-layer> -->
+      <mt-vector-layer
+        ref="vectorRef"
+        id="vectorId"
+        :options="vectorOptions"
+      ></mt-vector-layer>
     </mt-init-map>
   </div>
 </template>
 <script setup>
 import { ColorIn } from "colorin";
-import { GeoJSON, VectorLayer } from "maptalks";
-import { ThreeLayer } from "maptalks.three";
+import { GeoJSON } from "maptalks";
 import { DirectionalLight, AmbientLight, MeshPhongMaterial } from "three";
 import { ref, onMounted, onBeforeUnmount } from "vue";
-import geojson62 from "../../../geojson/62/甘肃省_市.json";
+import { getGeojsonData } from "@/api/geojson";
 // 地图组件名称
 const mapRef = ref(null);
 // geojson矢量瓦片图层名称
 const geoRef = ref(null);
 const glRef = ref(null);
+const vectorRef = ref(null);
+// 地图数据
+let geojsonData = null;
 // 地图对象
 let map = null;
-// 矢量图层对象
-let vectorLayer = null;
 // 地图加载状态
 let loading = ref(true);
 // 初始化地图参数
@@ -105,7 +105,8 @@ let vectorOptions = {
   geometryEvents: false,
   collision: true,
   collisionDelay: 250,
-  collisionBufferSize: 6
+  collisionBufferSize: 6,
+  zIndex: 99
 };
 // THREE图层配置信息
 let layerOptions = {
@@ -125,38 +126,28 @@ const colors = [
 // 创建颜色插值库
 const ci = new ColorIn(colors);
 // 高亮材质
-const highMaterial = new MeshPhongMaterial({ color: "#fff", vertexColors: 2 });
+const highMaterial = new MeshPhongMaterial({
+  color: "#00FFFF",
+  vertexColors: 2
+});
 // 页面加载后执行
 onMounted(() => {});
 // 页面销毁前执行
 onBeforeUnmount(() => {
   if (map) map = undefined;
 });
-
 // 地图加载完毕回调
 function getMap(e) {
   map = e;
   if (map.isLoaded()) {
-    loading.value = false;
-    addLayer();
+    // loading.value = false;
   }
-}
-function getLayer(e) {}
-// 添加矢量图层
-function addLayer() {
-  vectorLayer = new VectorLayer("layer", {
-    // enableAltitude: true
-    geometryEvents: false,
-    collision: true,
-    collisionDelay: 250,
-    collisionBufferSize: 6,
-    zIndex: 99
-  }).addTo(map);
 }
 // 加载行政区划数据
 function loadData(e) {
   // 获取组件中的THREE图层
   let threeLayer = e;
+  // 为three图层设置场景和光照参数
   threeLayer.prepareToDraw = (gl, scene, camera) => {
     var light = new DirectionalLight(0xffffff);
     light.position.set(0, -10, 10).normalize();
@@ -165,27 +156,37 @@ function loadData(e) {
     addPolygons(threeLayer);
   };
 }
-
 // 添加多边形区划块
-function addPolygons(layer) {
-  // 转换geojson数据
-  let data = getGeoData(geojson62);
-  const polygons = GeoJSON.toGeometry(data);
-  const extrudePolygons = polygons.map(p => {
-    const { value } = p.getProperties();
-    const [r, g, b] = ci.getColor(value);
-    const color = `rgb(${r},${g},${b})`;
-    const extrudePolygon = layer.toExtrudePolygon(
-      p,
-      { height, altitude: -height, topColor: "#fff" },
-      new MeshPhongMaterial({ color })
-    );
-    extrudePolygon.on("mouseover mouseout", mouseEventFunc);
-    return extrudePolygon;
-  });
-  layer.addMesh(extrudePolygons);
-  addOutLines(polygons);
-  addLabels();
+async function addPolygons(layer) {
+  try {
+    // 这里开始模拟查询后台获取geosjon数据当然也可以从本页面import中获取
+    const { data } = await getGeojsonData({ code: "62" });
+    // console.log(data);
+    // 将查询到的geojson数据赋值给全局属性
+    geojsonData = data;
+    const polygons = GeoJSON.toGeometry(geojsonData);
+    const extrudePolygons = polygons.map(p => {
+      const { value } = p.getProperties();
+      const [r, g, b] = ci.getColor(value);
+      const color = `rgb(${r},${g},${b})`;
+      const extrudePolygon = layer.toExtrudePolygon(
+        p,
+        { height, altitude: -height, topColor: "#fff" },
+        new MeshPhongMaterial({ color })
+      );
+      extrudePolygon.on("mouseover mouseout", mouseEventFunc);
+      return extrudePolygon;
+    });
+    layer.addMesh(extrudePolygons);
+    addOutLines(polygons);
+    addLabels();
+  } catch (e) {
+    console.log(e);
+  } finally {
+    setTimeout(() => {
+      loading.value = false;
+    }, 1000);
+  }
 }
 // 添加区划边界线
 function addOutLines(polygons) {
@@ -196,11 +197,14 @@ function addOutLines(polygons) {
       lineColor: "#00FFFF"
     });
   });
-  if (vectorLayer) vectorLayer.addGeometry(polygons);
+  let vectorLayer = vectorRef.value.vectorLayer;
+  if (vectorLayer) {
+    vectorLayer.addGeometry(polygons);
+  }
 }
 // 添加地区名称
 function addLabels() {
-  const points = GeoJSON.toGeometry(geojson62);
+  const points = GeoJSON.toGeometry(geojsonData);
   points.forEach(point => {
     const { name } = point.getProperties();
     point.setSymbol({
@@ -209,8 +213,10 @@ function addLabels() {
       textHaloFill: "#FFFFFF"
     });
   });
+  let vectorLayer = vectorRef.value.vectorLayer;
   if (vectorLayer) vectorLayer.addGeometry(points);
 }
+// 鼠标挪入挪出事件
 function mouseEventFunc(e) {
   const polygon = e.target;
   if (e.type === "mouseover") {
@@ -225,10 +231,11 @@ function mouseEventFunc(e) {
   }
 }
 // 获取行政区划设置行政区划中的地区值
-function getGeoData(data) {
+function setFeatureData(data) {
   let geoData = data;
   for (let i = 0; i < geoData.features.length; i++) {
     const element = geoData.features[i];
+    // 这里因为需要所以
     const num = getRandomInt(1000, 10000);
     element.properties.value = num;
   }
