@@ -1,13 +1,17 @@
 import {
   Eventable,
-  Class
+  Class,
+  Util
 } from "maptalks";
+
 import Supercluster from 'supercluster';
 
 const OPTIONS = {
   radius: 250,
   maxZoom: 18,
 };
+
+let superclusterIndex = null;
 
 function now() {
   return new Date().getTime();
@@ -23,6 +27,7 @@ export default class MarkerClusterLayer extends Eventable(Class) {
       return this;
     }
     const index = new Supercluster(Object.assign({}, OPTIONS, options));
+    superclusterIndex = index;
     this.index = index;
     this.clusterCache = {};
     this.time = now();
@@ -125,9 +130,13 @@ export default class MarkerClusterLayer extends Eventable(Class) {
       return this;
     }
     features.forEach((feature) => {
-      feature.id = feature.id || `f-${maptalks.Util.GUID()}`;
+      feature.id = feature.id || `f-${Util.GUID()}`;
     });
-    this.index.load(features);
+    console.log(this.index);
+    // this.index.load(features);
+    if (superclusterIndex) {
+      superclusterIndex.load(features);
+    }
     this.data = geojson;
     return this;
   }

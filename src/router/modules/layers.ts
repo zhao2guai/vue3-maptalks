@@ -47,6 +47,14 @@ export default {
       meta: {
         title: "3dtiles图层"
       },
+    },
+    {
+      path: "/layers/index6",
+      name: "点聚合图层",
+      component: () => import("@/views/examples/layers/index6.vue"),
+      meta: {
+        title: "点聚合图层"
+      },
     }
   ]
 } satisfies RouteConfigsTable;

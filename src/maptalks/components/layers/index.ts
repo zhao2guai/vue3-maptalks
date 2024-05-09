@@ -16,6 +16,7 @@ import MtGeoJSONVectorTileLayer from "./MtGeoJSONVectorTileLayer/index.vue";
 import MtGeo3DTilesLayer from "./MtGeo3DTilesLayer/index.vue";
 import MtThreeLayer from "./MtThreeLayer/index.vue";
 import MtVectorLayer from "./MtVectorLayer/index.vue";
+import MtMarkerClusterLayer from "./MtMarkerClusterLayer/index.vue";
 
 function install(app: App) {
   // webgl图层集合的管理和融合类
@@ -38,6 +39,8 @@ function install(app: App) {
   app.component('mt-three-layer', MtThreeLayer);
   // 矢量数据图层
   app.component('mt-vector-layer', MtVectorLayer);
+  // 点聚合图层
+  app.component('mt-maker-cluster-layer', MtMarkerClusterLayer);
 }
 
 export default install;
