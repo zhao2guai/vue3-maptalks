@@ -118,12 +118,13 @@ let layerOptions = {
 const height = 25000;
 // 定义颜色值范围
 const colors = [
-  [1000, "lightskyblue"],
+  [2500, "lightskyblue"],
   [5000, "yellow"],
-  [10000, "orangered"]
+  [7500, "orangered"]
 ];
 // 创建颜色插值库
 const ci = new ColorIn(colors);
+// 高亮材质
 const highMaterial = new MeshPhongMaterial({ color: "#fff", vertexColors: 2 });
 // 页面加载后执行
 onMounted(() => {});
@@ -204,8 +205,8 @@ function addLabels() {
     const { name } = point.getProperties();
     point.setSymbol({
       textName: name,
-      textHaloRadius: 0.25,
-      textHaloFill: "#00BFFF"
+      textHaloRadius: 0.5,
+      textHaloFill: "#FFFFFF"
     });
   });
   if (vectorLayer) vectorLayer.addGeometry(points);
