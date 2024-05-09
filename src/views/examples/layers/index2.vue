@@ -13,7 +13,8 @@
         />
         <mt-geojson-vector-tile-layer
           ref="geoRef"
-          :options="layerOptions"
+          :layerStyle="layerStyle"
+          :layerData="layerData"
         ></mt-geojson-vector-tile-layer>
       </mt-group-gl-layer>
     </mt-init-map>
@@ -22,7 +23,7 @@
 <script setup>
 import { ui } from "maptalks";
 import { ref, onMounted, onBeforeUnmount } from "vue";
-import geojson62 from "../../../geojson/62/甘肃省_市.json";
+import { getGeojsonData } from "@/api/geojson";
 // 地图组件名称
 const mapRef = ref(null);
 // geojson矢量瓦片图层名称
@@ -80,7 +81,7 @@ let sceneConfig = {
   }
 };
 // 图层样式信息
-const style = {
+const layerStyle = {
   style: [
     {
       name: "area-fill",
@@ -115,11 +116,8 @@ const style = {
     }
   ]
 };
-// 图层配置信息
-let layerOptions = {
-  style,
-  data: geojson62
-};
+// 图层geojson数据
+let layerData = ref(null);
 // 高亮颜色参数
 let params = {
   color: "#2e7e57",
@@ -134,13 +132,29 @@ var uiMarker = null;
 
 // 页面加载后执行
 onMounted(() => {
-  // loadData();
+  loadData("62");
 });
 // 页面销毁前执行
 onBeforeUnmount(() => {
   if (map) map = undefined;
 });
-
+// 获取地图geojson数据
+async function loadData(code) {
+  try {
+    // 这里开始模拟查询后台获取geosjon数据当然也可以从本页面import中获取
+    const { data } = await getGeojsonData({ code: code });
+    // console.log(data);
+    // 将查询到的geojson数据赋值给全局属性
+    layerData.value = data;
+    // console.log(layerData);
+  } catch (e) {
+    console.log(e);
+  } finally {
+    setTimeout(() => {
+      loading.value = false;
+    }, 1000);
+  }
+}
 // 地图加载完毕回调
 function getMap(e) {
   map = e;
