@@ -24,14 +24,36 @@ export default defineComponent({
       type: [String, Number],
       default: ""
     },
-    // GeoJSON图层配置
-    options: {
+    // GeoJSON图层样式
+    layerStyle: {
       type: Object,
       default: () => ({
-        data: {
-          type: "FeatureCollection",
-          features: []
-        }
+        style: [
+          {
+            filter: true, // 数据的过滤条件
+            renderPlugin: {
+              // 渲染插件
+              type: "native-point",
+              dataConfig: {
+                type: "native-point"
+              }
+            },
+            symbol: {
+              // 样式定义
+              markerSize: 6,
+              markerType: "circle",
+              markerFill: "#0f0"
+            }
+          }
+        ]
+      })
+    },
+    // GeoJSON图层数据
+    layerData: {
+      type: Object,
+      default: () => ({
+        type: "FeatureCollection",
+        features: []
       })
     }
   },
@@ -40,9 +62,43 @@ export default defineComponent({
     // 获取图层ID
     let id = props.id ? props.id : buildUUID();
     // 获取图层样式
-    let options = props.options ? props.options : null;
+    let layerStyle = props.layerStyle
+      ? props.layerStyle
+      : {
+          style: [
+            {
+              filter: true, // 数据的过滤条件
+              renderPlugin: {
+                // 渲染插件
+                type: "native-point",
+                dataConfig: {
+                  type: "native-point"
+                }
+              },
+              symbol: {
+                // 样式定义
+                markerSize: 6,
+                markerType: "circle",
+                markerFill: "#0f0"
+              }
+            }
+          ]
+        };
+    // 默认设置空的数据源
+    let layerData = props.layerData
+      ? props.layerData
+      : {
+          type: "FeatureCollection",
+          features: []
+        };
     // 接收图层配置信息并初始化图层对象
-    let geoJSONVectorTileLayer = new GeoJSONVectorTileLayer(id, options);
+    let geoJSONVectorTileLayer = new GeoJSONVectorTileLayer(id, {
+      data: layerData
+    });
+    // 设置图层样式
+    geoJSONVectorTileLayer.setStyle(layerStyle);
+    // 图层创建后的回调
+    context.emit("layerCreated", geoJSONVectorTileLayer);
 
     // 监听GeoJSON图层ID
     watch(
@@ -55,12 +111,23 @@ export default defineComponent({
       { immediate: true }
     );
 
+    // 监听GeoJSON图层样式
+    watch(
+      () => props.layerStyle,
+      newStyle => {
+        if (geoJSONVectorTileLayer && newStyle) {
+          geoJSONVectorTileLayer.setStyle(newStyle);
+        }
+      },
+      { immediate: true, deep: true }
+    );
+
     // 监听GeoJSON图层配置
     watch(
-      () => props.options,
-      newVal => {
-        if (geoJSONVectorTileLayer && newVal) {
-          geoJSONVectorTileLayer.setOptions(newVal);
+      () => props.layerData,
+      newData => {
+        if (geoJSONVectorTileLayer && newData) {
+          geoJSONVectorTileLayer.setData(newData);
         }
       },
       { immediate: true, deep: true }

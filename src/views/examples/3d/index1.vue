@@ -119,15 +119,15 @@ let layerOptions = {
 const height = 25000;
 // 定义颜色值范围
 const colors = [
-  [2500, "lightskyblue"],
+  [3000, "lightskyblue"],
   [5000, "yellow"],
-  [7500, "orangered"]
+  [7000, "orangered"]
 ];
 // 创建颜色插值库
 const ci = new ColorIn(colors);
 // 高亮材质
 const highMaterial = new MeshPhongMaterial({
-  color: "#00FFFF",
+  color: "#FFFFF",
   vertexColors: 2
 });
 // 页面加载后执行
@@ -152,7 +152,7 @@ function loadData(e) {
     var light = new DirectionalLight(0xffffff);
     light.position.set(0, -10, 10).normalize();
     scene.add(light);
-    scene.add(new AmbientLight("#fff", 0.3));
+    scene.add(new AmbientLight("#FFFFF", 0.8));
     addPolygons(threeLayer);
   };
 }
@@ -168,7 +168,7 @@ async function addPolygons(layer) {
     const extrudePolygons = polygons.map(p => {
       const { value } = p.getProperties();
       const [r, g, b] = ci.getColor(value);
-      const color = `rgb(${r},${g},${b})`;
+      const color = `rgb(${r},${g},${b}),0.5`;
       const extrudePolygon = layer.toExtrudePolygon(
         p,
         { height, altitude: -height, topColor: "#fff" },
@@ -209,8 +209,12 @@ function addLabels() {
     const { name } = point.getProperties();
     point.setSymbol({
       textName: name,
+      textFaceName: "sans-serif",
+      textFill: "#FFFFF",
+      textHorizontalAlignment: "right",
+      textSize: 18,
       textHaloRadius: 0.5,
-      textHaloFill: "#FFFFFF"
+      textHaloFill: "#00FFF"
     });
   });
   let vectorLayer = vectorRef.value.vectorLayer;
@@ -229,23 +233,6 @@ function mouseEventFunc(e) {
       polygon.getObject3d().material = polygon._oldSymbol;
     }
   }
-}
-// 获取行政区划设置行政区划中的地区值
-function setFeatureData(data) {
-  let geoData = data;
-  for (let i = 0; i < geoData.features.length; i++) {
-    const element = geoData.features[i];
-    // 这里因为需要所以
-    const num = getRandomInt(1000, 10000);
-    element.properties.value = num;
-  }
-  return geoData;
-}
-// 生成范围之间的随机整数
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 </script>
 
