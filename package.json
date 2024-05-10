@@ -79,6 +79,7 @@
     "supercluster": "^8.0.1",
     "three": "^0.164.1",
     "vue": "^3.4.21",
+    "vue-i18n": "^9.13.1",
     "vue-demi": "^0.14.7",
     "vue-router": "^4.3.0",
     "vue-tippy": "^6.4.1",
