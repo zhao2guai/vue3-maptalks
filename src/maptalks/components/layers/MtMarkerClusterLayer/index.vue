@@ -54,8 +54,16 @@ export default defineComponent({
         });
       }
       // 图层创建后的回调
-      context.emit("markerClick");
+      marker.on("click", markerClick);
       return marker;
+    };
+
+    const markerClick = e => {
+      if (e.target.feature.properties.cluster) {
+        console.log("我是一个聚合点");
+      } else {
+        context.emit("getMarkData", e.target.feature.properties);
+      }
     };
 
     let markerClusterLayer = new MarkerClusterLayerModel({ createIcon });
@@ -105,6 +113,20 @@ export default defineComponent({
     onBeforeMount(() => {
       addUIMarker();
     });
+
+    // 页面元素销毁之前执行
+    onBeforeUnmount(() => {
+      removeAll();
+    });
+
+    // 移除地图gltf三维模型绘制图层
+    const removeAll = () => {
+      if (markerClusterLayer) {
+        markerClusterLayer.clear();
+        markerClusterLayer.remove();
+        markerClusterLayer = undefined;
+      }
+    };
 
     return {
       createIcon

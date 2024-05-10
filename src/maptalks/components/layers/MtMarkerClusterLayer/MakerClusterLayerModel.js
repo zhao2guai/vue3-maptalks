@@ -132,7 +132,6 @@ export default class MarkerClusterLayer extends Eventable(Class) {
     features.forEach((feature) => {
       feature.id = feature.id || `f-${Util.GUID()}`;
     });
-    console.log(this.index);
     // this.index.load(features);
     if (superclusterIndex) {
       superclusterIndex.load(features);
