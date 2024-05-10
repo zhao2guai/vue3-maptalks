@@ -66,6 +66,7 @@
     "js-cookie": "^3.0.5",
     "localforage": "^1.10.0",
     "maptalks": "^1.0.0-rc.33",
+    "maptalks.routeplayer": "1.0.0-rc.1",
     "maptalks.three": "^0.38.3",
     "mitt": "^3.0.1",
     "nprogress": "^0.2.0",
@@ -79,8 +80,8 @@
     "supercluster": "^8.0.1",
     "three": "^0.164.1",
     "vue": "^3.4.21",
-    "vue-i18n": "^9.13.1",
     "vue-demi": "^0.14.7",
+    "vue-i18n": "^9.13.1",
     "vue-router": "^4.3.0",
     "vue-tippy": "^6.4.1",
     "vue-types": "^5.1.1"
