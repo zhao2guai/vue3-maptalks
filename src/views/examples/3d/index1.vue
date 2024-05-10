@@ -122,6 +122,9 @@ const colors = [
   [3000, "lightskyblue"],
   [5000, "yellow"],
   [7000, "orangered"]
+  // [3000, "#40E0D0"],
+  // [5000, "#FF8C00"],
+  // [7000, "#FF0000"]
 ];
 // 创建颜色插值库
 const ci = new ColorIn(colors);
