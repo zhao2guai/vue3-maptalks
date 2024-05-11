@@ -17,6 +17,9 @@ import MtGeo3DTilesLayer from "./MtGeo3DTilesLayer/index.vue";
 import MtThreeLayer from "./MtThreeLayer/index.vue";
 import MtVectorLayer from "./MtVectorLayer/index.vue";
 import MtMarkerClusterLayer from "./MtMarkerClusterLayer/index.vue";
+import MtPointLayer from "./MtPointLayer/index.vue";
+import MtLineStringLayer from "./MtLineStringLayer/index.vue";
+import MtPloygonLayer from "./MtPloygonLayer/index.vue";
 
 function install(app: App) {
   // webgl图层集合的管理和融合类
@@ -41,6 +44,12 @@ function install(app: App) {
   app.component('mt-vector-layer', MtVectorLayer);
   // 点聚合图层
   app.component('mt-maker-cluster-layer', MtMarkerClusterLayer);
+  // 点数据绘制图层
+  app.component('mt-point-layer', MtPointLayer);
+  // 线数据绘制图层
+  app.component('mt-line-string-layer', MtLineStringLayer);
+  // 线数据绘制图层
+  app.component('mt-ploygon-layer', MtPloygonLayer);
 }
 
 export default install;
