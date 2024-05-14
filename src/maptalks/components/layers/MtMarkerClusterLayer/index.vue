@@ -67,6 +67,8 @@ export default defineComponent({
     };
 
     let markerClusterLayer = new MarkerClusterLayerModel({ createIcon });
+    // 向组件传送初始化完毕的layer
+    context.emit("layerCreated", markerClusterLayer);
 
     // 点聚合数据geojson
     watch(

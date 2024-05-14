@@ -84,6 +84,8 @@ export default defineComponent({
     let id = props.id ? props.id : buildUUID();
     // 接收图层配置信息并初始化图层对象
     let wmsLayer = new WMSTileLayer(id, props.options);
+    // 向组件传送初始化完毕的layer
+    context.emit("layerCreated", wmsLayer);
     // 设置ol数据源参数
     let properties = {
       url: props.options.urlTemplate,

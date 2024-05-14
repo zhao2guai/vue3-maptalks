@@ -64,6 +64,8 @@ export default defineComponent({
 
     // 将gltf图层添加到注册组件中提供给子组件调用
     provide("gltfLayer", gltfLayer);
+    // 向组件传送初始化完毕的layer
+    context.emit("layerCreated", gltfLayer);
 
     // 页面加载后执行
     onBeforeMount(() => {

@@ -42,6 +42,9 @@ export default defineComponent({
     let options = props.options ? props.options : null;
     // 接收图层配置信息并初始化图层对象
     let geo3DTilesLayer = new Geo3DTilesLayer(id, options);
+    // 向组件传送初始化完毕的layer
+    context.emit("layerCreated", geo3DTilesLayer);
+
 
     // 监听图层ID
     watch(

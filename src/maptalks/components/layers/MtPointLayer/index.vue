@@ -45,6 +45,8 @@ export default defineComponent({
 
     // 接收图层配置信息并初始化图层对象
     let pointLayer = new PointLayer(id, props.options);
+    // 向组件传送初始化完毕的layer
+    context.emit("layerCreated", pointLayer);
 
     // 监听点数据绘制图层ID
     watch(

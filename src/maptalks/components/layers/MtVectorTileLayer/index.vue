@@ -40,6 +40,8 @@ export default defineComponent({
 
     // 接收图层配置信息并初始化图层对象
     let vectorTileLayer = new VectorTileLayer(id, props.options);
+    // 向组件传送初始化完毕的layer
+    context.emit("layerCreated", vectorTileLayer);
 
     // 监听矢量瓦片图层ID
     watch(

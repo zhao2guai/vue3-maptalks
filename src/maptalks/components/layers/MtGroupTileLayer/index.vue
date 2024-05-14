@@ -64,8 +64,8 @@ export default defineComponent({
 
     // 将图层添加到注册组件中提供给子组件调用
     provide("groupTileLayer", groupTileLayer);
-    // 组件回调方法
-    context.emit("getLayer", groupTileLayer);
+    // 向组件传送初始化完毕的layer
+    context.emit("layerCreated", groupTileLayer);
 
     // 页面加载后执行
     onBeforeMount(() => {

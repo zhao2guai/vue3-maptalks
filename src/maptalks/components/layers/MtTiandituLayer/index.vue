@@ -102,7 +102,7 @@ export default defineComponent({
       });
     }
     // 向组件传送初始化完毕的layer
-    context.emit("getLayer", tileLayer);
+    context.emit("layerCreated", tileLayer);
 
     // 监听瓦片图层ID
     watch(
