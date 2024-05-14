@@ -14,7 +14,8 @@ export default {
       name: "虫情设备",
       component: () => import("@/views/examples/gltf/index1.vue"),
       meta: {
-        title: "虫情设备"
+        title: "虫情设备",
+        hiddenTag: true
       }
     },
     {
@@ -22,7 +23,8 @@ export default {
       name: "摄像头模型",
       component: () => import("@/views/examples/gltf/index2.vue"),
       meta: {
-        title: "摄像头模型"
+        title: "摄像头模型",
+        hiddenTag: true
       }
     },
     {
@@ -30,7 +32,8 @@ export default {
       name: "动物模型",
       component: () => import("@/views/examples/gltf/index3.vue"),
       meta: {
-        title: "动物模型"
+        title: "动物模型",
+        hiddenTag: true
       }
     },
     {
@@ -38,7 +41,8 @@ export default {
       name: "批量模型",
       component: () => import("@/views/examples/gltf/index4.vue"),
       meta: {
-        title: "批量模型"
+        title: "批量模型",
+        hiddenTag: true
       }
     }
   ]

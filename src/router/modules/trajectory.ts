@@ -13,7 +13,8 @@ export default {
       name: "基础轨迹",
       component: () => import("@/views/examples/trajectory/index1.vue"),
       meta: {
-        title: "基础轨迹"
+        title: "基础轨迹",
+        hiddenTag: true
       }
     },
     {
@@ -21,7 +22,8 @@ export default {
       name: "GLTFLayer轨迹",
       component: () => import("@/views/examples/trajectory/index2.vue"),
       meta: {
-        title: "GLTFLayer轨迹"
+        title: "GLTFLayer轨迹",
+        hiddenTag: true
       }
     },
     {
@@ -29,7 +31,8 @@ export default {
       name: "ThreeLayer轨迹",
       component: () => import("@/views/examples/trajectory/index3.vue"),
       meta: {
-        title: "ThreeLayer轨迹"
+        title: "ThreeLayer轨迹",
+        hiddenTag: true
       }
     },
   ]

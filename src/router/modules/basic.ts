@@ -14,7 +14,8 @@ export default {
       name: "天地图-影像",
       component: () => import("@/views/examples/basic/map1.vue"),
       meta: {
-        title: "天地图-影像"
+        title: "天地图-影像",
+        hiddenTag: true
       }
     },
     {
@@ -22,7 +23,8 @@ export default {
       name: "天地图-矢量(深蓝)",
       component: () => import("@/views/examples/basic/map2.vue"),
       meta: {
-        title: "天地图-矢量(深蓝)"
+        title: "天地图-矢量(深蓝)",
+        hiddenTag: true
       }
     },
     {
@@ -30,7 +32,8 @@ export default {
       name: "开放街道图",
       component: () => import("@/views/examples/basic/map3.vue"),
       meta: {
-        title: "开放街道图"
+        title: "开放街道图",
+        hiddenTag: true
       }
     },
     {
@@ -38,7 +41,8 @@ export default {
       name: "开放街道图(暗黑)",
       component: () => import("@/views/examples/basic/map4.vue"),
       meta: {
-        title: "开放街道图(暗黑)"
+        title: "开放街道图(暗黑)",
+        hiddenTag: true
       }
     }
   ]

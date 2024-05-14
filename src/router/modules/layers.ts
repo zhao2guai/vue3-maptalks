@@ -13,7 +13,8 @@ export default {
       name: "WebGL图层",
       component: () => import("@/views/examples/layers/index1.vue"),
       meta: {
-        title: "WebGL图层"
+        title: "WebGL图层",
+        hiddenTag: true
       }
     },
     {
@@ -21,7 +22,8 @@ export default {
       name: "GEOJSON图层",
       component: () => import("@/views/examples/layers/index2.vue"),
       meta: {
-        title: "GEOJSON图层"
+        title: "GEOJSON图层",
+        hiddenTag: true
       }
     },
     {
@@ -29,7 +31,8 @@ export default {
       name: "白膜图层",
       component: () => import("@/views/examples/layers/index3.vue"),
       meta: {
-        title: "白膜图层"
+        title: "白膜图层",
+        hiddenTag: true
       },
     },
     {
@@ -37,7 +40,8 @@ export default {
       name: "服务图层",
       component: () => import("@/views/examples/layers/index4.vue"),
       meta: {
-        title: "服务图层"
+        title: "服务图层",
+        hiddenTag: true
       },
     },
     {
@@ -45,7 +49,8 @@ export default {
       name: "3dtiles图层",
       component: () => import("@/views/examples/layers/index5.vue"),
       meta: {
-        title: "3dtiles图层"
+        title: "3dtiles图层",
+        hiddenTag: true
       },
     },
     {
@@ -53,7 +58,8 @@ export default {
       name: "点聚合图层",
       component: () => import("@/views/examples/layers/index6.vue"),
       meta: {
-        title: "点聚合图层"
+        title: "点聚合图层",
+        hiddenTag: true
       },
     }
   ]
