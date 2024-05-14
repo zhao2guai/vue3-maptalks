@@ -3,18 +3,14 @@
     <mt-init-map ref="mapRef" :options="options" @getMap="getMap">
       <mt-tianditu-layer
         tk="695a9bebe4c75d64d9cada2be2789425"
+        layerType="img"
+        @layerCreated="getImgLayer"
+      />
+      <mt-tianditu-layer
+        tk="695a9bebe4c75d64d9cada2be2789425"
         layerType="vec"
         cssFilter="sepia(100%) invert(90%)"
-      />
-      <mt-tianditu-layer
-        tk="695a9bebe4c75d64d9cada2be2789425"
-        layerType="cva"
-        cssFilter="sepia(100%) invert(90%)"
-      />
-      <mt-tianditu-layer
-        tk="695a9bebe4c75d64d9cada2be2789425"
-        layerType="ibo"
-        cssFilter="sepia(100%) invert(90%)"
+        @layerCreated="getVecLayer"
       />
       <mt-group-gl-layer ref="glRef" :sceneConfig="sceneConfig">
         <mt-three-layer
@@ -30,6 +26,16 @@
         :options="vectorOptions"
       ></mt-vector-layer>
     </mt-init-map>
+    <!-- 右上角开关 -->
+    <el-card class="map-operation-area">
+      <el-switch
+        v-model="layersSwitch"
+        class="mb-2"
+        active-text="蓝黑底图"
+        inactive-text="影像底图"
+        @change="changeMap"
+      />
+    </el-card>
   </div>
 </template>
 <script setup>
@@ -44,6 +50,8 @@ const mapRef = ref(null);
 const geoRef = ref(null);
 const glRef = ref(null);
 const vectorRef = ref(null);
+// 图层切换开关
+let layersSwitch = ref(true);
 // 地图数据
 let geojsonData = null;
 // 地图对象
@@ -119,12 +127,12 @@ let layerOptions = {
 const height = 25000;
 // 定义颜色值范围
 const colors = [
-  [3000, "lightskyblue"],
-  [5000, "yellow"],
-  [7000, "orangered"]
-  // [3000, "#40E0D0"],
-  // [5000, "#FF8C00"],
-  // [7000, "#FF0000"]
+  // [3000, "lightskyblue"],
+  // [5000, "yellow"],
+  // [7000, "orangered"]
+  [3000, "#40E0D0"],
+  [5000, "#FF8C00"],
+  [7000, "#FF0000"]
 ];
 // 创建颜色插值库
 const ci = new ColorIn(colors);
@@ -133,12 +141,36 @@ const highMaterial = new MeshPhongMaterial({
   color: "#FFFFF",
   vertexColors: 2
 });
+// 底图图层
+let imgLayer = undefined;
+let vecLayer = undefined;
 // 页面加载后执行
 onMounted(() => {});
 // 页面销毁前执行
 onBeforeUnmount(() => {
   if (map) map = undefined;
+  imgLayer = undefined;
+  vecLayer = undefined;
 });
+// 获取影像图层
+function getImgLayer(e) {
+  imgLayer = e;
+}
+// 获取矢量图层
+function getVecLayer(e) {
+  vecLayer = e;
+}
+// 改变地图
+function changeMap(e) {
+  console.log(e);
+  if (e) {
+    imgLayer.hide();
+    vecLayer.show();
+  } else {
+    imgLayer.show();
+    vecLayer.hide();
+  }
+}
 // 地图加载完毕回调
 function getMap(e) {
   map = e;
@@ -266,5 +298,12 @@ function mouseEventFunc(e) {
   width: 100%;
   height: calc(100vh - 86px);
   overflow: hidden;
+  .map-operation-area {
+    position: absolute;
+    top: 2%;
+    right: 2%;
+    max-width: 480px;
+    z-index: 999;
+  }
 }
 </style>

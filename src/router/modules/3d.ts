@@ -11,7 +11,7 @@ export default {
     {
       path: "/3d/index1",
       name: "分层设色(甘肃省)",
-      component: () => import("@/views/welcome/index.vue"),
+      component: () => import("@/views/examples/3d/index1.vue"),
       meta: {
         title: "分层设色(甘肃省)",
         hiddenTag: true
@@ -19,10 +19,10 @@ export default {
     },
     {
       path: "/3d/index2",
-      name: "甘肃",
-      component: () => import("@/views/welcome/index.vue"),
+      name: "分层设色(新疆)",
+      component: () => import("@/views/examples/3d/index2.vue"),
       meta: {
-        title: "甘肃",
+        title: "分层设色(新疆)",
         hiddenTag: true
       }
     }
