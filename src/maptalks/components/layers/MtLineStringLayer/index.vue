@@ -99,47 +99,47 @@ export default defineComponent({
     const initEvents = () => {
       if (!lineStringLayer) return;
       // 图层画布产生绘制的事件
-      vectorTileLayer.on("canvasisdirty", event => {
+      lineStringLayer.on("canvasisdirty", event => {
         context.emit("canvasisdirty", event);
       });
       // 添加Geometry事件
-      vectorTileLayer.on("addgeo", event => {
+      lineStringLayer.on("addgeo", event => {
         context.emit("addgeo", event);
       });
       // 移除Geometry事件
-      vectorTileLayer.on("removegeo", event => {
+      lineStringLayer.on("removegeo", event => {
         context.emit("removegeo", event);
       });
       // 调用图层setStyle设置图层样式后的事件
-      vectorTileLayer.on("setstyle", event => {
+      lineStringLayer.on("setstyle", event => {
         context.emit("setstyle", event);
       });
       // 调用图层removeStyle清除图层样式后的事件
-      vectorTileLayer.on("removestyle", event => {
+      lineStringLayer.on("removestyle", event => {
         context.emit("removestyle", event);
       });
       // 监听图层被清除事件
-      vectorTileLayer.on("clear", event => {
+      lineStringLayer.on("clear", event => {
         context.emit("clear", event);
       });
       // 监听图层id变化事件
-      vectorTileLayer.on("idchange", event => {
+      lineStringLayer.on("idchange", event => {
         context.emit("idchange", event);
       });
       // 监听renderer创建事件
-      vectorTileLayer.on("renderercreate", event => {
+      lineStringLayer.on("renderercreate", event => {
         context.emit("renderercreate", event);
       });
       // canvas创建事件
-      vectorTileLayer.on("canvascreate", event => {
+      lineStringLayer.on("canvascreate", event => {
         context.emit("canvascreate", event);
       });
       // 开始渲染事件
-      vectorTileLayer.on("renderstart", event => {
+      lineStringLayer.on("renderstart", event => {
         context.emit("renderstart", event);
       });
       // 结束渲染事件
-      vectorTileLayer.on("renderend", event => {
+      lineStringLayer.on("renderend", event => {
         context.emit("renderend", event);
       });
     };
