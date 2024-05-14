@@ -6,8 +6,12 @@ type Result = {
 };
 
 /** 获取geojson数据 */
-export const getGeojsonData = (data?: object) => {
-  return http.request<Result>("get", "/get-async-geojson", { data });
+export const getGeojsonData = (params?: any) => {
+  if (params.code==="65") {
+    return http.request<Result>("get", "/get-async-geojson65");
+  } else { 
+    return http.request<Result>("get", "/get-async-geojson62");
+  }
 };
 
 /**

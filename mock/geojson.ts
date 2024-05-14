@@ -11,22 +11,27 @@ type geoJsonType = {
 
 export default defineFakeRoute([
   {
-    url: "/get-async-geojson",
+    url: "/get-async-geojson62",
     method: "get",
-    response: ({ body }) => {
-      if (body.code === "65") {
-        return {
-          success: true,
-          data: geojson65
-        };
-      } else {
-        // 转换甘肃geojson数据随机加上value值为了分层设色效果，如有真是数据还是从后台一次性设置好再返回
-        let resData = setFeatureData(geojson62);
-        return {
-          success: true,
-          data: resData
-        };
-      }
+    response: () => {
+      // 转换甘肃geojson数据随机加上value值为了分层设色效果，如有真是数据还是从后台一次性设置好再返回
+      let resData = setFeatureData(geojson62);
+      return {
+        success: true,
+        data: resData
+      };
+    }
+  },
+  {
+    url: "/get-async-geojson65",
+    method: "get",
+    response: () => {
+      // 转换甘肃geojson数据随机加上value值为了分层设色效果，如有真是数据还是从后台一次性设置好再返回
+      let resData = setFeatureData(geojson65);
+      return {
+        success: true,
+        data: resData
+      };
     }
   },
   {
