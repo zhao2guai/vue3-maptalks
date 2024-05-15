@@ -60,9 +60,11 @@ export default defineComponent({
   setup(props, context) {
     // 获取点ID
     let id = props.id ? props.id : buildUUID();
+    let markPoint =
+      props.point && props.point.length === 2 ? props.point : [0, 0];
 
     // 初始化gltf三维模型绘制图层
-    let gltfMarker = new GLTFMarker(props.point, {
+    let gltfMarker = new GLTFMarker(markPoint, {
       id: id,
       cursor: "pointer",
       symbol: props.symbol

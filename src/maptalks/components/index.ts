@@ -14,11 +14,14 @@ import * as Map from "./map";
 import * as Layers from "./layers";
 // 模型类组件
 import * as GLTF from './gltf';
+// maptalks插件
+import * as MtPlugin from './mtplugin'
 
 const install: Plugin = (app: App) => {
   app.use(Map.install);
   app.use(Layers.install);
   app.use(GLTF.install);
+  app.use(MtPlugin.install);
 };
 
 const plugin = { install };
@@ -28,5 +31,6 @@ export {
   install,
   Map,
   Layers,
-  GLTF
+  GLTF,
+  MtPlugin
 };
