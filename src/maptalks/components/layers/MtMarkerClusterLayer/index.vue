@@ -33,6 +33,16 @@ export default defineComponent({
     options: {
       type: Object,
       default: () => ({})
+    },
+    // 第一个分界点数据
+    sizeOne: {
+      type: Number,
+      default: 100
+    },
+    // 第二个分界点数据
+    sizeTwo: {
+      type: Number,
+      default: 1000
     }
   },
 
@@ -48,7 +58,7 @@ export default defineComponent({
         const id = feature.id;
         const index = markerClusterLayer.getIndex();
         const features = index.getLeaves(id, 10);
-        const size = count < 100 ? "small" : count < 1000 ? "medium" : "large";
+        const size = count < props.sizeOne ? "small" : count < props.sizeTwo ? "medium" : "large";
         marker = new ui.UIMarker(coordinate, {
           content: `<div class="marker-cluster marker-cluster-${size}">${count}</div>`
         });
