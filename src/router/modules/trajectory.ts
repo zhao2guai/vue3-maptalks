@@ -19,10 +19,10 @@ export default {
     },
     {
       path: "/trajectory/index2",
-      name: "GLTFLayer轨迹",
+      name: "GLTFLayer轨迹(拖拉机)",
       component: () => import("@/views/examples/trajectory/index2.vue"),
       meta: {
-        title: "GLTFLayer轨迹",
+        title: "GLTFLayer轨迹(拖拉机)",
         hiddenTag: true
       }
     },
@@ -32,6 +32,15 @@ export default {
       component: () => import("@/views/examples/trajectory/index3.vue"),
       meta: {
         title: "ThreeLayer轨迹",
+        hiddenTag: true
+      }
+    },
+    {
+      path: "/trajectory/index4",
+      name: "GLTFLayer轨迹(无人机)",
+      component: () => import("@/views/examples/trajectory/index4.vue"),
+      meta: {
+        title: "GLTFLayer轨迹(无人机)",
         hiddenTag: true
       }
     },

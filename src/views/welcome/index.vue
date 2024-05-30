@@ -32,6 +32,7 @@
 </template>
 
 <script setup lang="ts">
+import router from "@/router";
 import { ref } from "vue";
 defineOptions({
   name: "Welcome"
@@ -82,6 +83,10 @@ let baseCards = ref([
     author: "赵二乖"
   }
 ]);
+
+// 获取路由信息
+console.log(router.getRoutes());
+
 </script>
 
 <style lang="scss" scoped>
