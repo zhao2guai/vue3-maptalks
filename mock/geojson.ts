@@ -3,6 +3,7 @@ import { defineFakeRoute } from "vite-plugin-fake-server/client";
 import geojson62 from "@/geojson/62/甘肃省_市.json";
 import geojson65 from "@/geojson/65/新疆维吾尔自治区_市.json";
 import shanghai from "@/geojson/markerCluster/shanghai.json";
+import pipelineData from "@/geojson/pipeline/pipeline.json";
 
 type geoJsonType = {
   features: Array<Object>;
@@ -41,6 +42,16 @@ export default defineFakeRoute([
       return {
         success: true,
         data: shanghai
+      };
+    }
+  },
+  {
+    url: "/get-pipeline-geojson",
+    method: "get",
+    response: () => {
+      return {
+        success: true,
+        data: pipelineData
       };
     }
   },

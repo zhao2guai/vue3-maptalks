@@ -20,3 +20,10 @@ export const getGeojsonData = (params?: any) => {
 export const getmarkerClusterData = () => {
   return http.request<Result>("get", "/get-marker-cluster-geojson");
 };
+
+/**
+ * 获取管线数据
+ */
+export const getPipelineData = () => {
+  return http.request<Result>("get", "/get-pipeline-geojson");
+};
