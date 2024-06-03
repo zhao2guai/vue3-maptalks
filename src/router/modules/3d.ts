@@ -2,7 +2,7 @@ export default {
   path: "/3d",
   redirect: "/3d/index1",
   meta: {
-    icon: "fa-solid:map-marked-alt",
+    icon: "gis:3dtiles-web",
     // showLink: false,
     title: "行政区划",
     rank: 13

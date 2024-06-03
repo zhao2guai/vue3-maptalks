@@ -2,7 +2,7 @@ export default {
   path: "/osgb",
   redirect: "/osgb/index1",
   meta: {
-    icon: "fa-solid:map-marked-alt",
+    icon: "majesticons:image-photography-line",
     // showLink: false,
     title: "倾斜摄影(osgb)",
     rank: 15

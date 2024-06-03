@@ -2,7 +2,7 @@ export default {
   path: "/pipeline",
   redirect: "/pipeline/index1",
   meta: {
-    icon: "fa-solid:map-marked-alt",
+    icon: "eos-icons:pipeline-outlined",
     // showLink: false,
     title: "管线",
     rank: 15

@@ -2,7 +2,7 @@ export default {
   path: "/trajectory",
   redirect: "/trajectory/index1",
   meta: {
-    icon: "fa-solid:map-marked-alt",
+    icon: "lets-icons:line-alt",
     // showLink: false,
     title: "轨迹",
     rank: 14
