@@ -80,6 +80,12 @@ let sceneConfig = ref({
   },
   weather: {
     enable: true,
+    fog: {
+      enable: true,
+      start: 3,
+      end: 70,
+      color: [0.80, 0.80, 0.80]
+    },
     snow: {
       enable: true,
       snowGroundTexture: "../../../../public/marker/perlin.png",
