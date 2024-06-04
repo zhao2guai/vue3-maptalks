@@ -38,7 +38,6 @@
             v-model="terrainSwitch"
             active-text="打开"
             inactive-text="关闭"
-            @change="showTerrain"
           />
         </el-col>
         <el-col :span="24" style="margin-top: 2.5vh">
@@ -168,10 +167,6 @@ onMounted(() => {});
 onBeforeUnmount(() => {
   map = undefined;
 });
-
-function showTerrain(val) {
-  terrainSwitch.value = val;
-}
 
 function startDistanceChange(val) {
   if (sceneConfig.value.weather.fog) sceneConfig.value.weather.fog.start = val;
