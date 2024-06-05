@@ -7,7 +7,7 @@ export default {
   meta: {
     icon: "ri:file-info-line",
     title: "关于",
-    rank: 17
+    rank: 30
   },
   children: [
     {
