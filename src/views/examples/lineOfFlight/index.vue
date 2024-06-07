@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading" class="map-content">
+  <div v-loading="loading" class="map-content" id="fxx">
     <!-- 地图部分 -->
     <div class="map-div">
       <mt-init-map ref="mapRef" @getMap="getMap" :options="options">
@@ -83,6 +83,7 @@ let sceneConfig = {
     }
   }
 };
+
 let geoCoordMap = {
   上海: [121.4648, 31.2891],
   东莞: [113.8953, 22.901],
@@ -264,13 +265,36 @@ function addLine(data) {
       symbol: {
         linePatternFile: "../../../../public/marker/line.png",
         linePatternAnimSpeed: 0.1,
-        lineWidth: 8
+        lineWidth: 8,
+        cucursor: "pointer"
       }
+    });
+    line.setInfoWindow({
+      custom: true,
+      content:
+        `<div class="infocontent" ref="infoWindowRef">` +
+        `<i class="close-icon" onclick="closeInfoWindow()"></i>` +
+        `<div class="infopop_title">从` +
+        item.from +
+        `到` +
+        item.to +
+        `</div>` +
+        `</div>`
     });
     return line;
   });
   lineStringLayerRef.value.lineStringLayer.addGeometry(lines);
 }
+
+function closeInfoWindow() {
+  lineStringLayerRef.value.lineStringLayer.forEach(getGeometry => {
+    if (getGeometry.getInfoWindow) {
+      getGeometry.closeInfoWindow();
+    }
+  });
+}
+
+window.closeInfoWindow = closeInfoWindow;
 </script>
 
 <style lang="scss" scoped>
@@ -289,6 +313,63 @@ function addLine(data) {
   .map-div {
     width: 100%;
     height: 100%;
+  }
+}
+</style>
+
+<style lang="scss">
+#fxx {
+  .infocontent {
+    color: #fff;
+    width: 20vw;
+    height: 10vh;
+    background-color: #051127;
+    border: 1px solid #0c2c45;
+  }
+  .infopop_title {
+    float: left;
+    padding-left: 10px;
+    width: 100%;
+    height: 36px;
+    line-height: 36px;
+    background: url(title.png);
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .infopop_time {
+    width: 100%;
+    height: 30px;
+    margin: 0 10px;
+    line-height: 36px;
+  }
+  .infopop_dept {
+    padding: 5px;
+    line-height: 15px;
+    text-align: center;
+    border: 1px solid #192b41;
+    margin: 0 10px;
+    position: absolute;
+    bottom: 2vh;
+    text-align: center;
+  }
+  .infopop_arrow {
+    float: left;
+    width: 15px;
+    height: 24px;
+    line-height: 24px;
+    background: url(arrow.png) no-repeat center center;
+  }
+
+  .close-icon {
+    width: 2vh;
+    height: 2vh;
+    background: url("../../../maptalks/assets/imgs/dialog/modalClose.png")
+      no-repeat;
+    background-size: 100% 100%;
+    position: absolute;
+    top: 1vh;
+    right: 1vh;
+    cursor: pointer;
   }
 }
 </style>
