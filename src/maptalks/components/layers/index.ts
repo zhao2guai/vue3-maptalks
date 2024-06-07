@@ -20,6 +20,7 @@ import MtMarkerClusterLayer from "./MtMarkerClusterLayer/index.vue";
 import MtPointLayer from "./MtPointLayer/index.vue";
 import MtLineStringLayer from "./MtLineStringLayer/index.vue";
 import MtPloygonLayer from "./MtPloygonLayer/index.vue";
+import MtVideoLayer from "./MtVideoLayer/index.vue";
 
 function install(app: App) {
   // webgl图层集合的管理和融合类
@@ -50,6 +51,8 @@ function install(app: App) {
   app.component('mt-line-string-layer', MtLineStringLayer);
   // 线数据绘制图层
   app.component('mt-ploygon-layer', MtPloygonLayer);
+  // 视频图层
+  app.component('mt-video-layer', MtVideoLayer);
 }
 
 export default install;
