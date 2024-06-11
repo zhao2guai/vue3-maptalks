@@ -61,6 +61,15 @@ export default {
         title: "点聚合图层",
         hiddenTag: true
       },
+    },
+    {
+      path: "/layers/index7",
+      name: "视频图层",
+      component: () => import("@/views/examples/layers/index7.vue"),
+      meta: {
+        title: "视频图层",
+        hiddenTag: true
+      },
     }
   ]
 } satisfies RouteConfigsTable;

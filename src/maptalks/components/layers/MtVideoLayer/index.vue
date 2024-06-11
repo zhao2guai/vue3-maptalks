@@ -63,6 +63,41 @@ export default defineComponent({
     // 向组件传送初始化完毕的layer
     context.emit("layerCreated", videoLayer);
 
+    // 监听videoSuface的四个角的坐标
+    watch(
+      () => props.pointList,
+      (newPointList, oldPointList) => {
+        if (videoSurface && newPointList) {
+          if (newPointList != oldPointList) {
+            videoSurface.setCoordinates(newPointList);
+          }
+        }
+      },
+      { deep: true }
+    );
+
+    // 监听videoSurface的配置信息
+    watch(
+      () => props.videoSufaceConfig,
+      (newVideoSufaceConfig, oldVideoSufaceConfig) => {
+        if (videoSurface && newVideoSufaceConfig) {
+          if (newVideoSufaceConfig != oldVideoSufaceConfig) {
+            videoSurface.setVideo(newVideoSufaceConfig);
+          }
+        }
+      },
+      { deep: true }
+    );
+
+    // 监听视频声音是否打开
+    watch(
+      () => props.audioFlag,
+      newAudioFlag => {
+        videoAudio(newAudioFlag);
+      },
+      { deep: true }
+    );
+
     // 页面加载后执行
     onBeforeMount(() => {
       addVideoLayer();
@@ -111,10 +146,8 @@ export default defineComponent({
     };
 
     const videoAudio = flag => {
-      if (videoSurface && flag) {
-        videoSurface.setAudio(true);
-      } else if (videoSurface && !flag) {
-        videoSurface.setAudio(false);
+      if (videoSurface) {
+        videoSurface.setAudio(!flag);
       }
     };
 
