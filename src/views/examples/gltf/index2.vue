@@ -137,10 +137,7 @@ let symbol2 = {
 };
 // 厂房
 let symbol3 = {
-  url: new URL(
-    "@/assets/gltf/factory/changfang.gltf",
-    import.meta.url
-  ), //模型的url
+  url: new URL("@/assets/gltf/factory/changfang.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -195,7 +192,7 @@ onBeforeUnmount(() => {
 .map-content {
   position: relative;
   width: 100%;
-  height: calc(100vh - 86px);
+  height: calc(100vh - 0px);
   overflow: hidden;
 }
 </style>

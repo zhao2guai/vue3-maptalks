@@ -300,8 +300,9 @@ let content =
   '<div class="infocontent" ref="infoWindowRef">' +
   '<div class="infopop_title">1号无人机</div>' +
   '<div class="infopop_title">无人机编号: A103JHR89Y20</div>' +
-  '<div class="infopop_title">已迅田面积（亩）: 2</div>' +
-  '<div class="infopop_title">已迅田时间（小时）: 1.5</div>' +
+  '<div class="infopop_title">无人机型号: 经纬 M300 RTK</div>' +
+  '<div class="infopop_title">已巡田面积（亩）: 2</div>' +
+  '<div class="infopop_title">已巡田时间（小时）: 1.5</div>' +
   "</div>";
 
 // 地图map配置

@@ -109,7 +109,7 @@ function closeMarkerDataDialog() {
 .map-content {
   position: relative;
   width: 100%;
-  height: calc(100vh - 86px);
+  height: calc(100vh - 0px);
   overflow: hidden;
 }
 </style>

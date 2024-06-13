@@ -37,5 +37,45 @@ export default [
       showLink: false,
       rank: 103
     }
+  },
+  {
+    path: "/tdt-img",
+    name: "天地图-影像",
+    component: () => import("@/views/examples/basic/map1.vue"),
+    meta: {
+      title: "天地图-影像",
+      showLink: false,
+      rank: 200
+    }
+  },
+  {
+    path: "/dark-blue",
+    name: "天地图-深蓝",
+    component: () => import("@/views/examples/basic/map2.vue"),
+    meta: {
+      title: "天地图-深蓝",
+      showLink: false,
+      rank: 201
+    }
+  },
+  {
+    path: "/xzqh-62",
+    name: "分层设色(甘肃省)",
+    component: () => import("@/views/examples/3d/index1.vue"),
+    meta: {
+      title: "分层设色(甘肃省)",
+      showLink: false,
+      rank: 230
+    }
+  },
+  {
+    path: "/xzqh-65",
+    name: "分层设色(新疆)",
+    component: () => import("@/views/examples/3d/index2.vue"),
+    meta: {
+      title: "分层设色(新疆)",
+      showLink: false,
+      rank: 231
+    }
   }
 ] satisfies Array<RouteConfigsTable>;
