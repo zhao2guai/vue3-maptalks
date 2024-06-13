@@ -117,11 +117,20 @@ let layerOptions = {
   animation: true
 };
 // 高亮材质
-var planeMaterial = new MeshLambertMaterial({ color, transparent: true, opacity: 0.8, side: 0 });
-var material = new MeshLambertMaterial({ color, transparent: true, opacity: 0.8 });
+var planeMaterial = new MeshLambertMaterial({
+  color,
+  transparent: true,
+  opacity: 0.8,
+  side: 0
+});
+var material = new MeshLambertMaterial({
+  color,
+  transparent: true,
+  opacity: 0.8
+});
 const height = 10000;
-const color = 'rgb(255,255,255)';
-const lineColor = '#fff';
+const color = "rgb(255,255,255)";
+const lineColor = "#fff";
 // 页面加载后执行
 onMounted(() => {
   getXinjiangData();
@@ -150,7 +159,7 @@ function changeMap(e) {
     vecLayer.hide();
   }
 }
-async function getXinjiangData() { 
+async function getXinjiangData() {
   try {
     // 这里开始模拟查询后台获取geosjon数据当然也可以从本页面import中获取
     const { data } = await getGeojsonData({ code: "65" });
@@ -162,7 +171,7 @@ async function getXinjiangData() {
       loading.value = false;
     }, 1000);
   }
-};
+}
 // 地图加载完毕回调
 function getMap(e) {
   map = e;
@@ -179,7 +188,7 @@ function loadData(layer) {
     var light = new DirectionalLight(0xffffff);
     light.position.set(0, -10, 10).normalize();
     scene.add(light);
-    scene.add(new AmbientLight('#fff', 0.3));
+    scene.add(new AmbientLight("#fff", 0.3));
     addAreaPlane(threeLayer.value);
     // addPolygons(threeLayer.value);
   };
@@ -190,85 +199,96 @@ async function addAreaPlane(threeLayer) {
   const { data } = await getGeojsonData({ code: "65" });
   let geojson = data;
   const extrudePolygons = geojson.features.map(feature => {
-    return threeLayer.toExtrudePolygon(feature, { height: 1 }, planeMaterial)
+    return threeLayer.toExtrudePolygon(feature, { height: 1 }, planeMaterial);
   });
   resetTopUV(extrudePolygons);
-  const texture = new TextureLoader().load(getImgBg(), (texture) => {
-      planeMaterial.map = texture;
-      planeMaterial.needsUpdate = true;
-      threeLayer.addMesh(extrudePolygons);
-      // threeLayer.addMesh(plane);
+  const texture = new TextureLoader().load(getImgBg(), texture => {
+    planeMaterial.map = texture;
+    planeMaterial.needsUpdate = true;
+    threeLayer.addMesh(extrudePolygons);
+    // threeLayer.addMesh(plane);
   });
   texture.needsUpdate = true; //使用贴图时进行更新
   texture.wrapS = texture.wrapT = RepeatWrapping;
   // texture.repeat.set(0.002, 0.002);
-  texture.repeat.set(1.030, 1.001);
+  texture.repeat.set(1.03, 1.001);
 }
 function resetTopUV(extrudePolygons) {
   // console.log(geometries);
   // 计算所有区域的总的包围盒
-  let minx = Infinity, miny = Infinity, maxx = -Infinity, maxy = -Infinity, maxZ = -Infinity;
+  let minx = Infinity,
+    miny = Infinity,
+    maxx = -Infinity,
+    maxy = -Infinity,
+    maxZ = -Infinity;
   extrudePolygons.forEach(extrudePolygon => {
-      const geometry = extrudePolygon.getObject3d().geometry;
-      const center = extrudePolygon.getObject3d().position;
-      const px = center.x, py = center.y;
-      const position = geometry.attributes.position.array;
-      for (let i = 0, len = position.length; i < len; i += 3) {
-          const x = position[i] + px, y = position[i + 1] + py, z = position[i + 2];
-          minx = Math.min(minx, x);
-          miny = Math.min(miny, y);
-          maxx = Math.max(maxx, x);
-          maxy = Math.max(maxy, y);
-          maxZ = Math.max(maxZ, z);
-      }
+    const geometry = extrudePolygon.getObject3d().geometry;
+    const center = extrudePolygon.getObject3d().position;
+    const px = center.x,
+      py = center.y;
+    const position = geometry.attributes.position.array;
+    for (let i = 0, len = position.length; i < len; i += 3) {
+      const x = position[i] + px,
+        y = position[i + 1] + py,
+        z = position[i + 2];
+      minx = Math.min(minx, x);
+      miny = Math.min(miny, y);
+      maxx = Math.max(maxx, x);
+      maxy = Math.max(maxy, y);
+      maxZ = Math.max(maxZ, z);
+    }
   });
   // console.log(minx, miny, maxx, maxy);
   // 计算每个子区域的每个轮廓坐标点的在这个包围盒的百分比
-  const dx = maxx - minx, dy = maxy - miny;
+  const dx = maxx - minx,
+    dy = maxy - miny;
   extrudePolygons.forEach(extrudePolygon => {
-      const geometry = extrudePolygon.getObject3d().geometry;
-      const position = geometry.attributes.position.array;
-      const center = extrudePolygon.getObject3d().position;
-      const px = center.x, py = center.y;
-      const uv = geometry.attributes.uv.array;
-      let idx = 0;
-      for (let i = 0, len = position.length; i < len; i += 3) {
-          const x = position[i] + px, y = position[i + 1] + py, z = position[i + 2];
-          if (z === maxZ) {
-              const u = (x - minx) / dx;
-              const v = (y - miny) / dy;
-              const index = idx * 2;
-              uv[index] = u;
-              uv[index + 1] = v;
-          }
-          idx++;
+    const geometry = extrudePolygon.getObject3d().geometry;
+    const position = geometry.attributes.position.array;
+    const center = extrudePolygon.getObject3d().position;
+    const px = center.x,
+      py = center.y;
+    const uv = geometry.attributes.uv.array;
+    let idx = 0;
+    for (let i = 0, len = position.length; i < len; i += 3) {
+      const x = position[i] + px,
+        y = position[i + 1] + py,
+        z = position[i + 2];
+      if (z === maxZ) {
+        const u = (x - minx) / dx;
+        const v = (y - miny) / dy;
+        const index = idx * 2;
+        uv[index] = u;
+        uv[index + 1] = v;
       }
+      idx++;
+    }
   });
 }
 function flatPolygon2Lines(geojson) {
   const results = {
-      type: 'FeatureCollection',
-      features: []
+    type: "FeatureCollection",
+    features: []
   };
   geojson.features.forEach(f => {
-      const { geometry, properties } = f;
-      const { coordinates, type } = geometry;
-      let polygons = [];
-      if (type.includes('Multi')) {
-          polygons = coordinates;
-      } else {
-          polygons.push(coordinates);
-      }
-      polygons.forEach(p => {
-          results.features.push({
-              type: 'Feature',
-              geometry: {
-                  type: 'MultiLineString',
-                  coordinates: p
-              },
-              properties
-          })
+    const { geometry, properties } = f;
+    const { coordinates, type } = geometry;
+    let polygons = [];
+    if (type.includes("Multi")) {
+      polygons = coordinates;
+    } else {
+      polygons.push(coordinates);
+    }
+    polygons.forEach(p => {
+      results.features.push({
+        type: "Feature",
+        geometry: {
+          type: "MultiLineString",
+          coordinates: p
+        },
+        properties
       });
+    });
   });
   return results;
 }
@@ -279,7 +299,11 @@ async function addPolygons(threeLayer) {
   const geojson1 = flatPolygon2Lines(geojson);
   const lines = GeoJSON.toGeometry(geojson1);
   lines.forEach(line => {
-    const extrudeLine = threeLayer.toExtrudeLine(line, { height, altitude: -height, topColor: '#fff' }, material);
+    const extrudeLine = threeLayer.toExtrudeLine(
+      line,
+      { height, altitude: -height, topColor: "#fff" },
+      material
+    );
     threeLayer.addMesh(extrudeLine);
   });
   // addOutLines();
@@ -288,11 +312,11 @@ function addOutLines() {
   let geojson = geojsonData.value;
   const polygons = GeoJSON.toGeometry(geojson);
   polygons.forEach(polygon => {
-      polygon.setSymbol({
-          polygonOpacity: 0,
-          lineWidth: 1,
-          lineColor,
-      });
+    polygon.setSymbol({
+      polygonOpacity: 0,
+      lineWidth: 1,
+      lineColor
+    });
   });
   layer.addGeometry(polygons);
 }
@@ -327,7 +351,7 @@ function getImgBg() {
 .map-content {
   position: relative;
   width: 100%;
-  height: calc(100vh - 86px);
+  height: calc(100vh - 0px);
   overflow: hidden;
   .map-operation-area {
     position: absolute;
