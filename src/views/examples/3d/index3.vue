@@ -35,15 +35,19 @@
 </template>
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
+import { buildUUID } from "@pureadmin/utils";
 import { getGeojsonData } from "@/api/geojson";
 import {
   MeshLambertMaterial,
+  Vector2,
   DirectionalLight,
   AmbientLight,
   TextureLoader,
+  MeshPhongMaterial,
   RepeatWrapping
 } from "three";
-import { GeoJSON } from "maptalks";
+import LineMaterial from "@/maptalks/lib/LineMaterial.js";
+import { GeoJSON, animate } from "maptalks";
 // 地图加载状态
 let loading = ref(true);
 // 地图组件名称
@@ -52,20 +56,20 @@ const glRef = ref(null);
 // geojson矢量瓦片图层名称
 const geoRef = ref(null);
 // 图层切换开关
-let layersSwitch = ref(true);
+let layersSwitch = ref(false);
 // 地图数据
 let geojsonData = ref(null);
 // 地图对象
 let map = null;
 // 底图图层
-let imgLayer = undefined;
-let vecLayer = undefined;
+let imgLayer = ref(undefined);
+let vecLayer = ref(undefined);
 // THREE图层
 let threeLayer = ref(null);
 // 初始化地图参数
 let options = {
-  center: [85.510272, 40.84152], // 新疆
-  zoom: 6,
+  center: [106.157549, 36.843907], // 宁夏回族自治区
+  zoom: 8.5,
   spatialReference: {
     projection: "EPSG:4326"
   },
@@ -123,53 +127,46 @@ var planeMaterial = new MeshLambertMaterial({
   opacity: 0.8,
   side: 0
 });
-var material = new MeshLambertMaterial({
-  color,
-  transparent: true,
-  opacity: 0.8
+var linematerial = new LineMaterial({
+  color: 0xf2f2f2,
+  // transparent: true,
+  // vertexColors: THREE.VertexColors,
+  // side: THREE.BackSide,
+  linewidth: 4 // in pixels
+  // vertexColors: THREE.VertexColors,
+  // dashed: false
 });
-const height = 10000;
+const material = new MeshPhongMaterial({ color: "#fff" });
 const color = "rgb(255,255,255)";
 const lineColor = "#fff";
+const height = 10000;
+const offset = 100;
+const polygonLinkLine = new Map();
 // 页面加载后执行
-onMounted(() => {
-  getXinjiangData();
-});
+onMounted(() => {});
 // 页面销毁前执行
 onBeforeUnmount(() => {
   if (map) map = undefined;
-  imgLayer = undefined;
-  vecLayer = undefined;
+  imgLayer.value = undefined;
+  vecLayer.value = undefined;
 });
 // 获取影像图层
 function getImgLayer(e) {
-  imgLayer = e;
+  imgLayer.value = e;
 }
 // 获取矢量图层
 function getVecLayer(e) {
-  vecLayer = e;
+  vecLayer.value = e;
+  vecLayer.value.hide();
 }
 // 改变地图
 function changeMap(e) {
   if (e) {
-    imgLayer.hide();
-    vecLayer.show();
+    imgLayer.value.hide();
+    vecLayer.value.show();
   } else {
-    imgLayer.show();
-    vecLayer.hide();
-  }
-}
-async function getXinjiangData() {
-  try {
-    // 这里开始模拟查询后台获取geosjon数据当然也可以从本页面import中获取
-    const { data } = await getGeojsonData({ code: "65" });
-    geojsonData.value = data;
-  } catch (e) {
-    console.log(e);
-  } finally {
-    setTimeout(() => {
-      loading.value = false;
-    }, 1000);
+    imgLayer.value.show();
+    vecLayer.value.hide();
   }
 }
 // 地图加载完毕回调
@@ -189,33 +186,79 @@ function loadData(layer) {
     light.position.set(0, -10, 10).normalize();
     scene.add(light);
     scene.add(new AmbientLight("#fff", 0.3));
-    addAreaPlane(threeLayer.value);
-    // addPolygons(threeLayer.value);
+    loadTexture(layer);
+    // animation();
   };
 }
-// 添加多边形数据
-async function addAreaPlane(threeLayer) {
-  // 这里开始模拟查询后台获取geosjon数据当然也可以从本页面import中获取
-  const { data } = await getGeojsonData({ code: "65" });
-  let geojson = data;
-  const extrudePolygons = geojson.features.map(feature => {
-    return threeLayer.toExtrudePolygon(feature, { height: 1 }, planeMaterial);
-  });
-  resetTopUV(extrudePolygons);
-  const texture = new TextureLoader().load(getImgBg(), texture => {
-    planeMaterial.map = texture;
-    planeMaterial.needsUpdate = true;
+/** 地图背景图 */
+function loadTexture(layer) {
+  const textureLoader = new TextureLoader();
+  textureLoader.load(
+    "../../../../public/texture/gz-map.jpg",
+    texture => {
+      texture.needsUpdate = true; //使用贴图时进行更新
+      texture.wrapS = texture.wrapT = RepeatWrapping;
+      // texture.repeat.set(0.002, 0.002);
+      texture.repeat.set(1, 1);
+      material.map = texture;
+      material.needsUpdate = true;
+      addAreas(layer);
+    }
+  );
+}
+/** 地图背景图 */
+async function addAreas(threeLayer) {
+  try {
+    // 这里开始模拟查询后台获取geosjon数据当然也可以从本页面import中获取
+    const { data } = await getGeojsonData({ code: "64" });
+    geojsonData.value = data;
+    const polygons = GeoJSON.toGeometry(data);
+    const geojsonLines = polygonToLine(data);
+    const lines = GeoJSON.toGeometry(geojsonLines);
+    const fatlines = lines.map(line => {
+      return threeLayer.toFatLine(
+        line,
+        { altitude: height + offset, bloom: true },
+        linematerial
+      );
+    });
+
+    const extrudePolygons = polygons.map((p, index) => {
+      const id = buildUUID();
+      const extrudePolygon = threeLayer.toExtrudePolygon(
+        p,
+        { height, topColor: "#fff", asynchronous: true },
+        material
+      );
+      extrudePolygon.on("mouseover", polygonUp);
+      extrudePolygon.on("mouseout", polygonDown);
+      extrudePolygon.setId(id);
+      polygonLinkLine.set(id, fatlines[index]);
+      return extrudePolygon;
+    });
+    let idx = 0;
+    extrudePolygons.forEach(extrudePolygon => {
+      extrudePolygon.on("workerload", e => {
+        idx++;
+        if (idx === extrudePolygons.length) {
+          resetTopUV(extrudePolygons);
+        }
+      });
+    });
+    // 这个fatlines报错
+    threeLayer.addMesh(fatlines);
     threeLayer.addMesh(extrudePolygons);
-    // threeLayer.addMesh(plane);
-  });
-  texture.needsUpdate = true; //使用贴图时进行更新
-  texture.wrapS = texture.wrapT = RepeatWrapping;
-  // texture.repeat.set(0.002, 0.002);
-  texture.repeat.set(1.03, 1.001);
+  } catch (e) {
+    console.log(e);
+  } finally {
+    setTimeout(() => {
+      loading.value = false;
+    }, 1000);
+  }
 }
 function resetTopUV(extrudePolygons) {
   // console.log(geometries);
-  // 计算所有区域的总的包围盒
+  //计算所有区域的总的包围盒
   let minx = Infinity,
     miny = Infinity,
     maxx = -Infinity,
@@ -238,8 +281,8 @@ function resetTopUV(extrudePolygons) {
       maxZ = Math.max(maxZ, z);
     }
   });
-  // console.log(minx, miny, maxx, maxy);
-  // 计算每个子区域的每个轮廓坐标点的在这个包围盒的百分比
+  console.log(minx, miny, maxx, maxy);
+  //计算每个子区域的每个轮廓坐标点的在这个包围盒的百分比
   const dx = maxx - minx,
     dy = maxy - miny;
   extrudePolygons.forEach(extrudePolygon => {
@@ -265,64 +308,93 @@ function resetTopUV(extrudePolygons) {
     }
   });
 }
-function flatPolygon2Lines(geojson) {
-  const results = {
-    type: "FeatureCollection",
-    features: []
-  };
-  geojson.features.forEach(f => {
-    const { geometry, properties } = f;
-    const { coordinates, type } = geometry;
-    let polygons = [];
-    if (type.includes("Multi")) {
-      polygons = coordinates;
-    } else {
-      polygons.push(coordinates);
+function syncAltitude(id, altitude) {
+  const line = polygonLinkLine.get(id);
+  line.setAltitude(altitude + height + offset);
+}
+
+function polygonUp(e) {
+  const polygon = e.target;
+  if (polygon._showPlayer) {
+    polygon._showPlayer.cancel();
+  }
+  const duration = 1000,
+    easing = "out";
+  const player = (polygon._showPlayer = animate(
+    {
+      altitude: 8000
+    },
+    {
+      duration: duration,
+      easing: easing
+    },
+    frame => {
+      const altitude = frame.styles.altitude;
+      if (altitude > 0) {
+        this.setAltitude(altitude);
+        syncAltitude(polygon.getId(), altitude);
+      }
     }
-    polygons.forEach(p => {
-      results.features.push({
+  ));
+  player.play();
+}
+
+function polygonDown(e) {
+  const polygon = e.target;
+  if (polygon._showPlayer) {
+    polygon._showPlayer.cancel();
+  }
+  polygon.setAltitude(0);
+  syncAltitude(polygon.getId(), 0);
+}
+
+function polygonToLine(geojson) {
+  return geojson.features.map(f => {
+    const { type, coordinates } = f.geometry;
+    if (type === "MultiPolygon") {
+      return {
         type: "Feature",
         geometry: {
           type: "MultiLineString",
-          coordinates: p
-        },
-        properties
-      });
+          coordinates: coordinates.map(c => {
+            return c[0];
+          })
+        }
+      };
+    }
+    return {
+      type: "Feature",
+      geometry: {
+        type: "LineString",
+        coordinates: coordinates[0]
+      }
+    };
+  });
+}
+function animation() {
+  // layer animation support Skipping frames
+  threeLayer._needsUpdate = !threeLayer._needsUpdate;
+  if (threeLayer._needsUpdate) {
+    threeLayer.redraw();
+  }
+  requestAnimationFrame(animation);
+}
+
+function initGui() {
+  var params = {
+    add: true,
+    color: linematerial.color.getStyle(),
+    show: true,
+    opacity: 1,
+    altitude: 0
+  };
+  var gui = new lil.GUI();
+  gui
+    .addColor(params, "color")
+    .name("line color")
+    .onChange(function () {
+      linematerial.color.set(params.color);
     });
-  });
-  return results;
-}
-async function addPolygons(threeLayer) {
-  // 这里开始模拟查询后台获取geosjon数据当然也可以从本页面import中获取
-  const { data } = await getGeojsonData({ code: "65" });
-  let geojson = data;
-  const geojson1 = flatPolygon2Lines(geojson);
-  const lines = GeoJSON.toGeometry(geojson1);
-  lines.forEach(line => {
-    const extrudeLine = threeLayer.toExtrudeLine(
-      line,
-      { height, altitude: -height, topColor: "#fff" },
-      material
-    );
-    threeLayer.addMesh(extrudeLine);
-  });
-  // addOutLines();
-}
-function addOutLines() {
-  let geojson = geojsonData.value;
-  const polygons = GeoJSON.toGeometry(geojson);
-  polygons.forEach(polygon => {
-    polygon.setSymbol({
-      polygonOpacity: 0,
-      lineWidth: 1,
-      lineColor
-    });
-  });
-  layer.addGeometry(polygons);
-}
-/** 地图背景图 */
-function getImgBg() {
-  return new URL("../../../../public/imgs/xinjiang.png", import.meta.url).href;
 }
 </script>
 
