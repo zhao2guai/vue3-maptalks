@@ -16,12 +16,15 @@ import * as Layers from "./layers";
 import * as GLTF from './gltf';
 // maptalks插件
 import * as MtPlugin from './mtplugin'
+// 地图分析插件
+import * as MtAnalysis from './analysis'
 
 const install: Plugin = (app: App) => {
   app.use(Map.install);
   app.use(Layers.install);
   app.use(GLTF.install);
   app.use(MtPlugin.install);
+  app.use(MtAnalysis.install);
 };
 
 const plugin = { install };
@@ -32,5 +35,6 @@ export {
   Map,
   Layers,
   GLTF,
-  MtPlugin
+  MtPluginm,
+  MtAnalysis
 };
