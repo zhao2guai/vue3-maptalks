@@ -130,15 +130,15 @@ const colors = [
   // [3000, "lightskyblue"],
   // [5000, "yellow"],
   // [7000, "orangered"]
-  [3000, "#40E0D0"],
+  [3000, "#008B8B"],
   [5000, "#FF8C00"],
-  [7000, "#FF0000"]
+  [7000, "#8B0000"]
 ];
 // 创建颜色插值库
 const ci = new ColorIn(colors);
 // 高亮材质
 const highMaterial = new MeshPhongMaterial({
-  color: "#FFFFF",
+  color: "#00FA9A",
   vertexColors: 2
 });
 // 底图图层
@@ -187,7 +187,7 @@ function loadData(e) {
     var light = new DirectionalLight(0xffffff);
     light.position.set(0, -10, 10).normalize();
     scene.add(light);
-    scene.add(new AmbientLight("#FFFFF", 0.8));
+    scene.add(new AmbientLight("#87CEFA", 0.8));
     addPolygons(threeLayer);
   };
 }
@@ -229,7 +229,7 @@ function addOutLines(polygons) {
     polygon.setSymbol({
       polygonOpacity: 0.25,
       lineWidth: 3.5,
-      lineColor: "#00FFFF"
+      lineColor: "#00CED1"
     });
   });
   let vectorLayer = vectorRef.value.vectorLayer;
@@ -245,11 +245,11 @@ function addLabels() {
     point.setSymbol({
       textName: name,
       textFaceName: "sans-serif",
-      textFill: "#FFFFF",
+      textFill: "#FFFAFA",
       textHorizontalAlignment: "right",
       textSize: 18,
       textHaloRadius: 0.5,
-      textHaloFill: "#00FFF"
+      textHaloFill: "#F5F5F5"
     });
   });
   let vectorLayer = vectorRef.value.vectorLayer;

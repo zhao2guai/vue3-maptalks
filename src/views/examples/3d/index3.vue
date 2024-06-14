@@ -128,11 +128,11 @@ var planeMaterial = new MeshLambertMaterial({
   side: 0
 });
 var linematerial = new LineMaterial({
-  color: 0xf2f2f2,
+  color: 0xe0ffff, // 边界线颜色
   // transparent: true,
   // vertexColors: THREE.VertexColors,
   // side: THREE.BackSide,
-  linewidth: 4 // in pixels
+  linewidth: 5 // in pixels
   // vertexColors: THREE.VertexColors,
   // dashed: false
 });
@@ -187,24 +187,21 @@ function loadData(layer) {
     scene.add(light);
     scene.add(new AmbientLight("#fff", 0.3));
     loadTexture(layer);
-    // animation();
+    animation(layer);
   };
 }
 /** 地图背景图 */
 function loadTexture(layer) {
   const textureLoader = new TextureLoader();
-  textureLoader.load(
-    "../../../../public/texture/gz-map.jpg",
-    texture => {
-      texture.needsUpdate = true; //使用贴图时进行更新
-      texture.wrapS = texture.wrapT = RepeatWrapping;
-      // texture.repeat.set(0.002, 0.002);
-      texture.repeat.set(1, 1);
-      material.map = texture;
-      material.needsUpdate = true;
-      addAreas(layer);
-    }
-  );
+  textureLoader.load("../../../../public/texture/ningxia.png", texture => {
+    texture.needsUpdate = true; //使用贴图时进行更新
+    texture.wrapS = texture.wrapT = RepeatWrapping;
+    // texture.repeat.set(0.002, 0.002);
+    texture.repeat.set(1, 1);
+    material.map = texture;
+    material.needsUpdate = true;
+    addAreas(layer);
+  });
 }
 /** 地图背景图 */
 async function addAreas(threeLayer) {
@@ -371,9 +368,10 @@ function polygonToLine(geojson) {
     };
   });
 }
-function animation() {
+function animation(threeLayer) {
   // layer animation support Skipping frames
-  threeLayer._needsUpdate = !threeLayer._needsUpdate;
+  if (!threeLayer) return;
+  // threeLayer._needsUpdate = !threeLayer._needsUpdate;
   if (threeLayer._needsUpdate) {
     threeLayer.redraw();
   }

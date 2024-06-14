@@ -127,12 +127,12 @@ let layerOptions = {
 const height = 25000;
 // 定义颜色值范围
 const colors = [
-  [3000, "lightskyblue"],
-  [5000, "yellow"],
-  [7000, "orangered"]
-  // [3000, "#40E0D0"],
-  // [5000, "#FF8C00"],
-  // [7000, "#FF0000"]
+  // [3000, "lightskyblue"],
+  // [5000, "yellow"],
+  // [7000, "orangered"]
+  [3000, "#008B8B"],
+  [5000, "#FF8C00"],
+  [7000, "#8B0000"]
 ];
 // 创建颜色插值库
 const ci = new ColorIn(colors);
