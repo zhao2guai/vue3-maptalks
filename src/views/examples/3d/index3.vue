@@ -1,35 +1,59 @@
 <template>
   <div id="threeMapId" class="map-content" v-loading="loading">
     <mt-init-map ref="mapRef" :options="options" @getMap="getMap">
-      <mt-tianditu-layer
-        tk="695a9bebe4c75d64d9cada2be2789425"
-        layerType="img"
-        @layerCreated="getImgLayer"
-      />
-      <mt-tianditu-layer
-        tk="695a9bebe4c75d64d9cada2be2789425"
-        layerType="vec"
-        cssFilter="sepia(100%) invert(90%)"
-        @layerCreated="getVecLayer"
-      />
       <mt-group-gl-layer ref="glRef" :sceneConfig="sceneConfig">
+        <mt-tianditu-layer
+          tk="695a9bebe4c75d64d9cada2be2789425"
+          layerType="img"
+          @layerCreated="getImgLayer"
+        />
+        <mt-tianditu-layer
+          tk="695a9bebe4c75d64d9cada2be2789425"
+          layerType="ter"
+          @layerCreated="getVecLayer"
+        />
         <mt-three-layer
           ref="geoRef"
           id="threeLayerId"
           :options="layerOptions"
           @layerCreated="loadData"
         ></mt-three-layer>
+        <mt-vector-layer
+          id="vectorId12"
+          ref="vectorRef12"
+          :options="vectorOptions"
+          @layer-created="addPoints"
+        ></mt-vector-layer>
       </mt-group-gl-layer>
     </mt-init-map>
     <!-- 右上角开关 -->
     <el-card class="map-operation-area">
-      <el-switch
-        v-model="layersSwitch"
-        class="mb-2"
-        active-text="蓝黑底图"
-        inactive-text="影像底图"
-        @change="changeMap"
-      />
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-text class="mx-1">图层开关</el-text>
+        </el-col>
+        <el-col :span="16">
+          <el-switch
+            v-model="layersSwitch"
+            class="mb-2"
+            active-text="地形"
+            inactive-text="影像"
+            @change="changeMap"
+          />
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-text class="mx-1">边界颜色</el-text>
+        </el-col>
+        <el-col :span="16">
+          <el-color-picker
+            v-model="lineColor"
+            show-alpha
+            @active-change="changeLineColor"
+          />
+        </el-col>
+      </el-row>
     </el-card>
   </div>
 </template>
@@ -39,7 +63,6 @@ import { buildUUID } from "@pureadmin/utils";
 import { getGeojsonData } from "@/api/geojson";
 import {
   MeshLambertMaterial,
-  Vector2,
   DirectionalLight,
   AmbientLight,
   TextureLoader,
@@ -47,7 +70,7 @@ import {
   RepeatWrapping
 } from "three";
 import LineMaterial from "@/maptalks/lib/LineMaterial.js";
-import { GeoJSON, animate } from "maptalks";
+import { Marker, GeoJSON, animate } from "maptalks";
 // 地图加载状态
 let loading = ref(true);
 // 地图组件名称
@@ -81,10 +104,10 @@ let options = {
 // 场景配置
 let sceneConfig = {
   environment: {
-    enable: false, // 环境必须关闭否则底图不出
+    enable: true, // 环境必须关闭否则底图不出
     mode: 1,
     level: 0,
-    brightness: 0
+    brightness: 0.489
   },
   postProcess: {
     enable: true,
@@ -115,6 +138,16 @@ let sceneConfig = {
     }
   }
 };
+// 文字标注图层配置
+let vectorOptions = {
+  enableAltitude: true,
+  altitudeProperty: "altitude", // altitude property in properties, default by 'altitude'
+  geometryEvents: false,
+  collisionDelay: 250,
+  collisionBufferSize: 6,
+  // zIndex: 99,
+  collision: false
+};
 // THREE图层配置信息
 let layerOptions = {
   identifyCountOnEvent: 1,
@@ -127,8 +160,9 @@ var planeMaterial = new MeshLambertMaterial({
   opacity: 0.8,
   side: 0
 });
+
 var linematerial = new LineMaterial({
-  color: 0xe0ffff, // 边界线颜色
+  color: "#FAFAD2", // 边界线颜色
   // transparent: true,
   // vertexColors: THREE.VertexColors,
   // side: THREE.BackSide,
@@ -136,9 +170,9 @@ var linematerial = new LineMaterial({
   // vertexColors: THREE.VertexColors,
   // dashed: false
 });
-const material = new MeshPhongMaterial({ color: "#fff" });
+const material = new MeshPhongMaterial({ color: "#00fff" });
 const color = "rgb(255,255,255)";
-const lineColor = "#fff";
+let lineColor = ref("#FAFAD2");
 const height = 10000;
 const offset = 100;
 const polygonLinkLine = new Map();
@@ -190,7 +224,7 @@ function loadData(layer) {
     var light = new DirectionalLight(0xffffff);
     light.position.set(0, -10, 10).normalize();
     scene.add(light);
-    scene.add(new AmbientLight("#fff", 0.3));
+    scene.add(new AmbientLight("#00fff", 0.3));
     loadTexture(layer);
     animation(layer);
   };
@@ -229,7 +263,7 @@ async function addAreas(threeLayer) {
       const id = buildUUID();
       const extrudePolygon = threeLayer.toExtrudePolygon(
         p,
-        { height, topColor: "#fff", asynchronous: true },
+        { height, topColor: "#00fff", asynchronous: true },
         material
       );
       extrudePolygon.on("mouseover", polygonUp);
@@ -399,6 +433,57 @@ function initGui() {
       linematerial.color.set(params.color);
     });
 }
+
+// 更换边界线颜色
+function changeLineColor(e) {
+  linematerial.color.set(e);
+  lineColor.value = e;
+}
+
+// 添加打点
+async function addPoints(layer) {
+  // 这里开始模拟查询后台获取geosjon数据当然也可以从本页面import中获取
+  const { data } = await getGeojsonData({ code: "64" });
+  let features = data.features;
+  if (!features || features.length === 0) return;
+  let points = [];
+  const blue = new URL("../../../assets/marker/icon-blue.png", import.meta.url)
+    .href;
+  const oprange = new URL(
+    "../../../assets/marker/icon-orange.png",
+    import.meta.url
+  ).href;
+  features.forEach(item => {
+    const name = item.properties.name;
+    const point = item.properties.centroid;
+    points.push({
+      point: point,
+      name: name,
+      color: "#FFF",
+      icon: ""
+    });
+    new Marker(point, {
+      properties: {
+        name: name,
+        altitude: 10000
+      },
+      symbol: [
+        {
+          markerFile: name === "银川市" ? oprange : blue,
+          markerWidth: 65,
+          markerHeight: 78,
+          markerOpacity: 1
+        },
+        {
+          textName: "{name}",
+          textFill: "#FFFFFF",
+          textSize: 14,
+          textDy: -67
+        }
+      ]
+    }).addTo(layer);
+  });
+}
 </script>
 
 <style lang="scss">
@@ -430,6 +515,7 @@ function initGui() {
   overflow: hidden;
   .map-operation-area {
     position: absolute;
+    width: 280px;
     top: 2%;
     right: 2%;
     max-width: 480px;
