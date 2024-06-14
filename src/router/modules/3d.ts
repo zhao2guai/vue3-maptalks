@@ -25,6 +25,15 @@ export default {
         title: "分层设色(新疆)",
         hiddenTag: true
       }
+    },
+    {
+      path: "/3d/index3",
+      name: "行政区划(宁夏)",
+      component: () => import("@/views/examples/3d/index3.vue"),
+      meta: {
+        title: "行政区划(宁夏)",
+        hiddenTag: true
+      }
     }
   ]
 } satisfies RouteConfigsTable;

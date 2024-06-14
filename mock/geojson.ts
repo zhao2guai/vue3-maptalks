@@ -1,6 +1,7 @@
 import { defineFakeRoute } from "vite-plugin-fake-server/client";
-
+import geojson10 from "@/geojson/10/beijingarea.json";
 import geojson62 from "@/geojson/62/甘肃省_市.json";
+import geojson64 from "@/geojson/64/宁夏回族自治区_市.json";
 import geojson65 from "@/geojson/65/新疆维吾尔自治区_市.json";
 import shanghai from "@/geojson/markerCluster/shanghai.json";
 import pipelineData from "@/geojson/pipeline/pipeline.json";
@@ -32,6 +33,26 @@ export default defineFakeRoute([
       return {
         success: true,
         data: resData
+      };
+    }
+  },
+  {
+    url: "/get-async-geojson64",
+    method: "get",
+    response: () => {
+      return {
+        success: true,
+        data: geojson64
+      };
+    }
+  },
+  {
+    url: "/get-async-beijing",
+    method: "get",
+    response: () => {
+      return {
+        success: true,
+        data: geojson10
       };
     }
   },

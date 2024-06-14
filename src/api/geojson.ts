@@ -7,11 +7,18 @@ type Result = {
 
 /** 获取geojson数据 */
 export const getGeojsonData = (params?: any) => {
-  if (params.code==="65") {
+  if (params.code === "65") {
     return http.request<Result>("get", "/get-async-geojson65");
+  } else if (params.code === "64") { 
+    return http.request<Result>("get", "/get-async-geojson64");
   } else { 
     return http.request<Result>("get", "/get-async-geojson62");
   }
+};
+
+/** 获取geojson数据 */
+export const getBeijingData = (params?: any) => {
+  return http.request<Result>("get", "/get-async-beijing");
 };
 
 /**
