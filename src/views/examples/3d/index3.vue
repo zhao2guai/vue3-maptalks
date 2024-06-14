@@ -142,6 +142,11 @@ const lineColor = "#fff";
 const height = 10000;
 const offset = 100;
 const polygonLinkLine = new Map();
+// 获取3D行政区划背景
+const mapbg = new URL(
+  "../../../../public/texture/ningxia.png",
+  import.meta.url
+);
 // 页面加载后执行
 onMounted(() => {});
 // 页面销毁前执行
@@ -193,7 +198,7 @@ function loadData(layer) {
 /** 地图背景图 */
 function loadTexture(layer) {
   const textureLoader = new TextureLoader();
-  textureLoader.load("../../../../public/texture/ningxia.png", texture => {
+  textureLoader.load(mapbg, texture => {
     texture.needsUpdate = true; //使用贴图时进行更新
     texture.wrapS = texture.wrapT = RepeatWrapping;
     // texture.repeat.set(0.002, 0.002);

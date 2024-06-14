@@ -27,5 +27,8 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "iconify.excludes": ["el"]
+  "iconify.excludes": [
+    "el"
+  ],
+  "i18n-ally.localesPaths": []
 }
