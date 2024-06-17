@@ -3,7 +3,6 @@
     <!-- 地图部分 -->
     <div class="map-div" :style="{ width: mapDivWidth + '%' }">
       <mt-init-map @getMap="getMap" :options="options">
-        <mt-group-gl-layer></mt-group-gl-layer>
         <mt-vector-layer
           ref="vectorLayerRef"
           id="layer"

@@ -8,6 +8,7 @@
 import {
   defineComponent,
   inject,
+  provide,
   onUnmounted,
   onBeforeMount,
   watch
@@ -47,7 +48,8 @@ export default defineComponent({
     let pointLayer = new PointLayer(id, props.options);
     // 向组件传送初始化完毕的layer
     context.emit("layerCreated", pointLayer);
-
+    // 向外部提供当前图层对象，方便其他组件进行获取和操作
+    provide("pointLayer", pointLayer);
     // 监听点数据绘制图层ID
     watch(
       () => props.id,

@@ -7,10 +7,9 @@
 <script>
 import {
   defineComponent,
-  inject,
   onBeforeUnmount,
   onBeforeMount,
-  watch,
+  inject,
   provide
 } from "vue";
 import { buildUUID } from "@pureadmin/utils";

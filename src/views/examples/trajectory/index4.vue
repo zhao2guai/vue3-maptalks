@@ -21,10 +21,6 @@
             layerType="img"
           />
         </mt-group-gl-layer>
-        <mt-vector-layer
-          id="layer"
-          :options="{ enableAltitude: true }"
-        ></mt-vector-layer>
       </mt-init-map>
       <mt-router-player
         ref="routePlayerRef"

@@ -8,6 +8,7 @@
 import {
   defineComponent,
   inject,
+  provide,
   onUnmounted,
   onBeforeMount,
   watch
@@ -47,6 +48,8 @@ export default defineComponent({
     let lineStringLayer = new LineStringLayer(id, props.options);
     // 向组件传送初始化完毕的layer
     context.emit("layerCreated", lineStringLayer);
+    // 提供lineStringLayer给子组件使用或调用layer方法时使用
+    provide("lineStringLayer", lineStringLayer);
 
     // 监听线数据绘制图层ID
     watch(
@@ -90,7 +93,7 @@ export default defineComponent({
         groupGLLayer.addLayer(lineStringLayer);
         return;
       }
-
+      // 如果没有GL图层存在，则从全局map对象获取并添加到其中
       const map = inject("map", null);
       if (map) {
         map.addLayer(lineStringLayer);

@@ -28,10 +28,10 @@ export default {
     },
     {
       path: "/3d/index3",
-      name: "行政区划(宁夏)",
+      name: "地形抬升(宁夏)",
       component: () => import("@/views/examples/3d/index3.vue"),
       meta: {
-        title: "行政区划(宁夏)",
+        title: "地形抬升(宁夏)",
         hiddenTag: true
       }
     }

@@ -10,6 +10,7 @@ import {
   onBeforeMount,
   onBeforeUnmount,
   inject,
+  provide,
   watch
 } from "vue";
 import { GeoJSONVectorTileLayer } from "@maptalks/gl-layers";
@@ -99,7 +100,8 @@ export default defineComponent({
     geoJSONVectorTileLayer.setStyle(layerStyle);
     // 图层创建后的回调
     context.emit("layerCreated", geoJSONVectorTileLayer);
-
+    // 向父级组件提供图层对象
+    provide("geoJSONVectorTileLayer", geoJSONVectorTileLayer);
     // 监听GeoJSON图层ID
     watch(
       () => props.id,

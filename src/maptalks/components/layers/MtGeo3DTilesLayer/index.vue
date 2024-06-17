@@ -10,6 +10,7 @@ import {
   onBeforeMount,
   onBeforeUnmount,
   inject,
+  provide,
   watch
 } from "vue";
 import { buildUUID } from "@pureadmin/utils";
@@ -44,8 +45,8 @@ export default defineComponent({
     let geo3DTilesLayer = new Geo3DTilesLayer(id, options);
     // 向组件传送初始化完毕的layer
     context.emit("layerCreated", geo3DTilesLayer);
-
-
+    // 将图层对象提供到后代组件里。在其他组件中，可以通过inject的方式访问到该属性
+    provide("geo3DTilesLayer", geo3DTilesLayer);
     // 监听图层ID
     watch(
       () => props.id,

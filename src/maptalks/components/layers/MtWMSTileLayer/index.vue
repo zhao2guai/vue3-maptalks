@@ -8,6 +8,7 @@
 import {
   defineComponent,
   inject,
+  provide,
   onBeforeUnmount,
   onBeforeMount,
   watch,
@@ -86,6 +87,8 @@ export default defineComponent({
     let wmsLayer = new WMSTileLayer(id, props.options);
     // 向组件传送初始化完毕的layer
     context.emit("layerCreated", wmsLayer);
+    // 在组件内部向外提供当前的图层对象，其他组件可以通过调用inject('wmsLayer')来使用这个图层对象。
+    provide("wmsLayer", wmsLayer);
     // 设置ol数据源参数
     let properties = {
       url: props.options.urlTemplate,

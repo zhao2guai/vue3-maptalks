@@ -8,10 +8,10 @@
 import {
   defineComponent,
   inject,
+  provide,
   onBeforeUnmount,
   onBeforeMount,
-  watch,
-  ref
+  watch
 } from "vue";
 import MarkerClusterLayerModel from "./MakerClusterLayerModel";
 import { ui } from "maptalks";
@@ -58,7 +58,12 @@ export default defineComponent({
         const id = feature.id;
         const index = markerClusterLayer.getIndex();
         const features = index.getLeaves(id, 10);
-        const size = count < props.sizeOne ? "small" : count < props.sizeTwo ? "medium" : "large";
+        const size =
+          count < props.sizeOne
+            ? "small"
+            : count < props.sizeTwo
+              ? "medium"
+              : "large";
         marker = new ui.UIMarker(coordinate, {
           content: `<div class="marker-cluster marker-cluster-${size}">${count}</div>`
         });
@@ -79,7 +84,8 @@ export default defineComponent({
     let markerClusterLayer = new MarkerClusterLayerModel({ createIcon });
     // 向组件传送初始化完毕的layer
     context.emit("layerCreated", markerClusterLayer);
-
+    // 向外部提供markerClusterLayer对象
+    provide("markerClusterLayer", markerClusterLayer);
     // 点聚合数据geojson
     watch(
       () => props.geoJsonData,

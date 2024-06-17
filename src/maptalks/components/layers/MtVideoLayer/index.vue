@@ -8,6 +8,7 @@
 import {
   defineComponent,
   inject,
+  provide,
   onUnmounted,
   onBeforeMount,
   watch
@@ -62,6 +63,8 @@ export default defineComponent({
     let videoLayer = new VideoLayer(id, props.options);
     // 向组件传送初始化完毕的layer
     context.emit("layerCreated", videoLayer);
+    // 注入videoLayer到组件内部，可以被其他组件访问和使用。
+    provide("videoLayer", videoLayer);
 
     // 监听videoSuface的四个角的坐标
     watch(

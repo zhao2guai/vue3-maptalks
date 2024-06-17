@@ -4,6 +4,7 @@
 <script>
 import {
   inject,
+  provide,
   onBeforeUnmount,
   onBeforeMount,
   watch,
@@ -103,6 +104,8 @@ export default defineComponent({
     }
     // 向组件传送初始化完毕的layer
     context.emit("layerCreated", tileLayer);
+    // 将天地图图层对象向组件提供 (可供其他地方使用) 使用provide函数
+    provide("tileLayer", tileLayer);
 
     // 监听瓦片图层ID
     watch(

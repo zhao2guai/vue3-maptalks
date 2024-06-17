@@ -5,7 +5,13 @@
 </template>
 
 <script>
-import { onMounted, defineComponent, watch, onBeforeUnmount } from "vue";
+import {
+  provide,
+  onMounted,
+  defineComponent,
+  watch,
+  onBeforeUnmount
+} from "vue";
 import { RoutePlayer, formatRouteData } from "maptalks.routeplayer";
 
 export default defineComponent({
@@ -36,11 +42,12 @@ export default defineComponent({
     let routeData = props.routeData ? props.routeData : [];
     let options = props.options ? props.options : {};
     let data = getFormatRouteData(routeData);
-
     // 创建轨迹播放器
     const routePlayer = new RoutePlayer(data, options);
     // 轨迹播放器创建后的回调
     context.emit("routePlayerCreated", routePlayer);
+    // 将轨迹播放器提供给子组件使用，以便它们可以访问和交互这个播放器
+    provide("routePlayer", routePlayer);
 
     // 监听轨迹数据
     watch(
@@ -125,15 +132,15 @@ export default defineComponent({
       routePlayer.replay();
     };
     // 定位到指定顶点
-    const setIndex = (index) => {
+    const setIndex = index => {
       routePlayer.setIndex(index);
     };
     // 定位到指定时间
-    const setTime = (time) => {
+    const setTime = time => {
       routePlayer.setTime(time);
     };
     // 定位到指定距离
-    const setPercent = (percent) => {
+    const setPercent = percent => {
       routePlayer.setPercent(percent);
     };
     // 设置播放速度

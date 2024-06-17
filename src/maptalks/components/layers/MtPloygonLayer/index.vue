@@ -8,6 +8,7 @@
 import {
   defineComponent,
   inject,
+  provide,
   onUnmounted,
   onBeforeMount,
   watch
@@ -47,7 +48,8 @@ export default defineComponent({
     let polygonLayer = new PolygonLayer(id, props.options);
     // 向组件传送初始化完毕的layer
     context.emit("layerCreated", polygonLayer);
-
+    // 将图层对象作为provider向下传递
+    provide("polygonLayer", polygonLayer);
     // 监听点数据绘制图层ID
     watch(
       () => props.id,

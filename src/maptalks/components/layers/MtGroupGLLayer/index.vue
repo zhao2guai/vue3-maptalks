@@ -3,7 +3,6 @@
 </template>
 <script>
 import {
-  ref,
   provide,
   inject,
   onBeforeUnmount,

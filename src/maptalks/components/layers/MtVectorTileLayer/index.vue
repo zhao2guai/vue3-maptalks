@@ -8,6 +8,7 @@
 import {
   defineComponent,
   inject,
+  provide,
   onUnmounted,
   onBeforeMount,
   watch
@@ -42,6 +43,8 @@ export default defineComponent({
     let vectorTileLayer = new VectorTileLayer(id, props.options);
     // 向组件传送初始化完毕的layer
     context.emit("layerCreated", vectorTileLayer);
+    // 将图层对象提供出去，以便其他组件可以使用
+    provide("vectorTileLayer", vectorTileLayer);
 
     // 监听矢量瓦片图层ID
     watch(

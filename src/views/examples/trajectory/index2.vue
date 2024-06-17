@@ -12,19 +12,16 @@
               :content="content"
             ></mt-gltf-maker>
           </mt-gltf-layer>
-          <mt-line-string-layer
-            ref="lineLayerRef"
-            @layerCreated="getLineStringLayer"
-          ></mt-line-string-layer>
           <mt-tianditu-layer
             tk="ec89e7ba91633b147f76d47e08f9f1a1"
             layerType="img"
           />
+          <mt-line-string-layer
+            ref="lineLayerRef"
+            @layerCreated="getLineStringLayer"
+          >
+          </mt-line-string-layer>
         </mt-group-gl-layer>
-        <mt-vector-layer
-          id="layer"
-          :options="{ enableAltitude: true }"
-        ></mt-vector-layer>
       </mt-init-map>
       <mt-router-player
         ref="routePlayerRef"
@@ -34,7 +31,6 @@
         @playing="playingFun"
       ></mt-router-player>
     </div>
-
     <!-- 操作部分 -->
     <div
       class="operation-div"

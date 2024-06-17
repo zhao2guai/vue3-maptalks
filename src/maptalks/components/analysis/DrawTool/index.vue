@@ -9,8 +9,8 @@ import { DrawTool } from "maptalks";
 import {
   onBeforeMount,
   defineComponent,
-  watch,
   onBeforeUnmount,
+  provide,
   inject
 } from "vue";
 
@@ -33,10 +33,13 @@ export default defineComponent({
   },
 
   setup(props, context) {
+    // 创建一个新的绘制工具对象
     let drawTool = new DrawTool({
       mode: props.mode,
       symbol: props.symbol
     });
+    // 提供drawTool,让父级可以访问到
+    provide("drawTool", drawTool);
 
     // 页面加载后执行
     onBeforeMount(() => {

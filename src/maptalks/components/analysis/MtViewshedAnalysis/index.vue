@@ -9,9 +9,10 @@ import { ViewshedAnalysis } from "@maptalks/gl-layers";
 import {
   onBeforeMount,
   defineComponent,
-  watch,
   onBeforeUnmount,
-  inject
+  watch,
+  inject,
+  provide
 } from "vue";
 
 export default defineComponent({
@@ -48,13 +49,15 @@ export default defineComponent({
     let point1 = props.eyePos ? props.eyePos : [0, 0, 0];
 
     let point2 = props.lookPoint ? props.lookPoint : [0, 0, 0];
-
+    // 设置视线分析的属性
     let viewshedAnalysis = new ViewshedAnalysis({
       eyePos: point1,
       lookPoint: point2,
       horizontalAngle: props.horizontalAngle,
       verticalAngle: props.verticalAngle
     });
+    // 向外提供viewshedAnalysis工具
+    provide("viewshedAnalysis", viewshedAnalysis);
 
     // // 监听视点处坐标位置
     // watch(

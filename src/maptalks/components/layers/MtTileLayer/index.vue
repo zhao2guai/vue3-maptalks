@@ -4,6 +4,7 @@
 <script>
 import {
   inject,
+  provide,
   onBeforeUnmount,
   onBeforeMount,
   watch,
@@ -42,6 +43,8 @@ export default defineComponent({
     let tileLayer = new TileLayer(id, props.options);
     // 向组件传送初始化完毕的layer
     context.emit("layerCreated", tileLayer);
+    // 向父组件传递图层对象，以便于后续使用和操作。
+    provide("tileLayer", tileLayer);
 
     // 监听瓦片图层ID
     watch(

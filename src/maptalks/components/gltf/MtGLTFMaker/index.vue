@@ -7,9 +7,10 @@
 <script>
 import {
   defineComponent,
-  inject,
   onBeforeUnmount,
   onBeforeMount,
+  provide,
+  inject,
   watch
 } from "vue";
 import { GLTFMarker } from "@maptalks/gl-layers";
@@ -75,6 +76,8 @@ export default defineComponent({
       custom: true,
       content: props.content
     });
+    // 注入GLTFMarker对象，以便其他组件获取并使用它。
+    provide("gltfMarker", gltfMarker);
 
     // 监听打点样式
     watch(

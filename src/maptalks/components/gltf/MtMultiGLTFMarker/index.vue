@@ -7,9 +7,10 @@
 <script>
 import {
   defineComponent,
-  inject,
   onBeforeUnmount,
   onBeforeMount,
+  provide,
+  inject,
   watch
 } from "vue";
 import { MultiGLTFMarker } from "@maptalks/gl-layers";
@@ -49,6 +50,8 @@ export default defineComponent({
       custom: true,
       content: props.content
     });
+    // 向父组件提供多三维模型组对象
+    provide("multiGLTFMarker", multiGLTFMarker);
 
     // 监听三维模型组的配置信息
     watch(
