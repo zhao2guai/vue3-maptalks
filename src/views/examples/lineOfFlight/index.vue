@@ -258,12 +258,14 @@ function arcLinePoints(c1, c2, pointNumbers = 100) {
   return coordinates;
 }
 
+const lineImg = new URL("../../../../public/marker/line.png", import.meta.url);
+
 function addLine(data) {
   let lines = data.map(item => {
     let [point1, point2] = item.coordinates;
     let line = new LineString(arcLinePoints(point1, point2), {
       symbol: {
-        linePatternFile: "../../../../public/marker/line.png",
+        linePatternFile: lineImg,
         linePatternAnimSpeed: 0.1,
         lineWidth: 8,
         cucursor: "pointer"

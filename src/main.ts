@@ -60,7 +60,7 @@ getPlatformConfig(app).then(async config => {
   await router.isReady();
   injectResponsiveStorage(app, config);
   app.use(MotionPlugin).use(useElementPlus).use(Table);
-  app.use(PureDescriptions)
+  app.use(PureDescriptions);
   app.use(useEcharts);
   app.mount("#app");
 });

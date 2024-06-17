@@ -41,7 +41,10 @@ let options = {
 };
 
 let layerData = ref(null);
-
+let linePatternFile = new URL(
+  "../../../../public/marker/water.png",
+  import.meta.url
+);
 let layerStyle = {
   style: [
     {
@@ -62,7 +65,7 @@ let layerStyle = {
           property: "断面尺寸"
         },
         lineHeight: 60,
-        linePatternFile: "../../../../public/marker/water.png",
+        linePatternFile: linePatternFile,
         linePatternAnimSpeed: 0.1,
         uvScale: [1, 1],
         metallicFactor: 0,
