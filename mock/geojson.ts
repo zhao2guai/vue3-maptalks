@@ -2,7 +2,7 @@ import { defineFakeRoute } from "vite-plugin-fake-server/client";
 import geojson10 from "@/geojson/10/beijingarea.json";
 import geojson62 from "@/geojson/62/甘肃省_市.json";
 import geojson64 from "@/geojson/64/宁夏回族自治区.json";
-import geojson65 from "@/geojson/65/新疆维吾尔自治区_市.json";
+import geojson6527 from "@/geojson/65/博尔塔拉蒙古自治州_县.json";
 import shanghai from "@/geojson/markerCluster/shanghai.json";
 import pipelineData from "@/geojson/pipeline/pipeline.json";
 
@@ -29,7 +29,7 @@ export default defineFakeRoute([
     method: "get",
     response: () => {
       // 转换甘肃geojson数据随机加上value值为了分层设色效果，如有真是数据还是从后台一次性设置好再返回
-      let resData = setFeatureData(geojson65);
+      let resData = setFeatureData(geojson6527);
       return {
         success: true,
         data: resData
@@ -75,7 +75,7 @@ export default defineFakeRoute([
         data: pipelineData
       };
     }
-  },
+  }
 ]);
 
 // 获取行政区划设置行政区划中的地区值
@@ -87,7 +87,7 @@ const setFeatureData = (data: geoJsonType) => {
     element.properties.value = num;
   }
   return data;
-}
+};
 
 // 生成范围之间的随机整数
 const getRandomInt = (min: number, max: number) => {

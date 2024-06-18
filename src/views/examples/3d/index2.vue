@@ -1,5 +1,5 @@
 <template>
-  <div id="threeMapId" class="map-content" v-loading="loading">
+  <div id="threeMapId" v-loading="loading" class="map-content">
     <mt-init-map ref="mapRef" :options="options" @getMap="getMap">
       <mt-tianditu-layer
         tk="695a9bebe4c75d64d9cada2be2789425"
@@ -13,18 +13,14 @@
         @layerCreated="getImgLayer"
       />
       <mt-group-gl-layer ref="glRef" :sceneConfig="sceneConfig">
-        <mt-three-layer
+        <mt-extrude-polygon-layer
+          id="extrudeId"
           ref="geoRef"
-          id="threeLayerId"
           :options="layerOptions"
           @layerCreated="loadData"
-        ></mt-three-layer>
+        />
       </mt-group-gl-layer>
-      <mt-vector-layer
-        ref="vectorRef"
-        id="vectorId"
-        :options="vectorOptions"
-      ></mt-vector-layer>
+      <mt-vector-layer id="vectorId" ref="vectorRef" :options="vectorOptions" />
     </mt-init-map>
     <!-- 右上角开关 -->
     <el-card class="map-operation-area">
@@ -41,7 +37,6 @@
 <script setup>
 import { ColorIn } from "colorin";
 import { GeoJSON } from "maptalks";
-import { DirectionalLight, AmbientLight, MeshPhongMaterial } from "three";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { getGeojsonData } from "@/api/geojson";
 // 地图组件名称
@@ -53,15 +48,15 @@ const vectorRef = ref(null);
 // 图层切换开关
 let layersSwitch = ref(false);
 // 地图数据
-let geojsonData = null;
+let geojsonData = ref(null);
 // 地图对象
 let map = null;
 // 地图加载状态
 let loading = ref(true);
 // 初始化地图参数
 let options = {
-  center: [85.510272, 40.84152], // 新疆
-  zoom: 6.8,
+  center: [82.22105, 44.708094], // 新疆博州
+  zoom: 9,
   spatialReference: {
     projection: "EPSG:4326"
   },
@@ -116,15 +111,31 @@ let vectorOptions = {
   collisionBufferSize: 6,
   zIndex: 99
 };
-// THREE图层配置信息
-let layerOptions = {
-  identifyCountOnEvent: 1,
-  animation: true
-  // forceRenderOnMoving: true,
-  // forceRenderOnRotating: true
+const dataConfig = {
+  type: "3d-extrusion",
+  altitudeProperty: "height",
+  altitudeScale: 5,
+  defaultAltitude: 0,
+  top: true,
+  side: true
+  // sideVerticalUVMode: 1
+  // textureYOrigin: 'bottom'
 };
-// 区划块饼子厚度
-const height = 25000;
+
+const material = {
+  baseColorFactor: [1, 1, 1, 1],
+  emissiveFactor: [1, 1, 1],
+  roughnessFactor: 0,
+  metalnessFactor: 0,
+  outputSRGB: 0,
+  uvScale: [0.001, 0.0013]
+};
+// 三维多边形图层配置信息
+let layerOptions = {
+  dataConfig,
+  material,
+  geometryEvents: false
+};
 // 定义颜色值范围
 const colors = [
   // [3000, "lightskyblue"],
@@ -136,11 +147,6 @@ const colors = [
 ];
 // 创建颜色插值库
 const ci = new ColorIn(colors);
-// 高亮材质
-const highMaterial = new MeshPhongMaterial({
-  color: "#FFFFF",
-  vertexColors: 2
-});
 // 底图图层
 let imgLayer = undefined;
 let vecLayer = undefined;
@@ -178,94 +184,44 @@ function getMap(e) {
   }
 }
 // 加载行政区划数据
-function loadData(e) {
-  // 获取组件中的THREE图层
-  let threeLayer = e;
-  // 为three图层设置场景和光照参数
-  threeLayer.prepareToDraw = (gl, scene, camera) => {
-    var light = new DirectionalLight(0xffffff);
-    light.position.set(0, -10, 10).normalize();
-    scene.add(light);
-    scene.add(new AmbientLight("#FFFFF", 0.8));
-    addPolygons(threeLayer);
-  };
-}
-// 添加多边形区划块
-async function addPolygons(layer) {
+async function loadData(layer) {
   try {
+    loading.value = true;
     // 这里开始模拟查询后台获取geosjon数据当然也可以从本页面import中获取
     const { data } = await getGeojsonData({ code: "65" });
     // console.log(data);
     // 将查询到的geojson数据赋值给全局属性
-    geojsonData = data;
-    const polygons = GeoJSON.toGeometry(geojsonData);
-    const extrudePolygons = polygons.map(p => {
-      const { value } = p.getProperties();
+    geojsonData.value = data;
+    const polygons = GeoJSON.toGeometry(data);
+    polygons.forEach(polygon => {
+      // console.log(polygon.getProperties());
+      // 获取行政区划中的value
+      const { value, name } = polygon.getProperties();
       const [r, g, b] = ci.getColor(value);
-      const color = `rgb(${r},${g},${b}),0.5`;
-      const extrudePolygon = layer.toExtrudePolygon(
-        p,
-        { height, altitude: -height, topColor: "#fff" },
-        new MeshPhongMaterial({ color })
-      );
-      extrudePolygon.on("mouseover mouseout", mouseEventFunc);
-      return extrudePolygon;
+      const color = `rgb(${r},${g},${b})`;
+      polygon.setSymbol({
+        lineColor: "#00FFFF",
+        // lineDasharray: [10, 5, 5],
+        lineWidth: 6,
+        polygonFill: color,
+        polygonOpacity: 0.5,
+        // topPolygonFill: "#DAA520",
+        // bottomPolygonFill: "#FF8C00"
+        textName: name ? name : "",
+        textPitchAlignment: "map",
+        textRotationAlignment: "map"
+      });
+      polygon.setProperties({
+        height: 1000
+      });
     });
-    layer.addMesh(extrudePolygons);
-    addOutLines(polygons);
-    addLabels();
+    layer.addGeometry(polygons);
   } catch (e) {
     console.log(e);
   } finally {
     setTimeout(() => {
       loading.value = false;
     }, 1000);
-  }
-}
-// 添加区划边界线
-function addOutLines(polygons) {
-  polygons.forEach(polygon => {
-    polygon.setSymbol({
-      polygonOpacity: 0.25,
-      lineWidth: 3.5,
-      lineColor: "#00FFFF"
-    });
-  });
-  let vectorLayer = vectorRef.value.vectorLayer;
-  if (vectorLayer) {
-    vectorLayer.addGeometry(polygons);
-  }
-}
-// 添加地区名称
-function addLabels() {
-  const points = GeoJSON.toGeometry(geojsonData);
-  points.forEach(point => {
-    const { name } = point.getProperties();
-    point.setSymbol({
-      textName: name,
-      textFaceName: "sans-serif",
-      textFill: "#FFFFF",
-      textHorizontalAlignment: "right",
-      textSize: 18,
-      textHaloRadius: 0.5,
-      textHaloFill: "#00FFF"
-    });
-  });
-  let vectorLayer = vectorRef.value.vectorLayer;
-  if (vectorLayer) vectorLayer.addGeometry(points);
-}
-// 鼠标挪入挪出事件
-function mouseEventFunc(e) {
-  const polygon = e.target;
-  if (e.type === "mouseover") {
-    if (!polygon._oldSymbol) {
-      polygon._oldSymbol = polygon.getObject3d().material;
-    }
-    polygon.getObject3d().material = highMaterial;
-  } else if (e.type === "mouseout") {
-    if (polygon._oldSymbol) {
-      polygon.getObject3d().material = polygon._oldSymbol;
-    }
   }
 }
 </script>
