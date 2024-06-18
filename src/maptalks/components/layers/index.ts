@@ -21,6 +21,8 @@ import MtPointLayer from "./MtPointLayer/index.vue";
 import MtLineStringLayer from "./MtLineStringLayer/index.vue";
 import MtPloygonLayer from "./MtPloygonLayer/index.vue";
 import MtVideoLayer from "./MtVideoLayer/index.vue";
+import MtExtrudePolygonLayer from "./MtExtrudePolygonLayer/index.vue";
+import MtImageLayer from "./MtImageLayer/index.vue";
 
 function install(app: App) {
   // webgl图层集合的管理和融合类
@@ -32,27 +34,31 @@ function install(app: App) {
   // 瓦片图层组
   app.component("mt-group-tile-layer", MtGroupTileLayer);
   // 服务图层
-  app.component('mt-wms-tile-layer', MtWMSTileLayer);
+  app.component("mt-wms-tile-layer", MtWMSTileLayer);
   // 矢量瓦片图层
-  app.component('mt-vector-tile-layer', MtVectorTileLayer);
+  app.component("mt-vector-tile-layer", MtVectorTileLayer);
   // GEOJSON矢量瓦片图层
-  app.component('mt-geojson-vector-tile-layer', MtGeoJSONVectorTileLayer);
+  app.component("mt-geojson-vector-tile-layer", MtGeoJSONVectorTileLayer);
   // GEO3D矢量瓦片图层
-  app.component('mt-geo3d-tile-layer', MtGeo3DTilesLayer);
+  app.component("mt-geo3d-tile-layer", MtGeo3DTilesLayer);
   // ThreeJS图层
-  app.component('mt-three-layer', MtThreeLayer);
+  app.component("mt-three-layer", MtThreeLayer);
   // 矢量数据图层
-  app.component('mt-vector-layer', MtVectorLayer);
+  app.component("mt-vector-layer", MtVectorLayer);
   // 点聚合图层
-  app.component('mt-maker-cluster-layer', MtMarkerClusterLayer);
+  app.component("mt-maker-cluster-layer", MtMarkerClusterLayer);
   // 点数据绘制图层
-  app.component('mt-point-layer', MtPointLayer);
+  app.component("mt-point-layer", MtPointLayer);
   // 线数据绘制图层
-  app.component('mt-line-string-layer', MtLineStringLayer);
+  app.component("mt-line-string-layer", MtLineStringLayer);
   // 线数据绘制图层
-  app.component('mt-ploygon-layer', MtPloygonLayer);
+  app.component("mt-ploygon-layer", MtPloygonLayer);
   // 视频图层
-  app.component('mt-video-layer', MtVideoLayer);
+  app.component("mt-video-layer", MtVideoLayer);
+  // 三维多边形图层
+  app.component("mt-extrude-polygon-layer", MtExtrudePolygonLayer);
+  // 加载图片图层
+  app.component("mt-image-layer", MtImageLayer);
 }
 
 export default install;
@@ -68,5 +74,12 @@ export {
   MtGeoJSONVectorTileLayer,
   MtGeo3DTilesLayer,
   MtThreeLayer,
-  MtVectorLayer
+  MtVectorLayer,
+  MtMarkerClusterLayer,
+  MtPointLayer,
+  MtLineStringLayer,
+  MtPloygonLayer,
+  MtVideoLayer,
+  MtExtrudePolygonLayer,
+  MtImageLayer
 };

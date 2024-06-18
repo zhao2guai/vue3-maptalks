@@ -13,19 +13,24 @@ import {
   onBeforeMount,
   watch
 } from "vue";
-import { VectorLayer } from "maptalks";
+import { ImageLayer } from "maptalks";
 import { buildUUID } from "@pureadmin/utils";
 export default defineComponent({
-  // 初始化矢量图层
-  name: "mt-vector-layer",
+  // 加载图片的图层
+  name: "mt-image-layer",
 
   props: {
-    // 矢量图层id
+    // 图片图层id
     id: {
       type: [String, Number],
       default: ""
     },
-    // 矢量图层配置信息
+    // 图片数组
+    images: {
+      type: Array,
+      default: null
+    },
+    // 图片图层配置信息
     options: {
       type: Object,
       default: null
@@ -35,30 +40,41 @@ export default defineComponent({
   setup(props, context) {
     // 获取图层ID和配置
     let id = props.id ? props.id : buildUUID();
+    let images = props.images ? props.images : null;
     let options = props.options ? props.options : null;
     // 接收图层配置信息并初始化图层对象
-    let vectorLayer = new VectorLayer(id, options);
+    let imageLayer = new ImageLayer(id, images, options);
     // 图层对象创建完毕后的回调
-    context.emit("layerCreated", vectorLayer);
+    context.emit("layerCreated", imageLayer);
     // 使用provide注入图层对象，这样父组件就可以访问到图层对象了。
-    provide("vectorLayer", vectorLayer);
+    provide("imageLayer", imageLayer);
 
-    // 监听矢量图层ID
+    // 监听图片图层ID
     watch(
       () => props.id,
       newId => {
-        if (vectorLayer && newId) {
-          vectorLayer.setId(newId);
+        if (imageLayer && newId) {
+          imageLayer.setId(newId);
         }
       },
       { immediate: true }
     );
-    // 监听矢量图层配置信息
+    // 监听图片数组
+    watch(
+      () => props.images,
+      newImg => {
+        if (imageLayer && newImg) {
+          imageLayer.setImages(newImg);
+        }
+      },
+      { immediate: true, deep: true }
+    );
+    // 监听图片图层配置信息
     watch(
       () => props.options,
       newOptions => {
-        if (vectorLayer && newOptions) {
-          vectorLayer.setOptions(newOptions);
+        if (imageLayer && newOptions) {
+          imageLayer.setOptions(newOptions);
         }
       },
       { immediate: true, deep: true }
@@ -66,7 +82,7 @@ export default defineComponent({
 
     // 页面加载后执行
     onBeforeMount(() => {
-      addVectorLayer();
+      addImageLayer();
       initEvents();
     });
 
@@ -75,98 +91,78 @@ export default defineComponent({
       removeAll();
     });
 
-    // 添加矢量图层
-    const addVectorLayer = () => {
+    // 添加图片图层
+    const addImageLayer = () => {
       // 获取上级组件中的地图对象
       let maptalks = inject("maptalks", null);
       // 获取地图对象
       let map = maptalks.value;
       // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
       if (map && map.isLoaded()) {
-        vectorLayer.addTo(map);
+        imageLayer.addTo(map);
         return;
       }
     };
 
     // 初始化图层事件
     const initEvents = () => {
-      if (!vectorLayer) return;
-      // 设置样式时触发事件
-      vectorLayer.on("setstyle", event => {
-        context.emit("setstyle", event);
-      });
-      // 移除样式时触发事件
-      vectorLayer.on("removestyle", event => {
-        context.emit("removestyle", event);
-      });
-      // 添加geo数据触发事件
-      vectorLayer.on("addgeo", event => {
-        context.emit("addgeo", event);
-      });
-      // 移除geo数据触发事件
-      vectorLayer.on("removegeo", event => {
-        context.emit("removegeo", event);
-      });
-      // 监听clear事件
-      vectorLayer.on("clear", event => {
-        context.emit("clear", event);
-      });
+      if (!imageLayer) return;
       // 监听id改变事件
-      vectorLayer.on("idchange", event => {
+      imageLayer.on("idchange", event => {
         context.emit("idchange", event);
       });
       // 图层高度改变事件
-      vectorLayer.on("setzindex", event => {
+      imageLayer.on("setzindex", event => {
         context.emit("setzindex", event);
       });
       // 图层透明度改变事件
-      vectorLayer.on("setopacity", event => {
+      imageLayer.on("setopacity", event => {
         context.emit("setopacity", event);
       });
       // 图层显示时候触发事件
-      vectorLayer.on("show", event => {
+      imageLayer.on("show", event => {
         context.emit("show", event);
       });
       // 图层显示时候触发事件
-      vectorLayer.on("hide", event => {
+      imageLayer.on("hide", event => {
         context.emit("hide", event);
       });
       // renderer创建事件
-      vectorLayer.on("renderercreate", event => {
+      imageLayer.on("renderercreate", event => {
         context.emit("renderercreate", event);
       });
       // 关闭图层触发事件
-      vectorLayer.on("visiblechange", event => {
+      imageLayer.on("visiblechange", event => {
         context.emit("visiblechange", event);
       });
       // 数据源加载时候触发事件。
-      vectorLayer.on("resourceload", event => {
+      imageLayer.on("resourceload", event => {
         context.emit("resourceload", event);
       });
       // canvas创建时候触发事件。
-      vectorLayer.on("canvascreate", event => {
+      imageLayer.on("canvascreate", event => {
         context.emit("canvascreate", event);
       });
       // 开始渲染事件
-      vectorLayer.on("renderstart", event => {
+      imageLayer.on("renderstart", event => {
         context.emit("renderstart", event);
       });
       // 结束渲染事件
-      vectorLayer.on("renderend", event => {
+      imageLayer.on("renderend", event => {
         context.emit("renderend", event);
       });
     };
 
     // 移除并销毁图层对象
     const removeAll = () => {
-      if (vectorLayer) {
-        vectorLayer.remove();
-        vectorLayer = undefined;
+      if (imageLayer) {
+        imageLayer.remove();
+        imageLayer = undefined;
       }
     };
 
     return {
-      vectorLayer
+      imageLayer
     };
   }
 });
