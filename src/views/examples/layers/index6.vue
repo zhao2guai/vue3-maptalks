@@ -1,6 +1,6 @@
 <template>
-  <div v-loading="loading" id="clusterId" class="map-content">
-    <mt-init-map ref="mapRef" @getMap="getMap" :options="options">
+  <div id="clusterId" v-loading="loading" class="map-content">
+    <mt-init-map ref="mapRef" :options="options" @getMap="getMap">
       <mt-tianditu-layer
         tk="ec89e7ba91633b147f76d47e08f9f1a1"
         layerType="img"
@@ -12,13 +12,13 @@
       />
     </mt-init-map>
 
-    <div class="dialog-div" v-if="markerDataDialog">
-      <i class="close-icon" @click="closeMarkerDataDialog"></i>
+    <div v-if="markerDataDialog" class="dialog-div">
+      <i class="close-icon" @click="closeMarkerDataDialog" />
       <p class="point-title">点聚合单个点数据弹框</p>
       <div
-        class="content-div"
         v-for="(value, key, index) in markerData"
         :key="index"
+        class="content-div"
       >
         <p class="content-style" :title="value ? value : '--'">
           {{ key ? key : "未知" }}：{{ value ? value : "--" }}
@@ -117,7 +117,7 @@ function closeMarkerDataDialog() {
 <style lang="scss">
 #clusterId {
   .marker-style {
-    background: url("../../../assets/marker/point1.png") no-repeat;
+    background: url("../../../../public/marker/point1.png") no-repeat;
     background-size: 100% 100%;
     width: 30px;
     height: 30px;

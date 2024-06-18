@@ -1,5 +1,5 @@
 <template>
-  <div id="threeMapId" class="map-content" v-loading="loading">
+  <div id="threeMapId" v-loading="loading" class="map-content">
     <mt-init-map ref="mapRef" :options="options" @getMap="getMap">
       <mt-group-gl-layer ref="glRef" :sceneConfig="sceneConfig">
         <mt-tianditu-layer
@@ -13,17 +13,17 @@
           @layerCreated="getVecLayer"
         />
         <mt-three-layer
-          ref="geoRef"
           id="threeLayerId"
+          ref="geoRef"
           :options="layerOptions"
           @layerCreated="loadData"
-        ></mt-three-layer>
+        />
         <mt-vector-layer
           id="vectorId12"
           ref="vectorRef12"
           :options="vectorOptions"
           @layer-created="addPoints"
-        ></mt-vector-layer>
+        />
       </mt-group-gl-layer>
     </mt-init-map>
     <!-- 右上角开关 -->
@@ -447,10 +447,12 @@ async function addPoints(layer) {
   let features = data.features;
   if (!features || features.length === 0) return;
   let points = [];
-  const blue = new URL("../../../assets/marker/icon-blue.png", import.meta.url)
-    .href;
+  const blue = new URL(
+    "../../../../public/marker/icon-blue.png",
+    import.meta.url
+  ).href;
   const oprange = new URL(
-    "../../../assets/marker/icon-orange.png",
+    "../../../../public/marker/icon-orange.png",
     import.meta.url
   ).href;
   features.forEach(item => {

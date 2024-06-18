@@ -7,13 +7,13 @@
           layerType="img"
         />
         <mt-geo3d-tile-layer
-          ref="geo3dRef"
           id="3dtiles"
+          ref="geo3dRef"
           :options="layerOptions"
           @loadtileset="loadtileset"
           @renderstart="renderstart"
           @renderend="renderend"
-        ></mt-geo3d-tile-layer>
+        />
       </mt-group-gl-layer>
     </mt-init-map>
   </div>

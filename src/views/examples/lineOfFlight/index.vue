@@ -1,8 +1,8 @@
 <template>
-  <div v-loading="loading" class="map-content" id="fxx">
+  <div id="fxx" v-loading="loading" class="map-content">
     <!-- 地图部分 -->
     <div class="map-div">
-      <mt-init-map ref="mapRef" @getMap="getMap" :options="options">
+      <mt-init-map ref="mapRef" :options="options" @getMap="getMap">
         <mt-group-gl-layer :sceneConfig="sceneConfig">
           <mt-tianditu-layer
             tk="695a9bebe4c75d64d9cada2be2789425"
@@ -19,7 +19,7 @@
           <mt-line-string-layer
             ref="lineStringLayerRef"
             :options="{ enableAltitude: true, enableBloom: true }"
-          ></mt-line-string-layer>
+          />
         </mt-group-gl-layer>
       </mt-init-map>
     </div>
@@ -258,14 +258,12 @@ function arcLinePoints(c1, c2, pointNumbers = 100) {
   return coordinates;
 }
 
-const lineImg = new URL("../../../../public/marker/line.png", import.meta.url);
-
 function addLine(data) {
   let lines = data.map(item => {
     let [point1, point2] = item.coordinates;
     let line = new LineString(arcLinePoints(point1, point2), {
       symbol: {
-        linePatternFile: lineImg,
+        linePatternFile: "../../../../public/marker/line.png",
         linePatternAnimSpeed: 0.1,
         lineWidth: 8,
         cucursor: "pointer"

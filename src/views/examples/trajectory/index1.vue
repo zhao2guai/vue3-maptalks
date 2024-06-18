@@ -1,13 +1,13 @@
 <template>
-  <div v-loading="loading" id="trajectoryBaseId" class="map-content">
+  <div id="trajectoryBaseId" v-loading="loading" class="map-content">
     <!-- 地图部分 -->
     <div class="map-div" :style="{ width: mapDivWidth + '%' }">
-      <mt-init-map @getMap="getMap" :options="options">
+      <mt-init-map :options="options" @getMap="getMap">
         <mt-vector-layer
-          ref="vectorLayerRef"
           id="layer"
+          ref="vectorLayerRef"
           :options="{ enableAltitude: true, zIndex: 2 }"
-        ></mt-vector-layer>
+        />
         <mt-tianditu-layer
           tk="ec89e7ba91633b147f76d47e08f9f1a1"
           layerType="img"
@@ -20,7 +20,7 @@
         :options="routePlayerOptions"
         @routePlayerCreated="getRoutePlayerCreated"
         @playing="playingFun"
-      ></mt-router-player>
+      />
     </div>
 
     <!-- 操作部分 -->
@@ -29,8 +29,8 @@
       :style="{ width: operationWidth + '%' }"
       :class="[showOperation ? '' : 'hide-operation-div']"
     >
-      <p class="title-style" v-if="showOperation">地图中的操作</p>
-      <el-row style="margin-top: 2vh" v-if="showOperation">
+      <p v-if="showOperation" class="title-style">地图中的操作</p>
+      <el-row v-if="showOperation" style="margin-top: 2vh">
         <el-col :span="24" style="margin-top: 2.5vh">
           <span class="label-style">自动设置中心点：</span
           ><el-switch
@@ -84,10 +84,10 @@
           <el-slider
             v-model="speed"
             style="position: relative; top: -0.5vh"
-            @change="speedChange"
             :min="1"
             :max="20"
-          ></el-slider>
+            @change="speedChange"
+          />
         </el-col>
         <el-col
           :span="24"
@@ -106,14 +106,14 @@
         </el-col>
       </el-row>
       <div class="show-operation-div" @click="isShowOperation">
-        <i class="right-icon" v-if="showOperation"></i>
-        <i class="left-icon" v-else></i>
+        <i v-if="showOperation" class="right-icon" />
+        <i v-else class="left-icon" />
       </div>
     </div>
 
     <!-- 弹框 -->
-    <div class="infocontent" v-if="infoWindow">
-      <i class="close-icon" @click="closeMarkerDataDialog"></i>
+    <div v-if="infoWindow" class="infocontent">
+      <i class="close-icon" @click="closeMarkerDataDialog" />
       <div class="infopop_title">1号拖拉机</div>
       <div class="infopop_title">拖拉机编号: A103JHR89Y20</div>
       <div class="infopop_title">已作业面积（亩）: 2</div>
@@ -309,10 +309,6 @@ function getRoutePlayerCreated(routerPlayer) {
 
 let line = null;
 let marker = null;
-let markerFile = new URL(
-  "../../../../public/marker/point1.png",
-  import.meta.url
-);
 function addLine() {
   line = new LineString(coordinatesData.value, {
     symbol: {
@@ -329,7 +325,7 @@ function addLine() {
   marker = new Marker(coordinateData.value, {
     zIndex: 9,
     symbol: {
-      markerFile: markerFile,
+      markerFile: "../../../../public/marker/point1.png",
       markerWidth: 50,
       markerHeight: 50
     }
