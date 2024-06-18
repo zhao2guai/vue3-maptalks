@@ -3,6 +3,7 @@
 </template>
 <script>
 import {
+  watch,
   inject,
   provide,
   onBeforeUnmount,
@@ -19,26 +20,6 @@ export default defineComponent({
     id: {
       type: String,
       default: ""
-    },
-    // 图层最小缩放距离
-    minZoom: {
-      type: Number,
-      default: 1
-    },
-    // 图层最大缩放距离
-    maxZoom: {
-      type: Number,
-      default: 18
-    },
-    // 图层透明度
-    opacity: {
-      type: Number,
-      default: 1
-    },
-    // 图层服务地址
-    zIndex: {
-      type: Number,
-      default: undefined
     },
     // 服务配置信息
     options: {
@@ -65,6 +46,27 @@ export default defineComponent({
     provide("groupTileLayer", groupTileLayer);
     // 向组件传送初始化完毕的layer
     context.emit("layerCreated", groupTileLayer);
+
+    // 监听图层ID
+    watch(
+      () => props.id,
+      newId => {
+        if (groupTileLayer && newId) {
+          groupTileLayer.setId(newId);
+        }
+      },
+      { immediate: true }
+    );
+    // 监听图层配置信息
+    watch(
+      () => props.options,
+      newOptions => {
+        if (groupTileLayer && newOptions) {
+          groupTileLayer.setOptions(newOptions);
+        }
+      },
+      { immediate: true, deep: true }
+    );
 
     // 页面加载后执行
     onBeforeMount(() => {

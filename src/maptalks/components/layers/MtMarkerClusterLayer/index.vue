@@ -75,7 +75,7 @@ export default defineComponent({
 
     const markerClick = e => {
       if (e.target.feature.properties.cluster) {
-        console.log("我是一个聚合点");
+        // console.log("我是一个聚合点");
       } else {
         context.emit("getMarkData", e.target.feature.properties);
       }

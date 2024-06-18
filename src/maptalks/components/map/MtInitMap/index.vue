@@ -114,7 +114,7 @@ export default defineComponent({
           map.setOptions(newOptions);
         }
       },
-      { deep: true }
+      { immediate: true, deep: true }
     );
 
     // 监听地图光照配置
@@ -125,7 +125,7 @@ export default defineComponent({
           map.setLights(newLights);
         }
       },
-      { deep: true }
+      { immediate: true, deep: true }
     );
 
     // 监听地图暗角配置

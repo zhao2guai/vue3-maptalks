@@ -119,7 +119,7 @@ export default defineComponent({
           groupGLLayer.setOptions(newOptions);
         }
       },
-      { deep: true }
+      { immediate: true, deep: true }
     );
     // 监听GL场景配置
     watch(
@@ -129,7 +129,7 @@ export default defineComponent({
           groupGLLayer.setSceneConfig(newConfig);
         }
       },
-      { deep: true }
+      { immediate: true, deep: true }
     );
     // 监听地形开关
     watch(

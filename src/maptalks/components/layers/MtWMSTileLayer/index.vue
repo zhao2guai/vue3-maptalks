@@ -21,35 +21,10 @@ export default defineComponent({
   /** 初始化WMS图层组件 */
   name: "mt-wms-tile-layer",
   props: {
-    // tile图层id
+    // 服务图层id
     id: {
       type: String,
       default: ""
-    },
-    // 图层最小缩放距离
-    minZoom: {
-      type: Number,
-      default: 1
-    },
-    // 图层最大缩放距离
-    maxZoom: {
-      type: Number,
-      default: 18
-    },
-    // 是否显示图层
-    visible: {
-      type: Boolean,
-      default: true
-    },
-    // 图层透明度
-    opacity: {
-      type: Number,
-      default: 1
-    },
-    // 图层高度
-    zIndex: {
-      type: Number,
-      default: undefined
     },
     // 服务配置信息
     options: {
@@ -66,7 +41,7 @@ export default defineComponent({
         uppercase: true
       })
     },
-    // ol服务请求参数
+    // 服务请求参数
     params: {
       type: Object,
       default: () => ({})
@@ -115,28 +90,6 @@ export default defineComponent({
       { immediate: true }
     );
 
-    // 监听瓦片图层透明度
-    watch(
-      () => props.opacity,
-      newOpacity => {
-        if (wmsLayer && newOpacity) {
-          wmsLayer.setOpacity(newOpacity);
-        }
-      },
-      { immediate: true }
-    );
-
-    // 监听瓦片图层高度
-    watch(
-      () => props.zIndex,
-      newZIndex => {
-        if (wmsLayer && newZIndex) {
-          wmsLayer.setZIndex(newZIndex);
-        }
-      },
-      { immediate: true }
-    );
-
     // 监听服务配置信息
     watch(
       () => props.options,
@@ -146,7 +99,7 @@ export default defineComponent({
           wmsLayer.forceReload();
         }
       },
-      { deep: true }
+      { immediate: true, deep: true }
     );
 
     // 监听ol图层查询参数
@@ -155,7 +108,6 @@ export default defineComponent({
       newVal => {
         // 判断SQL和ol图层是否存在
         if (newVal && olTileLayer.value) {
-          alert(111);
           let layer = olTileLayer.value;
           layer.getSource().updateParams(newVal);
         }
@@ -300,5 +252,3 @@ export default defineComponent({
   }
 });
 </script>
-
-<style lang="scss" scoped></style>

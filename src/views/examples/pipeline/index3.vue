@@ -1,8 +1,8 @@
 <template>
-  <div v-loading="loading" id="trajectoryBaseId" class="map-content">
+  <div id="trajectoryBaseId" v-loading="loading" class="map-content">
     <!-- 地图部分 -->
     <div class="map-div">
-      <mt-init-map @getMap="getMap" :options="options">
+      <mt-init-map :options="options" @getMap="getMap">
         <mt-group-gl-layer>
           <mt-tianditu-layer
             tk="ec89e7ba91633b147f76d47e08f9f1a1"
@@ -13,7 +13,7 @@
             ref="geoRef"
             :layerStyle="layerStyle"
             :layerData="layerData"
-          ></mt-geojson-vector-tile-layer>
+          />
         </mt-group-gl-layer>
       </mt-init-map>
     </div>
@@ -41,7 +41,7 @@ let options = {
 };
 
 let layerData = ref(null);
-
+let snow = new URL("@/assets/gltf/ylk/ylk.gltf", import.meta.url);
 let layerStyle = {
   style: [
     {
@@ -60,7 +60,7 @@ let layerStyle = {
       symbol: {
         markerFill: "#0f0",
         markerRotationAlignment: "line",
-        url: new URL("@/assets/gltf/ylk/ylk.gltf", import.meta.url),
+        url: snow,
         markerPlacement: "vertex-last",
         rotationZ: 90,
         anchorZ: "middle",
