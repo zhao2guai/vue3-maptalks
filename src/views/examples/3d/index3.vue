@@ -104,7 +104,7 @@ let options = {
 // 场景配置
 let sceneConfig = {
   environment: {
-    enable: true, // 环境必须关闭否则底图不出
+    enable: true,
     mode: 1,
     level: 0,
     brightness: 0.489

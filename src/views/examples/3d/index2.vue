@@ -19,8 +19,13 @@
           :options="layerOptions"
           @layerCreated="loadData"
         />
+        <mt-vector-layer
+          id="vectorId"
+          ref="vectorRef"
+          :options="vectorOptions"
+          @layerCreated="loadLabels"
+        />
       </mt-group-gl-layer>
-      <mt-vector-layer id="vectorId" ref="vectorRef" :options="vectorOptions" />
     </mt-init-map>
     <!-- 右上角开关 -->
     <el-card class="map-operation-area">
@@ -213,6 +218,38 @@ async function loadData(layer) {
       });
       polygon.setProperties({
         height: 1000
+      });
+    });
+    layer.addGeometry(polygons);
+  } catch (e) {
+    console.log(e);
+  } finally {
+    setTimeout(() => {
+      loading.value = false;
+    }, 1000);
+  }
+}
+// 加载文字标注
+async function loadLabels(layer) {
+  try {
+    loading.value = true;
+    // 这里开始模拟查询后台获取geosjon数据当然也可以从本页面import中获取
+    const { data } = await getGeojsonData({ code: "65" });
+    // console.log(data);
+    // 将查询到的geojson数据赋值给全局属性
+    geojsonData.value = data;
+    const polygons = GeoJSON.toGeometry(data);
+    polygons.forEach(polygon => {
+      // console.log(polygon.getProperties());
+      // 获取行政区划中的value
+      const { name } = polygon.getProperties();
+      polygon.setSymbol({
+        lineColor: "#00FFFF",
+        // lineDasharray: [10, 5, 5],
+        lineWidth: 6,
+        textName: name ? name : "",
+        textPitchAlignment: "map",
+        textRotationAlignment: "map"
       });
     });
     layer.addGeometry(polygons);

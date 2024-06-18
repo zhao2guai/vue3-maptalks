@@ -1,30 +1,30 @@
 <template>
-  <div id="threeMapId" class="map-content" v-loading="loading">
+  <div id="threeMapId" v-loading="loading" class="map-content">
     <mt-init-map ref="mapRef" :options="options" @getMap="getMap">
-      <mt-tianditu-layer
-        tk="695a9bebe4c75d64d9cada2be2789425"
-        layerType="img"
-        @layerCreated="getImgLayer"
-      />
       <mt-tianditu-layer
         tk="695a9bebe4c75d64d9cada2be2789425"
         layerType="vec"
         cssFilter="sepia(100%) invert(90%)"
         @layerCreated="getVecLayer"
       />
+      <mt-tianditu-layer
+        tk="695a9bebe4c75d64d9cada2be2789425"
+        layerType="img"
+        @layerCreated="getImgLayer"
+      />
       <mt-group-gl-layer ref="glRef" :sceneConfig="sceneConfig">
         <mt-three-layer
-          ref="geoRef"
           id="threeLayerId"
+          ref="geoRef"
           :options="layerOptions"
           @layerCreated="loadData"
-        ></mt-three-layer>
+        />
+        <mt-vector-layer
+          id="vectorId"
+          ref="vectorRef"
+          :options="vectorOptions"
+        />
       </mt-group-gl-layer>
-      <mt-vector-layer
-        ref="vectorRef"
-        id="vectorId"
-        :options="vectorOptions"
-      ></mt-vector-layer>
     </mt-init-map>
     <!-- 右上角开关 -->
     <el-card class="map-operation-area">
@@ -51,7 +51,7 @@ const geoRef = ref(null);
 const glRef = ref(null);
 const vectorRef = ref(null);
 // 图层切换开关
-let layersSwitch = ref(true);
+let layersSwitch = ref(false);
 // 地图数据
 let geojsonData = null;
 // 地图对象
@@ -73,10 +73,10 @@ let options = {
 // 场景配置
 let sceneConfig = {
   environment: {
-    enable: false, // 环境必须关闭否则底图不出
+    enable: false,
     mode: 1,
     level: 0,
-    brightness: 0
+    brightness: 0.489
   },
   postProcess: {
     enable: true,
@@ -109,12 +109,13 @@ let sceneConfig = {
 };
 // 文字边界图层配置
 let vectorOptions = {
-  // enableAltitude: true
+  enableAltitude: true,
+  altitudeProperty: "altitude", // altitude property in properties, default by 'altitude'
   geometryEvents: false,
-  collision: true,
   collisionDelay: 250,
   collisionBufferSize: 6,
-  zIndex: 99
+  // zIndex: 99,
+  collision: false
 };
 // THREE图层配置信息
 let layerOptions = {
@@ -162,7 +163,7 @@ function getVecLayer(e) {
 }
 // 改变地图
 function changeMap(e) {
-  console.log(e);
+  // console.log(e);
   if (e) {
     imgLayer.hide();
     vecLayer.show();
@@ -226,6 +227,7 @@ async function addPolygons(layer) {
 // 添加区划边界线
 function addOutLines(polygons) {
   polygons.forEach(polygon => {
+    //polygon.setZIndexSilently(999);
     polygon.setSymbol({
       polygonOpacity: 0.25,
       lineWidth: 3.5,
