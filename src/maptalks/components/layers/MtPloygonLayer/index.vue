@@ -17,7 +17,7 @@ import { PolygonLayer } from "@maptalks/gl-layers";
 import { buildUUID } from "@pureadmin/utils";
 export default defineComponent({
   // 初始线数据绘制图层(支持添加Polygon和MultiPolygon，添加其他数据时会报错)
-  name: "mt-ploygon-layer",
+  name: "mt-polygon-layer",
 
   props: {
     // 点数据绘制图层id

@@ -12,16 +12,22 @@
           layerType="ter"
           @layerCreated="getVecLayer"
         />
+        <mt-polygon-layer
+          id="polygonId"
+          ref="polygonRef"
+          :options="polygonOptions"
+          @layer-created="addPolygon"
+        />
         <mt-three-layer
           id="threeLayerId"
           ref="geoRef"
           :options="layerOptions"
           @layerCreated="loadData"
         />
-        <mt-vector-layer
-          id="vectorId12"
-          ref="vectorRef12"
-          :options="vectorOptions"
+        <mt-point-layer
+          id="pointId"
+          ref="pointRef"
+          :options="pointOptions"
           @layer-created="addPoints"
         />
       </mt-group-gl-layer>
@@ -70,7 +76,7 @@ import {
   RepeatWrapping
 } from "three";
 import LineMaterial from "@/maptalks/lib/LineMaterial.js";
-import { Marker, GeoJSON, animate } from "maptalks";
+import { Coordinate, Marker, Polygon, GeoJSON, animate } from "maptalks";
 // 地图加载状态
 let loading = ref(true);
 // 地图组件名称
@@ -78,6 +84,7 @@ const mapRef = ref(null);
 const glRef = ref(null);
 // geojson矢量瓦片图层名称
 const geoRef = ref(null);
+const pointRef = ref(null);
 // 图层切换开关
 let layersSwitch = ref(false);
 // 地图数据
@@ -138,8 +145,18 @@ let sceneConfig = {
     }
   }
 };
+// 黑色遮罩图层配置
+let polygonOptions = {
+  enableAltitude: true,
+  altitudeProperty: "altitude", // altitude property in properties, default by 'altitude'
+  geometryEvents: false,
+  collisionDelay: 250,
+  collisionBufferSize: 6,
+  zIndex: 99,
+  collision: false
+};
 // 文字标注图层配置
-let vectorOptions = {
+let pointOptions = {
   enableAltitude: true,
   altitudeProperty: "altitude", // altitude property in properties, default by 'altitude'
   geometryEvents: false,
@@ -225,7 +242,7 @@ function loadData(layer) {
   threeLayer.value = layer;
   // 为three图层设置场景和光照参数
   threeLayer.value.prepareToDraw = (gl, scene, camera) => {
-    var light = new DirectionalLight(0xffffff);
+    let light = new DirectionalLight(0xffffff);
     light.position.set(0, -10, 10).normalize();
     scene.add(light);
     scene.add(new AmbientLight("0x404040", 0.9));
@@ -377,6 +394,9 @@ function polygonUp(e) {
     }
   ));
   player.play();
+  let layer = pointRef.value.pointLayer;
+  console.log(layer);
+  console.log(polygon);
 }
 
 function polygonDown(e) {
@@ -489,6 +509,29 @@ async function addPoints(layer) {
       ]
     }).addTo(layer);
   });
+}
+
+// 添加遮罩
+function addPolygon(layer) {
+  new Polygon(
+    [
+      [
+        [-33.168054, 70.534286],
+        [174.353454, 70.632214],
+        [174.206276, -6.233166],
+        [-33.020876, -6.380438],
+        [-33.168054, 70.534286]
+      ]
+    ],
+    {
+      symbol: {
+        lineColor: "#34495e",
+        lineWidth: 2,
+        polygonFill: "#2F4F4F",
+        polygonOpacity: 0.85
+      }
+    }
+  ).addTo(layer);
 }
 </script>
 

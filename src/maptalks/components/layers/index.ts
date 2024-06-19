@@ -52,7 +52,7 @@ function install(app: App) {
   // 线数据绘制图层
   app.component("mt-line-string-layer", MtLineStringLayer);
   // 线数据绘制图层
-  app.component("mt-ploygon-layer", MtPloygonLayer);
+  app.component("mt-polygon-layer", MtPloygonLayer);
   // 视频图层
   app.component("mt-video-layer", MtVideoLayer);
   // 三维多边形图层
