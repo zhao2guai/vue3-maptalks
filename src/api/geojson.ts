@@ -9,15 +9,20 @@ type Result = {
 export const getGeojsonData = (params?: any) => {
   if (params.code === "65") {
     return http.request<Result>("get", "/get-async-geojson65");
-  } else if (params.code === "64") { 
+  } else if (params.code === "64") {
     return http.request<Result>("get", "/get-async-geojson64");
-  } else { 
+  } else {
     return http.request<Result>("get", "/get-async-geojson62");
   }
 };
 
+/** 获取遮罩阴影数据 */
+export const getShadowData = () => {
+  return http.request<Result>("get", "/get-async-shadow6527");
+};
+
 /** 获取geojson数据 */
-export const getBeijingData = (params?: any) => {
+export const getBeijingData = () => {
   return http.request<Result>("get", "/get-async-beijing");
 };
 

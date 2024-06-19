@@ -16,7 +16,7 @@
           id="polygonId"
           ref="polygonRef"
           :options="polygonOptions"
-          @layer-created="addPolygon"
+          @layerCreated="addPolygon"
         />
         <mt-three-layer
           id="threeLayerId"
@@ -28,7 +28,7 @@
           id="pointId"
           ref="pointRef"
           :options="pointOptions"
-          @layer-created="addPoints"
+          @layerCreated="addPoints"
         />
       </mt-group-gl-layer>
     </mt-init-map>
@@ -66,7 +66,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { buildUUID } from "@pureadmin/utils";
-import { getGeojsonData } from "@/api/geojson";
+import { getGeojsonData, getShadowData } from "@/api/geojson";
 import {
   MeshLambertMaterial,
   DirectionalLight,
@@ -76,7 +76,7 @@ import {
   RepeatWrapping
 } from "three";
 import LineMaterial from "@/maptalks/lib/LineMaterial.js";
-import { Coordinate, Marker, Polygon, GeoJSON, animate } from "maptalks";
+import { Marker, Polygon, GeoJSON, animate } from "maptalks";
 // 地图加载状态
 let loading = ref(true);
 // 地图组件名称
@@ -512,26 +512,28 @@ async function addPoints(layer) {
 }
 
 // 添加遮罩
-function addPolygon(layer) {
-  new Polygon(
-    [
-      [
-        [-33.168054, 70.534286],
-        [174.353454, 70.632214],
-        [174.206276, -6.233166],
-        [-33.020876, -6.380438],
-        [-33.168054, 70.534286]
-      ]
-    ],
-    {
-      symbol: {
-        lineColor: "#34495e",
-        lineWidth: 2,
-        polygonFill: "#2F4F4F",
-        polygonOpacity: 0.85
-      }
+async function addPolygon(layer) {
+  const { data } = await getShadowData();
+  console.log(data);
+  let coordinates = data.features[0].geometry.coordinates;
+  console.log(coordinates);
+  // let polygon = GeoJSON.toGeometry(data);
+  // polygon.setSymbol({
+  //   symbol: {
+  //     lineColor: "#34495e",
+  //     lineWidth: 2,
+  //     polygonFill: "#2F4F4F",
+  //     polygonOpacity: 0.85
+  //   }
+  // });
+  const polygon = new Polygon(coordinates[0], {
+    symbol: {
+      lineColor: "#34495e",
+      lineWidth: 2,
+      polygonFill: "#2F4F4F",
+      polygonOpacity: 0.85
     }
-  ).addTo(layer);
+  }).addTo(layer);
 }
 </script>
 

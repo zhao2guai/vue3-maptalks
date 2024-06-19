@@ -22,7 +22,7 @@
           id="vectorId12"
           ref="vectorRef12"
           :options="vectorOptions"
-          @layer-created="addPoints"
+          @layerCreated="addPoints"
         />
       </mt-group-gl-layer>
     </mt-init-map>
