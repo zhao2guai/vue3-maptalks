@@ -34,6 +34,15 @@ export default {
         title: "地形抬升(ThreeLayer)",
         hiddenTag: true
       }
+    },
+    {
+      path: "/3d/index4",
+      name: "地形抬升(博州)",
+      component: () => import("@/views/examples/3d/index4.vue"),
+      meta: {
+        title: "地形抬升(博州)",
+        hiddenTag: true
+      }
     }
   ]
 } satisfies RouteConfigsTable;

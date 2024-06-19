@@ -71,7 +71,7 @@ export default [
   {
     path: "/xzqh-65",
     name: "分层设色(新疆)",
-    component: () => import("@/views/examples/3d/index2.vue"),
+    component: () => import("@/views/examples/3d/index4.vue"),
     meta: {
       title: "分层设色(新疆)",
       showLink: false,
