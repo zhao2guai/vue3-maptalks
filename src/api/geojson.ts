@@ -21,6 +21,11 @@ export const getShadowData = () => {
   return http.request<Result>("get", "/get-async-shadow6527");
 };
 
+/** 获取城市边缘数据 */
+export const getCityData = () => {
+  return http.request<Result>("get", "/get-async-cityData");
+};
+
 /** 获取geojson数据 */
 export const getBeijingData = () => {
   return http.request<Result>("get", "/get-async-beijing");

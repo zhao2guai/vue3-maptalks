@@ -80,13 +80,13 @@ let sceneConfig = {
   },
   postProcess: {
     enable: true,
-    ntialias: { enable: true }
-    // bloom: {
-    //   enable: true,
-    //   threshold: 0,
-    //   factor: 0.6,
-    //   radius: 1
-    // }
+    ntialias: { enable: true },
+    bloom: {
+      enable: true,
+      threshold: 0,
+      factor: 0.6,
+      radius: 1
+    }
   },
   shadow: {
     type: "esm",
@@ -185,7 +185,7 @@ function loadData(e) {
   let threeLayer = e;
   // 为three图层设置场景和光照参数
   threeLayer.prepareToDraw = (gl, scene, camera) => {
-    var light = new DirectionalLight(0xffffff);
+    let light = new DirectionalLight("#F0FFFF", 0.9);
     light.position.set(0, -10, 10).normalize();
     scene.add(light);
     scene.add(new AmbientLight("#87CEFA", 0.8));
@@ -231,7 +231,8 @@ function addOutLines(polygons) {
     polygon.setSymbol({
       polygonOpacity: 0.25,
       lineWidth: 3.5,
-      lineColor: "#00CED1"
+      lineOpacity: 0.75,
+      lineColor: "#00FFFF"
     });
   });
   let vectorLayer = vectorRef.value.vectorLayer;

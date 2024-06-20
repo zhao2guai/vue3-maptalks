@@ -66,7 +66,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { buildUUID } from "@pureadmin/utils";
-import { getGeojsonData, getShadowData } from "@/api/geojson";
+import { getGeojsonData, getShadowData, getCityData } from "@/api/geojson";
 import {
   MeshLambertMaterial,
   DirectionalLight,
@@ -85,6 +85,8 @@ const glRef = ref(null);
 // geojson矢量瓦片图层名称
 const geoRef = ref(null);
 const pointRef = ref(null);
+const polygonRef = ref(null);
+const lineStringRef = ref(null);
 // 图层切换开关
 let layersSwitch = ref(false);
 // 地图数据
@@ -103,7 +105,7 @@ let options = {
   spatialReference: {
     projection: "EPSG:4326"
   },
-  minZoom: 1,
+  minZoom: 8,
   maxZoom: 18,
   bearing: 0,
   pitch: 45
@@ -118,13 +120,13 @@ let sceneConfig = {
   },
   postProcess: {
     enable: true,
-    ntialias: { enable: true }
-    // bloom: {
-    //   enable: true,
-    //   threshold: 0,
-    //   factor: 0.6,
-    //   radius: 1
-    // }
+    ntialias: { enable: true },
+    bloom: {
+      enable: true,
+      threshold: 0,
+      factor: 0.6,
+      radius: 1
+    }
   },
   shadow: {
     type: "esm",
@@ -135,7 +137,7 @@ let sceneConfig = {
     blurOffset: 1
   },
   ground: {
-    enable: false, // 一定要关闭地面否则蓝黑色地图被盖在GLLayer下面看不到
+    enable: true,
     renderPlugin: {
       type: "fill"
     },
@@ -152,7 +154,15 @@ let polygonOptions = {
   geometryEvents: false,
   collisionDelay: 250,
   collisionBufferSize: 6,
-  zIndex: 99,
+  collision: false
+};
+// 线图层配置
+let lineStringOptions = {
+  enableAltitude: true,
+  altitudeProperty: "altitude", // altitude property in properties, default by 'altitude'
+  geometryEvents: false,
+  collisionDelay: 250,
+  collisionBufferSize: 6,
   collision: false
 };
 // 文字标注图层配置
@@ -177,9 +187,9 @@ var planeMaterial = new MeshLambertMaterial({
   opacity: 0.8,
   side: 0
 });
-
+// 线条材质
 var linematerial = new LineMaterial({
-  color: "#FAFAD2", // 边界线颜色
+  color: "#3C9696", // 边界线颜色
   // transparent: true,
   // vertexColors: THREE.VertexColors,
   // side: THREE.BackSide,
@@ -187,13 +197,14 @@ var linematerial = new LineMaterial({
   // vertexColors: THREE.VertexColors,
   // dashed: false
 });
+// 3D区划块的材质光照效果
 const material = new MeshPhongMaterial({
-  color: "#00fff",
-  specular: "#fffff",
-  shininess: 80
+  color: "rgb(255, 255, 255)",
+  specular: "rgb(255, 255, 255)",
+  shininess: 100
 });
-const color = "rgb(255,255,255)";
-let lineColor = ref("#FAFAD2");
+const color = "rgb(255,255,1)";
+let lineColor = ref("#3C9696");
 const height = 10000;
 const offset = 100;
 const polygonLinkLine = new Map();
@@ -242,10 +253,10 @@ function loadData(layer) {
   threeLayer.value = layer;
   // 为three图层设置场景和光照参数
   threeLayer.value.prepareToDraw = (gl, scene, camera) => {
-    let light = new DirectionalLight(0xffffff);
+    let light = new DirectionalLight("rgb(255, 255, 255)", 1);
     light.position.set(0, -10, 10).normalize();
     scene.add(light);
-    scene.add(new AmbientLight("0x404040", 0.9));
+    scene.add(new AmbientLight("rgb(255, 255, 255)", 0.65));
     loadTexture(layer);
     animation(layer);
   };
@@ -263,7 +274,7 @@ function loadTexture(layer) {
     addAreas(layer);
   });
 }
-/** 地图背景图 */
+/** 加载区划块 */
 async function addAreas(threeLayer) {
   try {
     // 这里开始模拟查询后台获取geosjon数据当然也可以从本页面import中获取
@@ -284,7 +295,7 @@ async function addAreas(threeLayer) {
       const id = buildUUID();
       const extrudePolygon = threeLayer.toExtrudePolygon(
         p,
-        { height, topColor: "#00fff", asynchronous: true },
+        { height, topColor: "rgb(255, 255, 255)", asynchronous: true },
         material
       );
       extrudePolygon.on("mouseover", polygonUp);
@@ -313,6 +324,7 @@ async function addAreas(threeLayer) {
     }, 1000);
   }
 }
+
 function resetTopUV(extrudePolygons) {
   // console.log(geometries);
   //计算所有区域的总的包围盒
@@ -338,7 +350,7 @@ function resetTopUV(extrudePolygons) {
       maxZ = Math.max(maxZ, z);
     }
   });
-  console.log(minx, miny, maxx, maxy);
+  // console.log(minx, miny, maxx, maxy);
   //计算每个子区域的每个轮廓坐标点的在这个包围盒的百分比
   const dx = maxx - minx,
     dy = maxy - miny;
@@ -365,6 +377,7 @@ function resetTopUV(extrudePolygons) {
     }
   });
 }
+
 function syncAltitude(id, altitude) {
   const line = polygonLinkLine.get(id);
   line.setAltitude(altitude + height + offset);
@@ -394,9 +407,6 @@ function polygonUp(e) {
     }
   ));
   player.play();
-  let layer = pointRef.value.pointLayer;
-  console.log(layer);
-  console.log(polygon);
 }
 
 function polygonDown(e) {
@@ -431,6 +441,7 @@ function polygonToLine(geojson) {
     };
   });
 }
+
 function animation(threeLayer) {
   // layer animation support Skipping frames
   if (!threeLayer) return;
@@ -514,9 +525,8 @@ async function addPoints(layer) {
 // 添加遮罩
 async function addPolygon(layer) {
   const { data } = await getShadowData();
-  console.log(data);
   let coordinates = data.features[0].geometry.coordinates;
-  console.log(coordinates);
+  // console.log(coordinates);
   // let polygon = GeoJSON.toGeometry(data);
   // polygon.setSymbol({
   //   symbol: {
@@ -528,8 +538,11 @@ async function addPolygon(layer) {
   // });
   const polygon = new Polygon(coordinates[0], {
     symbol: {
-      lineColor: "#34495e",
-      lineWidth: 2,
+      lineBloom: true,
+      linePatternAnimSpeed: 0.5,
+      lineColor: "#3C9696",
+      lineOpacity: 1,
+      lineWidth: 6,
       polygonFill: "#2F4F4F",
       polygonOpacity: 0.85
     }

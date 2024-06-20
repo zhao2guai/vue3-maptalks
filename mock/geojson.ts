@@ -3,6 +3,7 @@ import geojson10 from "@/geojson/10/beijingarea.json";
 import geojson62 from "@/geojson/62/甘肃省_市.json";
 import geojson64 from "@/geojson/64/宁夏回族自治区.json";
 import geojson6527 from "@/geojson/65/博尔塔拉蒙古自治州_县.json";
+import city6527 from "@/geojson/65/博尔塔拉蒙古自治州_外边界.json";
 import shadow6527 from "@/geojson/65/博州遮罩多边形.json";
 import shanghai from "@/geojson/markerCluster/shanghai.json";
 import pipelineData from "@/geojson/pipeline/pipeline.json";
@@ -44,6 +45,16 @@ export default defineFakeRoute([
       return {
         success: true,
         data: shadow6527
+      };
+    }
+  },
+  {
+    url: "/get-async-cityData",
+    method: "get",
+    response: () => {
+      return {
+        success: true,
+        data: city6527
       };
     }
   },

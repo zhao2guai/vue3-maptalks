@@ -111,13 +111,13 @@ let sceneConfig = {
   },
   postProcess: {
     enable: true,
-    ntialias: { enable: true }
-    // bloom: {
-    //   enable: true,
-    //   threshold: 0,
-    //   factor: 0.6,
-    //   radius: 1
-    // }
+    ntialias: { enable: true },
+    bloom: {
+      enable: true,
+      threshold: 0,
+      factor: 0.6,
+      radius: 1
+    }
   },
   shadow: {
     type: "esm",
@@ -128,7 +128,7 @@ let sceneConfig = {
     blurOffset: 1
   },
   ground: {
-    enable: false, // 一定要关闭地面否则蓝黑色地图被盖在GLLayer下面看不到
+    enable: true, // 一定要关闭地面否则蓝黑色地图被盖在GLLayer下面看不到
     renderPlugin: {
       type: "fill"
     },
@@ -153,26 +153,10 @@ let layerOptions = {
   identifyCountOnEvent: 1,
   animation: true
 };
-// 高亮材质
-var planeMaterial = new MeshLambertMaterial({
-  color,
-  transparent: true,
-  opacity: 0.8,
-  side: 0
-});
-
-var linematerial = new LineMaterial({
-  color: "#FAFAD2", // 边界线颜色
-  // transparent: true,
-  // vertexColors: THREE.VertexColors,
-  // side: THREE.BackSide,
-  linewidth: 5 // in pixels
-  // vertexColors: THREE.VertexColors,
-  // dashed: false
-});
-const material = new MeshPhongMaterial({ color: "#00fff" });
-const color = "rgb(255,255,255)";
-let lineColor = ref("#FAFAD2");
+// const color = "rgb(255,255,255)";
+// 边界线颜色
+let lineColor = ref("#969642");
+// 区划块高度
 const height = 10000;
 const offset = 100;
 const polygonLinkLine = new Map();
@@ -181,6 +165,29 @@ const mapbg = new URL(
   "../../../../public/texture/ningxia.png",
   import.meta.url
 );
+// 高亮材质
+// var planeMaterial = new MeshLambertMaterial({
+//   color,
+//   transparent: true,
+//   opacity: 0.8,
+//   side: 0
+// });
+// 边界线材质颜色
+let linematerial = new LineMaterial({
+  color: lineColor.value, // 边界线颜色
+  transparent: true,
+  // vertexColors: THREE.VertexColors,
+  // side: THREE.BackSide,
+  linewidth: 5 // in pixels
+  // vertexColors: THREE.VertexColors,
+  // dashed: false
+});
+// 材质泛光(3D区划块的材质光照效果)
+const material = new MeshPhongMaterial({
+  color: "rgb(255, 255, 255)",
+  specular: "rgb(255, 255, 255)",
+  shininess: 80
+});
 // 页面加载后执行
 onMounted(() => {});
 // 页面销毁前执行
@@ -221,10 +228,10 @@ function loadData(layer) {
   threeLayer.value = layer;
   // 为three图层设置场景和光照参数
   threeLayer.value.prepareToDraw = (gl, scene, camera) => {
-    var light = new DirectionalLight(0xffffff);
+    let light = new DirectionalLight("rgb(255, 255, 255)", 0.75);
     light.position.set(0, -10, 10).normalize();
     scene.add(light);
-    scene.add(new AmbientLight("#00fff", 0.3));
+    scene.add(new AmbientLight("rgb(255, 255, 255)", 0.35));
     loadTexture(layer);
     animation(layer);
   };
@@ -263,7 +270,7 @@ async function addAreas(threeLayer) {
       const id = buildUUID();
       const extrudePolygon = threeLayer.toExtrudePolygon(
         p,
-        { height, topColor: "#00fff", asynchronous: true },
+        { height, topColor: "rgb(255, 255, 255)", asynchronous: true },
         material
       );
       extrudePolygon.on("mouseover", polygonUp);
@@ -292,6 +299,7 @@ async function addAreas(threeLayer) {
     }, 1000);
   }
 }
+
 function resetTopUV(extrudePolygons) {
   // console.log(geometries);
   //计算所有区域的总的包围盒
@@ -344,6 +352,7 @@ function resetTopUV(extrudePolygons) {
     }
   });
 }
+
 function syncAltitude(id, altitude) {
   const line = polygonLinkLine.get(id);
   line.setAltitude(altitude + height + offset);
