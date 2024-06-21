@@ -253,7 +253,7 @@ function loadData(layer) {
   threeLayer.value = layer;
   // 为three图层设置场景和光照参数
   threeLayer.value.prepareToDraw = (gl, scene, camera) => {
-    let light = new DirectionalLight("rgb(255, 255, 255)", 1);
+    let light = new DirectionalLight("rgb(255, 255, 255)", 0.85);
     light.position.set(0, -10, 10).normalize();
     scene.add(light);
     scene.add(new AmbientLight("rgb(255, 255, 255)", 0.65));
@@ -540,8 +540,8 @@ async function addPolygon(layer) {
     symbol: {
       lineBloom: true,
       linePatternAnimSpeed: 0.5,
-      lineColor: "#3C9696",
-      lineOpacity: 1,
+      lineColor: "#00FFFF",
+      lineOpacity: 0.5,
       lineWidth: 6,
       polygonFill: "#2F4F4F",
       polygonOpacity: 0.85
