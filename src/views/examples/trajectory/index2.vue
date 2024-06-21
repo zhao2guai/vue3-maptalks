@@ -171,19 +171,19 @@ let modelValue = ref("拖拉机1");
 let tljList = [
   {
     name: "拖拉机1",
-    modelurl: new URL("@/assets/gltf/tractor/scene.gltf", import.meta.url)
+    modelurl: new URL("@public/gltf/tractor/scene.gltf", import.meta.url)
   },
   {
     name: "拖拉机2",
     modelurl: new URL(
-      "@/assets/gltf/david_brown_25d_tractor/scene.gltf",
+      "@public/gltf/david_brown_25d_tractor/scene.gltf",
       import.meta.url
     )
   },
   {
     name: "拖拉机3",
     modelurl: new URL(
-      "@/assets/gltf/tractors_stylized_low-poly/scene.gltf",
+      "@public/gltf/tractors_stylized_low-poly/scene.gltf",
       import.meta.url
     )
   }
@@ -316,7 +316,7 @@ let linestring = ref(null);
 let info = ref(null);
 // 模型数据
 let gltfSymbol = reactive({
-  url: new URL("@/assets/gltf/tractor/scene.gltf", import.meta.url), //模型的url
+  url: new URL("@public/gltf/tractor/scene.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度

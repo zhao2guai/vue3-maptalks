@@ -1,14 +1,14 @@
 <template>
-  <div v-loading="loading" id="trajectoryId" class="map-content">
+  <div id="trajectoryId" v-loading="loading" class="map-content">
     <!-- 地图部分 -->
     <div class="map-div" :style="{ width: mapDivWidth + '%' }">
-      <mt-init-map @getMap="getMap" :options="options">
+      <mt-init-map :options="options" @getMap="getMap">
         <mt-group-gl-layer>
           <mt-three-layer
             :id="'t'"
             :options="{ identifyCountOnEvent: 1, animation: true }"
             @layerCreated="loadData"
-          ></mt-three-layer>
+          />
           <mt-tianditu-layer
             tk="ec89e7ba91633b147f76d47e08f9f1a1"
             layerType="img"
@@ -21,7 +21,7 @@
         :options="routePlayerOptions"
         @routePlayerCreated="getRoutePlayerCreated"
         @playing="playingFun"
-      ></mt-router-player>
+      />
     </div>
 
     <!-- 操作部分 -->
@@ -30,16 +30,16 @@
       :style="{ width: operationWidth + '%' }"
       :class="[showOperation ? '' : 'hide-operation-div']"
     >
-      <p class="title-style" v-if="showOperation">地图中的操作</p>
-      <el-row style="margin-top: 2vh" v-if="showOperation">
+      <p v-if="showOperation" class="title-style">地图中的操作</p>
+      <el-row v-if="showOperation" style="margin-top: 2vh">
         <el-col :span="24">
           <span class="label-style">更换模型：</span
           ><el-select
             v-model="modelValue"
             size="large"
             style="width: 220px"
-            @change="changeModel"
             :disabled="modelDisabled"
+            @change="changeModel"
           >
             <el-option
               v-for="(item, index) in tljList"
@@ -102,10 +102,10 @@
           <el-slider
             v-model="speed"
             style="position: relative; top: -0.5vh"
-            @change="speedChange"
             :min="1"
             :max="20"
-          ></el-slider>
+            @change="speedChange"
+          />
         </el-col>
         <el-col
           :span="24"
@@ -124,8 +124,8 @@
         </el-col>
       </el-row>
       <div class="show-operation-div" @click="isShowOperation">
-        <i class="right-icon" v-if="showOperation"></i>
-        <i class="left-icon" v-else></i>
+        <i v-if="showOperation" class="right-icon" />
+        <i v-else class="left-icon" />
       </div>
     </div>
   </div>
@@ -166,19 +166,19 @@ let modelValue = ref("拖拉机1");
 let tljList = [
   {
     name: "拖拉机1",
-    modelurl: new URL("@/assets/gltf/tractor/scene.gltf", import.meta.url)
+    modelurl: new URL("@public/gltf/tractor/scene.gltf", import.meta.url)
   },
   {
     name: "拖拉机2",
     modelurl: new URL(
-      "@/assets/gltf/david_brown_25d_tractor/scene.gltf",
+      "@public/gltf/david_brown_25d_tractor/scene.gltf",
       import.meta.url
     )
   },
   {
     name: "拖拉机3",
     modelurl: new URL(
-      "@/assets/gltf/tractors_stylized_low-poly/scene.gltf",
+      "@public/gltf/tractors_stylized_low-poly/scene.gltf",
       import.meta.url
     )
   }
@@ -370,9 +370,10 @@ function addLine() {
   threeLayer.value.addMesh(baseLine);
 
   let loader = new GLTFLoader();
-
+  let gltfUrl = new URL("@public/gltf/tractor/scene.gltf", import.meta.url)
+    .href;
   loader.load(
-    "../../../../public/gltf/tractor/scene.gltf",
+    gltfUrl,
     function (gltf) {
       let model = gltf.scene;
       model.rotation.x = Math.PI / 2;

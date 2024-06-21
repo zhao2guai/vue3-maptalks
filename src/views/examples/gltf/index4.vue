@@ -107,7 +107,7 @@ let defaultSceneConfig = {
 };
 // 牛围栏
 let barn = {
-  url: new URL("@/assets/gltf/farm_cow_barn/scene.gltf", import.meta.url), //模型的url
+  url: new URL("@public/gltf/farm_cow_barn/scene.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -126,7 +126,7 @@ let barn = {
 };
 // 棚子
 let farm = {
-  url: new URL("@/assets/gltf/farm_pigsty/scene.gltf", import.meta.url), //模型的url
+  url: new URL("@public/gltf/farm_pigsty/scene.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -180,7 +180,7 @@ let cowOptions = {
   id: "cowId",
   // 批量模型符号
   symbol: {
-    url: new URL("@/assets/gltf/texas_longhorn/scene.gltf", import.meta.url), //模型的url
+    url: new URL("@public/gltf/texas_longhorn/scene.gltf", import.meta.url), //模型的url
     visible: true, //模型是否可见
     translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
     rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -204,7 +204,7 @@ let gltfOptions = {
   // 批量模型符号
   symbol: {
     url: new URL(
-      "@/assets/gltf/sheep-test_non-commercial/scene.gltf",
+      "@public/gltf/sheep-test_non-commercial/scene.gltf",
       import.meta.url
     ), //模型的url
     visible: true, //模型是否可见

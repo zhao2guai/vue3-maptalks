@@ -156,7 +156,7 @@ let layerOptions = {
 };
 // 摄像头监测设备
 let symbol1 = {
-  url: new URL("@/assets/gltf/equipment/01.gltf", import.meta.url), //模型的url
+  url: new URL("@public/gltf/equipment/01.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度

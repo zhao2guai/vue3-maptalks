@@ -169,10 +169,7 @@ let speed = ref(1);
 let density = ref(2000);
 let windDirectionX = ref(0);
 let windDirectionY = ref(0);
-const rainTexture = new URL(
-  "../../../../public/marker/rain1.png",
-  import.meta.url
-);
+const rainTexture = new URL("@public/marker/rain1.png", import.meta.url);
 let sceneConfig = ref({
   environment: {
     enable: true,

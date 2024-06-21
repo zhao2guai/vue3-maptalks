@@ -38,6 +38,7 @@ const pathResolve = (dir = ".", metaUrl = import.meta.url) => {
 /** 设置别名 */
 const alias: Record<string, string> = {
   "@": pathResolve("../src"),
+  "@public": pathResolve("../public"),
   "@build": pathResolve()
 };
 
@@ -58,7 +59,7 @@ const warpperEnv = (envConf: Recordable): ViteEnv => {
     VITE_HIDE_HOME: "false",
     VITE_COMPRESSION: "none",
     VITE_GEOSERVER_BASEURL: "",
-    VITE_API_TIANDITU_BASEURL: "",
+    VITE_API_TIANDITU_BASEURL: ""
   };
 
   for (const envName of Object.keys(envConf)) {

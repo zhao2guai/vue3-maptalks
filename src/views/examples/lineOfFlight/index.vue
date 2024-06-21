@@ -263,7 +263,7 @@ function addLine(data) {
     let [point1, point2] = item.coordinates;
     let line = new LineString(arcLinePoints(point1, point2), {
       symbol: {
-        linePatternFile: "../../../../public/marker/line.png",
+        linePatternFile: "@public/marker/line.png",
         linePatternAnimSpeed: 0.1,
         lineWidth: 8,
         cucursor: "pointer"

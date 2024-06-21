@@ -101,7 +101,7 @@ let defaultSceneConfig = {
 };
 // 摄像头杆子35
 let symbol1 = {
-  url: new URL("@/assets/gltf/camera/pole35.gltf", import.meta.url), //模型的url
+  url: new URL("@public/gltf/camera/pole35.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -119,7 +119,7 @@ let symbol1 = {
 };
 // 摄像头杆子37
 let symbol2 = {
-  url: new URL("@/assets/gltf/camera/pole37.gltf", import.meta.url), //模型的url
+  url: new URL("@public/gltf/camera/pole37.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -137,7 +137,7 @@ let symbol2 = {
 };
 // 厂房
 let symbol3 = {
-  url: new URL("@/assets/gltf/factory/changfang.gltf", import.meta.url), //模型的url
+  url: new URL("@public/gltf/factory/changfang.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度

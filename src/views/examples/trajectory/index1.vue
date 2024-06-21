@@ -309,6 +309,7 @@ function getRoutePlayerCreated(routerPlayer) {
 
 let line = null;
 let marker = null;
+let markerFile = new URL("@public/marker/point1.png", import.meta.url).href;
 function addLine() {
   line = new LineString(coordinatesData.value, {
     symbol: {
@@ -325,7 +326,7 @@ function addLine() {
   marker = new Marker(coordinateData.value, {
     zIndex: 9,
     symbol: {
-      markerFile: "../../../../public/marker/point1.png",
+      markerFile: markerFile,
       markerWidth: 50,
       markerHeight: 50
     }

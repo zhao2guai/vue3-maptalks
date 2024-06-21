@@ -41,7 +41,7 @@ let options = {
 };
 
 let layerData = ref(null);
-let snow = new URL("@/assets/gltf/ylk/ylk.gltf", import.meta.url);
+let snow = new URL("@public/gltf/ylk/ylk.gltf", import.meta.url);
 let layerStyle = {
   style: [
     {

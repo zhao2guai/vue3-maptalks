@@ -1,13 +1,13 @@
 <template>
   <div id="gltf2" v-loading="loading" class="map-content">
-    <mt-init-map @getMap="getMap" :options="options">
+    <mt-init-map :options="options" @getMap="getMap">
       <mt-group-gl-layer :sceneConfig="defaultSceneConfig">
         <mt-gltf-layer>
           <mt-gltf-maker
             v-for="(item, index) in makerList"
+            :id="item.id"
             :key="index"
             :ref="el => setPointRef(el, index)"
-            :id="item.id"
             :point="item.point"
             :symbol="item.symbol"
             :content="item.content"
@@ -98,7 +98,7 @@ let makerList = [
     name: "厂房",
     point: [81.868822, 44.945405],
     symbol: {
-      url: new URL("@/assets/gltf/farm/scene.gltf", import.meta.url), //模型的url
+      url: new URL("@public/gltf/farm/scene.gltf", import.meta.url), //模型的url
       visible: true, //模型是否可见
       translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
       rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -130,7 +130,7 @@ let makerList = [
     name: "摄像头监测设备",
     point: [81.863822, 44.940405],
     symbol: {
-      url: new URL("@/assets/gltf/equipment/01.gltf", import.meta.url), //模型的url
+      url: new URL("@public/gltf/equipment/01.gltf", import.meta.url), //模型的url
       visible: true, //模型是否可见
       translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
       rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -160,7 +160,7 @@ let makerList = [
     name: "气象监测设备",
     point: [81.873822, 44.940405],
     symbol: {
-      url: new URL("@/assets/gltf/equipment/02.gltf", import.meta.url), //模型的url
+      url: new URL("@public/gltf/equipment/02.gltf", import.meta.url), //模型的url
       visible: true, //模型是否可见
       translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
       rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -190,7 +190,7 @@ let makerList = [
     name: "虫情设备",
     point: [81.863822, 44.950405],
     symbol: {
-      url: new URL("@/assets/gltf/equipment/02.gltf", import.meta.url), //模型的url
+      url: new URL("@public/gltf/equipment/02.gltf", import.meta.url), //模型的url
       visible: true, //模型是否可见
       translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
       rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -220,7 +220,7 @@ let makerList = [
     name: "水肥一体机",
     point: [81.873822, 44.950405],
     symbol: {
-      url: new URL("@/assets/gltf/equipment/04.gltf", import.meta.url), //模型的url
+      url: new URL("@public/gltf/equipment/04.gltf", import.meta.url), //模型的url
       visible: true, //模型是否可见
       translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
       rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -248,7 +248,7 @@ let makerList = [
 ];
 // 摄像头监测设备
 let symbol1 = {
-  url: new URL("@/assets/gltf/equipment/01.gltf", import.meta.url), //模型的url
+  url: new URL("@public/gltf/equipment/01.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -266,7 +266,7 @@ let symbol1 = {
 };
 // 气象监测设备
 let symbol2 = {
-  url: new URL("@/assets/gltf/equipment/02.gltf", import.meta.url), //模型的url
+  url: new URL("@public/gltf/equipment/02.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -284,7 +284,7 @@ let symbol2 = {
 };
 // 虫情设备
 let symbol4 = {
-  url: new URL("@/assets/gltf/equipment/03.gltf", import.meta.url), //模型的url
+  url: new URL("@public/gltf/equipment/03.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -302,7 +302,7 @@ let symbol4 = {
 };
 // 水肥一体机
 let symbol5 = {
-  url: new URL("@/assets/gltf/equipment/04.gltf", import.meta.url), //模型的url
+  url: new URL("@public/gltf/equipment/04.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
@@ -320,7 +320,7 @@ let symbol5 = {
 };
 // 厂房
 let symbol3 = {
-  url: new URL("@/assets/gltf/farm/scene.gltf", import.meta.url), //模型的url
+  url: new URL("@public/gltf/farm/scene.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度

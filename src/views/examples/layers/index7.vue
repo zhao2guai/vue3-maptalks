@@ -1,6 +1,6 @@
 <template>
   <div id="gltf3" v-loading="loading" class="map-content">
-    <mt-init-map @getMap="getMap" :options="options">
+    <mt-init-map :options="options" @getMap="getMap">
       <mt-group-gl-layer :sceneConfig="defaultSceneConfig">
         <mt-gltf-layer>
           <mt-gltf-maker
@@ -14,7 +14,7 @@
           :pointList="pointList"
           :videoSufaceConfig="videoSufaceConfig"
           :audioFlag="audioFlag"
-        ></mt-video-layer>
+        />
       </mt-group-gl-layer>
     </mt-init-map>
 
@@ -84,10 +84,10 @@ let defaultSceneConfig = {
     }
   }
 };
-
+let symbolUrl = new URL("@public/gltf/ebc/scene.gltf", import.meta.url);
 let symbol = {
   shadow: true,
-  url: new URL("../../../../public/gltf/ebc/scene.gltf", import.meta.url),
+  url: symbolUrl,
   scaleX: 24.7345,
   scaleY: 24.7345,
   scaleZ: 10.7345,
@@ -115,7 +115,7 @@ let pointList = [
 ];
 
 let videoSufaceConfig = {
-  url: "../../../../public/videos/test1.mp4",
+  url: new URL("@public/videos/test1.mp4", import.meta.url).href,
   opacity: 1
 };
 

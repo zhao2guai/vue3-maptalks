@@ -41,10 +41,7 @@ let options = {
 };
 
 let layerData = ref(null);
-let linePatternFile = new URL(
-  "../../../../public/marker/water.png",
-  import.meta.url
-);
+let linePatternFile = new URL("@public/marker/water.png", import.meta.url);
 let layerStyle = {
   style: [
     {

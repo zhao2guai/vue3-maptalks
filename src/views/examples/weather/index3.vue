@@ -59,10 +59,7 @@ let operationWidth = ref(20);
 let showOperation = ref(true);
 let isAutoCenter = ref(true);
 let snowStrength = ref(0.5);
-let snowGroundTexture = new URL(
-  "../../../../public/marker/perlin.png",
-  import.meta.url
-);
+let snowGroundTexture = new URL("@public/marker/perlin.png", import.meta.url);
 let sceneConfig = ref({
   environment: {
     enable: true,

@@ -117,7 +117,7 @@ function closeMarkerDataDialog() {
 <style lang="scss">
 #clusterId {
   .marker-style {
-    background: url("../../../../public/marker/point1.png") no-repeat;
+    background: url("@public/marker/point1.png") no-repeat;
     background-size: 100% 100%;
     width: 30px;
     height: 30px;
@@ -128,8 +128,7 @@ function closeMarkerDataDialog() {
 .dialog-div {
   width: 20vw;
   height: 30vh;
-  background: url("../../../maptalks/assets/imgs/dialog/tooltipBg1.png")
-    no-repeat;
+  background: url("@/maptalks/assets/imgs/dialog/tooltipBg1.png") no-repeat;
   background-size: 100% 100%;
   position: absolute;
   top: 50%;
@@ -141,8 +140,7 @@ function closeMarkerDataDialog() {
   .close-icon {
     width: 2vh;
     height: 2vh;
-    background: url("../../../maptalks/assets/imgs/dialog/modalClose.png")
-      no-repeat;
+    background: url("@/maptalks/assets/imgs/dialog/modalClose.png") no-repeat;
     background-size: 100% 100%;
     position: absolute;
     top: 1vh;

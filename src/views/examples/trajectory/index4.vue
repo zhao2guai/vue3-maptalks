@@ -275,7 +275,7 @@ let linestring = ref(null);
 let info = ref(null);
 // 模型数据
 let gltfSymbol = reactive({
-  url: new URL("@/assets/gltf/flying_drone/scene.gltf", import.meta.url), //模型的url
+  url: new URL("@public/gltf/flying_drone/scene.gltf", import.meta.url), //模型的url
   visible: true, //模型是否可见
   translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
   rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度

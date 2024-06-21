@@ -209,10 +209,7 @@ const height = 10000;
 const offset = 100;
 const polygonLinkLine = new Map();
 // 获取3D行政区划背景
-const mapbg = new URL(
-  "../../../../public/texture/xj-bozhou.png",
-  import.meta.url
-);
+const mapbg = new URL("@public/texture/xj-bozhou.png", import.meta.url);
 // 页面加载后执行
 onMounted(() => {});
 // 页面销毁前执行
@@ -482,14 +479,9 @@ async function addPoints(layer) {
   let features = data.features;
   if (!features || features.length === 0) return;
   let points = [];
-  const blue = new URL(
-    "../../../../public/marker/icon-blue.png",
-    import.meta.url
-  ).href;
-  const oprange = new URL(
-    "../../../../public/marker/icon-orange.png",
-    import.meta.url
-  ).href;
+  const blue = new URL("@public/marker/icon-blue.png", import.meta.url).href;
+  const oprange = new URL("@public/marker/icon-orange.png", import.meta.url)
+    .href;
   features.forEach(item => {
     const name = item.properties.name;
     const point = item.properties.centroid;
