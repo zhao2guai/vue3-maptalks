@@ -15,7 +15,6 @@ import {
 } from "vue";
 import { buildUUID } from "@pureadmin/utils";
 import { ThreeLayer } from "maptalks.three";
-
 export default defineComponent({
   // three.js渲染图层
   name: "mt-three-layer",

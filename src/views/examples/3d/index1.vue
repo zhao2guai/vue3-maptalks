@@ -41,7 +41,12 @@
 <script setup>
 import { ColorIn } from "colorin";
 import { GeoJSON } from "maptalks";
-import { DirectionalLight, AmbientLight, MeshPhongMaterial } from "three";
+// import {
+//   DirectionalLight,
+//   AmbientLight,
+//   MeshPhongMaterial
+// } from "three";
+import * as THREE from "three";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { getGeojsonData } from "@/api/geojson";
 // 地图组件名称
@@ -138,7 +143,7 @@ const colors = [
 // 创建颜色插值库
 const ci = new ColorIn(colors);
 // 高亮材质
-const highMaterial = new MeshPhongMaterial({
+const highMaterial = new THREE.MeshPhongMaterial({
   color: "#00FA9A",
   vertexColors: 2
 });
@@ -185,10 +190,10 @@ function loadData(e) {
   let threeLayer = e;
   // 为three图层设置场景和光照参数
   threeLayer.prepareToDraw = (gl, scene, camera) => {
-    let light = new DirectionalLight("#F0FFFF", 0.9);
+    let light = new THREE.DirectionalLight("#F0FFFF", 0.9);
     light.position.set(0, -10, 10).normalize();
     scene.add(light);
-    scene.add(new AmbientLight("#87CEFA", 0.8));
+    scene.add(new THREE.AmbientLight("#87CEFA", 0.8));
     addPolygons(threeLayer);
   };
 }
@@ -208,7 +213,7 @@ async function addPolygons(layer) {
       const extrudePolygon = layer.toExtrudePolygon(
         p,
         { height, altitude: -height, topColor: "#fff" },
-        new MeshPhongMaterial({ color })
+        new THREE.MeshPhongMaterial({ color })
       );
       extrudePolygon.on("mouseover mouseout", mouseEventFunc);
       return extrudePolygon;
