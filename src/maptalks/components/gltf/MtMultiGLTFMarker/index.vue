@@ -21,7 +21,7 @@ export default defineComponent({
     // 模型组数据
     data: {
       type: Array,
-      default: []
+      default: () => []
     },
     // 模型组配置
     options: {

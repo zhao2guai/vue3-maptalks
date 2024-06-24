@@ -38,7 +38,7 @@ export default defineComponent({
     //gltf图层样式
     style: {
       type: Array,
-      default: []
+      default: () => []
     }
   },
 

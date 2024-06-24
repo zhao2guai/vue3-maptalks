@@ -27,7 +27,7 @@ export default defineComponent({
     // 坐标
     point: {
       type: Array,
-      default: []
+      default: () => []
     },
     //gltf图层配置
     symbol: {
