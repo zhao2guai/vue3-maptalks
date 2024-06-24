@@ -77,6 +77,7 @@ export default defineComponent({
     let cssFilter = props.cssFilter ? props.cssFilter : null;
     // 获取天地图URL
     let url = "";
+    if (!props.tk) console.error("天地图密匙不能为空!");
     if (type === "vec") url = tiandituApi.getUrlByVecc(props.tk);
     if (type === "cva") url = tiandituApi.getUrlByCvac(props.tk);
     if (type === "ter") url = tiandituApi.getUrlByTerc(props.tk);
@@ -144,7 +145,6 @@ export default defineComponent({
     onBeforeMount(() => {
       addTileLayer();
       initEvents();
-      if (!props.tk) console.error("天地图密匙不能为空!");
     });
 
     // 页面元素销毁之前执行

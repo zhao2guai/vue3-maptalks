@@ -156,12 +156,12 @@ export default defineComponent({
       // 加载地图配置参数
       map = new Map(container, props.options);
       // 获取坐标系
-      const proj = map.getProjection().code;
+      // const proj = map.getProjection().code;
       // 设置地图范围
-      map.setSpatialReference({
-        projection: proj ? proj : "EPSG:4326",
-        resolutions: getResolutions(props.options.maxZoom)
-      });
+      // map.setSpatialReference({
+      //   projection: proj ? proj : "EPSG:4326",
+      //   resolutions: getResolutions(props.options.maxZoom)
+      // });
       // 设置光照
       map.setLights(props.lights);
       // 向组件传送初始化完毕的map
@@ -182,7 +182,7 @@ export default defineComponent({
     // 获取地图范围
     const getResolutions = num => {
       const resolutions = [];
-      let zoom = num > 0 ? num : 19;
+      let zoom = num > 1 ? num : 19;
       for (let i = 0; i < zoom; i++) {
         resolutions[i] = 180 / (Math.pow(2, i) * 128);
       }
