@@ -156,6 +156,14 @@ export default defineComponent({
       }
     };
 
+    // 清除图层中的网格
+    const clearMeshes = () => {
+      let meshes = threeLayer.getMeshes();
+      if (threeLayer && meshes.length > 0) {
+        threeLayer.removeMesh(meshes);
+      }
+    };
+
     // 移除并销毁图层对象
     const removeAll = () => {
       // 判断并删除Three图层
@@ -174,7 +182,7 @@ export default defineComponent({
 
     return {
       threeLayer,
-      addThreeLayer
+      clearMeshes
     };
   }
 });

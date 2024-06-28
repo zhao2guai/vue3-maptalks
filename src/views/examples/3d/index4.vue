@@ -50,7 +50,7 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-text class="mx-1">边界颜色</el-text>
+          <el-text class="mx-1">边界线颜色</el-text>
         </el-col>
         <el-col :span="16">
           <el-color-picker
@@ -60,13 +60,27 @@
           />
         </el-col>
       </el-row>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-text class="mx-1">边界线粗细</el-text>
+        </el-col>
+        <el-col :span="16">
+          <el-slider
+            v-model="widthData"
+            :min="0"
+            :max="30"
+            :step="0.5"
+            @input="changeWidthData"
+          />
+        </el-col>
+      </el-row>
     </el-card>
   </div>
 </template>
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { buildUUID } from "@pureadmin/utils";
-import { getGeojsonData, getShadowData, getCityData } from "@/api/geojson";
+import { getGeojsonData, getShadowData } from "@/api/geojson";
 import {
   MeshLambertMaterial,
   DirectionalLight,
@@ -205,6 +219,7 @@ const material = new MeshPhongMaterial({
 });
 const color = "rgb(255,255,1)";
 let lineColor = ref("#3C9696");
+let widthData = ref(5);
 const height = 10000;
 const offset = 100;
 const polygonLinkLine = new Map();
@@ -472,6 +487,12 @@ function changeLineColor(e) {
   lineColor.value = e;
 }
 
+// 更换边界线粗细
+function changeWidthData(e) {
+  linematerial.linewidth = e;
+  widthData.value = e;
+}
+
 // 添加打点
 async function addPoints(layer) {
   // 这里开始模拟查询后台获取geosjon数据当然也可以从本页面import中获取
@@ -571,7 +592,7 @@ async function addPolygon(layer) {
   overflow: hidden;
   .map-operation-area {
     position: absolute;
-    width: 280px;
+    width: 320px;
     top: 2%;
     right: 2%;
     max-width: 480px;

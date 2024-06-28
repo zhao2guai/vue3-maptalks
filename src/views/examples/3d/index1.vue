@@ -58,7 +58,7 @@ const vectorRef = ref(null);
 // 图层切换开关
 let layersSwitch = ref(false);
 // 地图数据
-let geojsonData = null;
+let geojsonData = ref(null);
 // 地图对象
 let map = null;
 // 地图加载状态
@@ -177,6 +177,7 @@ function changeMap(e) {
     imgLayer.show();
     vecLayer.hide();
   }
+
   addPolygons(threeLayer.value);
 }
 // 地图加载完毕回调
@@ -186,16 +187,23 @@ function getMap(e) {
     // loading.value = false;
   }
 }
+let light = ref(undefined);
+let ambientLight = ref(undefined);
+let scene = ref(undefined);
 // 加载行政区划数据
 function loadData(e) {
   // 获取组件中的THREE图层
   threeLayer.value = e;
   // 为three图层设置场景和光照参数
   threeLayer.value.prepareToDraw = (gl, scene, camera) => {
-    let light = new THREE.DirectionalLight("#F0FFFF", 0.9);
-    light.position.set(0, -10, 10).normalize();
-    scene.add(light);
-    scene.add(new THREE.AmbientLight("#87CEFA", 0.8));
+    light.value = new THREE.DirectionalLight("#F0FFFF", 0.9);
+    light.value.position.set(0, -10, 10).normalize();
+    light.value.uuid = "light1";
+    scene.add(light.value);
+    ambientLight.value = new THREE.AmbientLight("#87CEFA", 0.8);
+    ambientLight.value.uuid = "light2";
+    scene.add(ambientLight.value);
+    scene.value = scene;
     addPolygons(threeLayer.value);
   };
 }
@@ -206,8 +214,8 @@ async function addPolygons(layer) {
     const { data } = await getGeojsonData({ code: "62" });
     // console.log(data);
     // 将查询到的geojson数据赋值给全局属性
-    geojsonData = data;
-    const polygons = GeoJSON.toGeometry(geojsonData);
+    geojsonData.value = data;
+    const polygons = GeoJSON.toGeometry(geojsonData.value);
     const extrudePolygons = polygons.map(p => {
       const { value } = p.getProperties();
       const [r, g, b] = ci.getColor(value);
@@ -215,13 +223,38 @@ async function addPolygons(layer) {
       const extrudePolygon = layer.toExtrudePolygon(
         p,
         { height, altitude: -height, topColor: "#fff" },
-        new THREE.MeshPhongMaterial({ color })
+        new THREE.MeshPhongMaterial({
+          color,
+          transparent: true,
+          opacity: 0.5,
+          side: 0
+        })
       );
+      extrudePolygon.uuid = p.getProperties().gb;
       extrudePolygon.on("mouseover mouseout", mouseEventFunc);
       return extrudePolygon;
     });
+    // 获取图层中所有meshes，若存在则清除
+    let meshes = layer.getMeshes();
+    // console.log(meshes);
+    // 判断材质数据
+    if (layer && meshes.length > 0) {
+      meshes.forEach(item => {
+        // 外层场景环境材质不删除，奇遇没UUID的业务相关的全删
+        if (item.uuid == "light1" || item.uuid == "light2") {
+          // 获取场景并重新添加
+          let scene = layer.getScene();
+          scene.add(item);
+        } else {
+          layer.removeMesh(item);
+        }
+      });
+    }
+    // 添加新的meshe
     layer.addMesh(extrudePolygons);
+    // 添加区划边界线
     addOutLines(polygons);
+    // 添加地区文字标签
     addLabels();
   } catch (e) {
     console.log(e);
@@ -249,7 +282,8 @@ function addOutLines(polygons) {
 }
 // 添加地区名称
 function addLabels() {
-  const points = GeoJSON.toGeometry(geojsonData);
+  if (!geojsonData.value) return;
+  const points = GeoJSON.toGeometry(geojsonData.value);
   points.forEach(point => {
     const { name } = point.getProperties();
     point.setSymbol({
