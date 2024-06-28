@@ -187,23 +187,19 @@ function getMap(e) {
     // loading.value = false;
   }
 }
-let light = ref(undefined);
-let ambientLight = ref(undefined);
-let scene = ref(undefined);
 // 加载行政区划数据
 function loadData(e) {
   // 获取组件中的THREE图层
   threeLayer.value = e;
   // 为three图层设置场景和光照参数
   threeLayer.value.prepareToDraw = (gl, scene, camera) => {
-    light.value = new THREE.DirectionalLight("#F0FFFF", 0.9);
-    light.value.position.set(0, -10, 10).normalize();
-    light.value.uuid = "light1";
-    scene.add(light.value);
-    ambientLight.value = new THREE.AmbientLight("#87CEFA", 0.8);
-    ambientLight.value.uuid = "light2";
-    scene.add(ambientLight.value);
-    scene.value = scene;
+    let light = new THREE.DirectionalLight("#F0FFFF", 0.9);
+    light.position.set(0, -10, 10).normalize();
+    light.uuid = "light1";
+    scene.add(light);
+    let ambientLight = new THREE.AmbientLight("#87CEFA", 0.8);
+    ambientLight.uuid = "light2";
+    scene.add(ambientLight);
     addPolygons(threeLayer.value);
   };
 }
@@ -289,11 +285,11 @@ function addLabels() {
     point.setSymbol({
       textName: name,
       textFaceName: "sans-serif",
-      textFill: "#FFFAFA",
+      textFill: "#F0FFFF",
       textHorizontalAlignment: "right",
       textSize: 18,
       textHaloRadius: 0.5,
-      textHaloFill: "#F5F5F5"
+      textHaloFill: "#2F4F4F"
     });
   });
   let vectorLayer = vectorRef.value.vectorLayer;
