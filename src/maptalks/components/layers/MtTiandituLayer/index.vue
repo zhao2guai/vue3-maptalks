@@ -152,37 +152,6 @@ export default defineComponent({
       removeAll();
     });
 
-    // 监听天地图图层ID
-    watch(
-      () => props.id,
-      (newVal, oldVal) => {
-        if (tileLayer && newVal) {
-          tileLayer.setId(newVal);
-        }
-      },
-      { immediate: true }
-    );
-    // 监听天地图图层透明度
-    watch(
-      () => props.opacity,
-      (newVal, oldVal) => {
-        if (tileLayer && newVal) {
-          tileLayer.setOpacity(newVal);
-        }
-      },
-      { immediate: true }
-    );
-    // 监听天地图图层高度
-    watch(
-      () => props.zIndex,
-      (newVal, oldVal) => {
-        if (tileLayer && newVal) {
-          tileLayer.setZIndex(newVal);
-        }
-      },
-      { immediate: true }
-    );
-
     // 添加天地图图层
     const addTileLayer = () => {
       // 获取插槽的上级组件 (groupGLLayer优先插入其次groupTileLayer最后才是map)

@@ -2,7 +2,9 @@
   <!-- 地图加载区域 -->
   <div :id="container" class="maptalks-map">
     <!-- 地图子组件插槽区域 -->
-    <slot v-if="mapload" />
+    <div v-if="mapload">
+      <slot />
+    </div>
   </div>
 </template>
 <script>

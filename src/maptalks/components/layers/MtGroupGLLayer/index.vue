@@ -91,21 +91,16 @@ export default defineComponent({
     let id = props.id ? props.id : buildUUID();
     // 定义GL图层组对象
     let groupGLLayer = new GroupGLLayer(id, []);
-    if (props.options) {
-      groupGLLayer.setOptions(props.options);
-    }
-    // 判断地形开关是否开启，天地图密匙是否存在
+    // 设置天地图3D地形(天地图密匙是否存在, 存在则优先更换天地图地形)
+    let terrain = props.tk ? tiandituApi.getTerrain(props.tk) : props.terrain;
+    // 设置GL图层配置选项
+    if (props.options) groupGLLayer.setOptions(props.options);
+    // 判断地形开关是否开启
     if (props.terrainSwitch === true) {
-      // 设置天地图3D地形
-      const terrain = props.tk
-        ? tiandituApi.getTerrain(props.tk)
-        : props.terrain;
       if (terrain) groupGLLayer.setTerrain(terrain);
     }
     // 设置场景配置
-    if (props.sceneConfig) {
-      groupGLLayer.setSceneConfig(props.sceneConfig);
-    }
+    if (props.sceneConfig) groupGLLayer.setSceneConfig(props.sceneConfig);
     // 图层创建后的回调
     context.emit("layerCreated", groupGLLayer);
     // 将GL图层添加到注册组件中提供给子组件调用
@@ -178,7 +173,6 @@ export default defineComponent({
       // 打开后添加terrain对象关闭则是设置为空
       if (e === true) {
         // 设置天地图3D地形
-        const terrain = tiandituApi.getTerrain(props.tk);
         if (terrain) groupGLLayer.setTerrain(terrain);
       } else {
         groupGLLayer.setTerrain(null);

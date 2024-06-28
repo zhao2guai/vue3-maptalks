@@ -150,6 +150,7 @@ const highMaterial = new THREE.MeshPhongMaterial({
 // 底图图层
 let imgLayer = undefined;
 let vecLayer = undefined;
+let threeLayer = ref(undefined);
 // 页面加载后执行
 onMounted(() => {});
 // 页面销毁前执行
@@ -176,6 +177,7 @@ function changeMap(e) {
     imgLayer.show();
     vecLayer.hide();
   }
+  addPolygons(threeLayer.value);
 }
 // 地图加载完毕回调
 function getMap(e) {
@@ -187,14 +189,14 @@ function getMap(e) {
 // 加载行政区划数据
 function loadData(e) {
   // 获取组件中的THREE图层
-  let threeLayer = e;
+  threeLayer.value = e;
   // 为three图层设置场景和光照参数
-  threeLayer.prepareToDraw = (gl, scene, camera) => {
+  threeLayer.value.prepareToDraw = (gl, scene, camera) => {
     let light = new THREE.DirectionalLight("#F0FFFF", 0.9);
     light.position.set(0, -10, 10).normalize();
     scene.add(light);
     scene.add(new THREE.AmbientLight("#87CEFA", 0.8));
-    addPolygons(threeLayer);
+    addPolygons(threeLayer.value);
   };
 }
 // 添加多边形区划块
