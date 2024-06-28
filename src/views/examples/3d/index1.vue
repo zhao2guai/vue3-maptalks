@@ -28,17 +28,38 @@
     </mt-init-map>
     <!-- 右上角开关 -->
     <el-card class="map-operation-area">
-      <el-switch
-        v-model="layersSwitch"
-        class="mb-2"
-        active-text="蓝黑底图"
-        inactive-text="影像底图"
-        @change="changeMap"
-      />
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-text class="mx-1">图层切换</el-text>
+        </el-col>
+        <el-col :span="16">
+          <el-switch
+            v-model="layersSwitch"
+            class="mb-2"
+            active-text="蓝黑"
+            inactive-text="影像"
+            @change="changeMap"
+          />
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-text class="mx-1">更新数据</el-text>
+        </el-col>
+        <el-col :span="16">
+          <IconifyIconOffline
+            style="cursor: pointer"
+            height="20"
+            :icon="EpRefresh"
+            @click="refreshData"
+          />
+        </el-col>
+      </el-row>
     </el-card>
   </div>
 </template>
 <script setup>
+import EpRefresh from "@iconify-icons/ep/refresh";
 import { ColorIn } from "colorin";
 import { GeoJSON } from "maptalks";
 // import {
@@ -177,7 +198,10 @@ function changeMap(e) {
     imgLayer.show();
     vecLayer.hide();
   }
-
+}
+// 更新地图数据
+function refreshData() {
+  if (!threeLayer.value) return;
   addPolygons(threeLayer.value);
 }
 // 地图加载完毕回调
@@ -342,6 +366,7 @@ function mouseEventFunc(e) {
     position: absolute;
     top: 2%;
     right: 2%;
+    width: 320px;
     max-width: 480px;
     z-index: 999;
   }
