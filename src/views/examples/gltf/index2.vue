@@ -1,24 +1,24 @@
 <template>
   <div id="gltf2" v-loading="loading" class="map-content">
-    <mt-init-map @getMap="getMap" :options="options">
+    <mt-init-map :options="options" @getMap="getMap">
       <mt-group-gl-layer :sceneConfig="defaultSceneConfig">
         <mt-gltf-layer>
           <mt-gltf-maker
             ref="camera1"
-            :point="[81.863822, 44.940405]"
-            :symbol="symbol1"
+            :coordinates="[81.863822, 44.940405]"
+            :options="symbol1"
             :content="content"
           />
           <mt-gltf-maker
             ref="camera2"
-            :point="[81.873822, 44.940405]"
-            :symbol="symbol2"
+            :coordinates="[81.873822, 44.940405]"
+            :options="symbol2"
             :content="content"
           />
           <mt-gltf-maker
             ref="camera3"
-            :point="[81.868822, 44.945405]"
-            :symbol="symbol3"
+            :coordinates="[81.868822, 44.945405]"
+            :options="symbol3"
             :content="content2"
           />
         </mt-gltf-layer>
@@ -27,8 +27,8 @@
   </div>
 </template>
 <script setup>
-import { title } from "process";
-import { ref, onMounted, onBeforeUnmount, reactive } from "vue";
+import { buildUUID } from "@pureadmin/utils";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 
 const loading = ref(true);
 
@@ -101,57 +101,69 @@ let defaultSceneConfig = {
 };
 // 摄像头杆子35
 let symbol1 = {
-  url: new URL("@public/gltf/camera/pole35.gltf", import.meta.url), //模型的url
-  visible: true, //模型是否可见
-  translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-  rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-  scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-  animation: true, //是否开启动画
-  loop: true, //是否开启动画循环
-  speed: 1, //动画速度倍数
-  fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-  anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-  shadow: true, //是否开启阴影
-  bloom: true, //是否开启泛光
-  shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-  modelHeight: 240,
-  translationZ: -120
+  id: buildUUID(),
+  cursor: "pointer",
+  symbol: {
+    url: new URL("@public/gltf/camera/pole35.gltf", import.meta.url), //模型的url
+    visible: true, //模型是否可见
+    translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+    rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+    scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+    animation: true, //是否开启动画
+    loop: true, //是否开启动画循环
+    speed: 1, //动画速度倍数
+    fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+    anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+    shadow: true, //是否开启阴影
+    bloom: true, //是否开启泛光
+    shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+    modelHeight: 240,
+    translationZ: -120
+  }
 };
 // 摄像头杆子37
 let symbol2 = {
-  url: new URL("@public/gltf/camera/pole37.gltf", import.meta.url), //模型的url
-  visible: true, //模型是否可见
-  translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-  rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-  scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-  animation: true, //是否开启动画
-  loop: true, //是否开启动画循环
-  speed: 1, //动画速度倍数
-  fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-  anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-  shadow: true, //是否开启阴影
-  bloom: true, //是否开启泛光
-  shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-  modelHeight: 240,
-  translationZ: -120
+  id: buildUUID(),
+  cursor: "pointer",
+  symbol: {
+    url: new URL("@public/gltf/camera/pole37.gltf", import.meta.url), //模型的url
+    visible: true, //模型是否可见
+    translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+    rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+    scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+    animation: true, //是否开启动画
+    loop: true, //是否开启动画循环
+    speed: 1, //动画速度倍数
+    fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+    anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+    shadow: true, //是否开启阴影
+    bloom: true, //是否开启泛光
+    shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+    modelHeight: 240,
+    translationZ: -120
+  }
 };
 // 厂房
 let symbol3 = {
-  url: new URL("@public/gltf/factory/changfang.gltf", import.meta.url), //模型的url
-  visible: true, //模型是否可见
-  translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-  rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-  scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-  animation: true, //是否开启动画
-  loop: true, //是否开启动画循环
-  speed: 1, //动画速度倍数
-  fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-  anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-  shadow: true, //是否开启阴影
-  bloom: true, //是否开启泛光
-  shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-  modelHeight: 240,
-  translationZ: -120
+  id: buildUUID(),
+  cursor: "pointer",
+  symbol: {
+    url: new URL("@public/gltf/factory/changfang.gltf", import.meta.url), //模型的url
+    visible: true, //模型是否可见
+    translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+    rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+    scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+    animation: true, //是否开启动画
+    loop: true, //是否开启动画循环
+    speed: 1, //动画速度倍数
+    fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+    anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+    shadow: true, //是否开启阴影
+    bloom: true, //是否开启泛光
+    shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+    modelHeight: 240,
+    translationZ: -120
+  }
 };
 // 自定义弹窗内容
 let content =

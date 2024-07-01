@@ -15,38 +15,37 @@ import { GLTFMarker } from "@maptalks/gl-layers";
 import { buildUUID } from "@pureadmin/utils";
 
 export default defineComponent({
-  /** 初始化webgl图层组件 */
+  /** 单个模型打点组件 */
   name: "mt-gltf-maker",
-
+  /** 组件参数 */
   props: {
-    // 点的id
-    id: {
-      type: [String, Number],
-      default: ""
-    },
     // 坐标
-    point: {
+    coordinates: {
       type: Array,
       default: () => []
     },
-    //gltf图层配置
-    symbol: {
+    // gltf配置
+    options: {
       type: Object,
       default: () => ({
-        url: null, //模型的url
-        visible: true, //模型是否可见
-        translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-        rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-        scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-        animation: false, //是否开启动画
-        animationName: 0, //动画序列名称
-        loop: true, //是否开启动画循环
-        speed: 1, //动画速度倍数
-        fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-        anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-        shadow: true, //是否开启阴影
-        bloom: true, //是否开启泛光
-        shader: "pbr" //模型绘制的shader，可选值：pbr, phong, wireframe
+        id: buildUUID(),
+        cursor: "pointer",
+        symbol: {
+          url: null, //模型的url
+          visible: true, //模型是否可见
+          translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+          rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+          scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+          animation: false, //是否开启动画
+          animationName: 0, //动画序列名称
+          loop: true, //是否开启动画循环
+          speed: 1, //动画速度倍数
+          fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+          anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+          shadow: true, //是否开启阴影
+          bloom: true, //是否开启泛光
+          shader: "pbr" //模型绘制的shader，可选值：pbr, phong, wireframe
+        }
       })
     },
     // 弹框HTML内容
@@ -57,17 +56,11 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    // 获取点ID
-    let id = props.id ? props.id : buildUUID();
+    // 获取坐标位置
     let markPoint =
       props.point && props.point.length === 2 ? props.point : [0, 0];
-
     // 初始化gltf三维模型绘制图层
-    let gltfMarker = new GLTFMarker(markPoint, {
-      id: id,
-      cursor: "pointer",
-      symbol: props.symbol
-    });
+    let gltfMarker = new GLTFMarker(markPoint, props.options);
     // 设置弹窗内容
     gltfMarker.setInfoWindow({
       // autoOpenOn: "", // 解除click绑定
@@ -77,12 +70,23 @@ export default defineComponent({
     // 注入GLTFMarker对象，以便其他组件获取并使用它。
     provide("gltfMarker", gltfMarker);
 
-    // 监听打点样式
+    // 监听模型打点位置信息
     watch(
-      () => props.symbol,
-      newSymbol => {
-        if (gltfMarker && newSymbol) {
-          gltfMarker.setSymbol(newSymbol);
+      () => props.coordinates,
+      coordinates => {
+        if (gltfMarker && coordinates) {
+          gltfMarker.setCoordinates(coordinates);
+        }
+      },
+      { immediate: true, deep: true }
+    );
+
+    // 监听模型打点配置信息
+    watch(
+      () => props.options,
+      newOptions => {
+        if (gltfMarker && newOptions) {
+          gltfMarker.setOptions(newOptions);
         }
       },
       { immediate: true, deep: true }

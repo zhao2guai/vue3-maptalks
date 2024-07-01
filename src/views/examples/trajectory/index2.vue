@@ -1,16 +1,17 @@
 <template>
-  <div v-loading="loading" id="trajectoryId" class="map-content">
+  <div id="trajectoryId" v-loading="loading" class="map-content">
     <!-- 地图部分 -->
     <div class="map-div" :style="{ width: mapDivWidth + '%' }">
-      <mt-init-map @getMap="getMap" :options="options">
+      <mt-init-map :options="options" @getMap="getMap">
         <mt-group-gl-layer>
           <mt-gltf-layer>
             <mt-gltf-maker
               ref="gltfMakerRef"
-              :point="point"
-              :symbol="gltfSymbol"
+              :coordinates="point"
+              :options="gltfOptions"
               :content="content"
-            ></mt-gltf-maker>
+              @load="makerLoad"
+            />
           </mt-gltf-layer>
           <mt-tianditu-layer
             tk="ec89e7ba91633b147f76d47e08f9f1a1"
@@ -19,8 +20,7 @@
           <mt-line-string-layer
             ref="lineLayerRef"
             @layerCreated="getLineStringLayer"
-          >
-          </mt-line-string-layer>
+          />
         </mt-group-gl-layer>
       </mt-init-map>
       <mt-router-player
@@ -29,7 +29,7 @@
         :options="routePlayerOptions"
         @routePlayerCreated="getRoutePlayerCreated"
         @playing="playingFun"
-      ></mt-router-player>
+      />
     </div>
     <!-- 操作部分 -->
     <div
@@ -37,16 +37,16 @@
       :style="{ width: operationWidth + '%' }"
       :class="[showOperation ? '' : 'hide-operation-div']"
     >
-      <p class="title-style" v-if="showOperation">地图中的操作</p>
-      <el-row style="margin-top: 2vh" v-if="showOperation">
+      <p v-if="showOperation" class="title-style">地图中的操作</p>
+      <el-row v-if="showOperation" style="margin-top: 2vh">
         <el-col :span="24">
           <span class="label-style">更换模型：</span
           ><el-select
             v-model="modelValue"
             size="large"
             style="width: 220px"
-            @change="changeModel"
             :disabled="modelDisabled"
+            @change="changeModel"
           >
             <el-option
               v-for="(item, index) in tljList"
@@ -109,10 +109,10 @@
           <el-slider
             v-model="speed"
             style="position: relative; top: -0.5vh"
-            @change="speedChange"
             :min="1"
             :max="20"
-          ></el-slider>
+            @change="speedChange"
+          />
         </el-col>
         <el-col
           :span="24"
@@ -131,8 +131,8 @@
         </el-col>
       </el-row>
       <div class="show-operation-div" @click="isShowOperation">
-        <i class="right-icon" v-if="showOperation"></i>
-        <i class="left-icon" v-else></i>
+        <i v-if="showOperation" class="right-icon" />
+        <i v-else class="left-icon" />
       </div>
     </div>
   </div>
@@ -145,7 +145,20 @@ const loading = ref(true);
 const gltfMakerRef = ref(null);
 const lineLayerRef = ref(null);
 const routePlayerRef = ref(null);
-
+let map = null;
+// 地图map配置
+let options = {
+  center: [120.543189862389, 31.35322014824814], // 苏州
+  zoom: 17.5,
+  spatialReference: {
+    projection: "EPSG:4326"
+  },
+  minZoom: 1,
+  maxZoom: 20,
+  bearing: -15.299999999999274,
+  pitch: 72.0000000000002
+  // baseLayer: TileLayer("base", {})
+};
 // 跟页面样式和右侧操作模块有关的变量
 let mapDivWidth = ref(80);
 let operationWidth = ref(20);
@@ -188,9 +201,7 @@ let tljList = [
     )
   }
 ];
-let symbolUrl = ref(tljList[0].modelurl);
 
-let map = null;
 // 轨迹点数据
 let coordinates = ref([
   [120.543189862389, 31.35322014824814],
@@ -315,24 +326,29 @@ let currentModel = ref(null);
 let linestring = ref(null);
 let info = ref(null);
 // 模型数据
-let gltfSymbol = reactive({
-  url: new URL("@public/gltf/tractor/scene.gltf", import.meta.url), //模型的url
-  visible: true, //模型是否可见
-  translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-  rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-  scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-  animation: true, //是否开启动画
-  loop: true, //是否开启动画循环
-  speed: 1, //动画速度倍数
-  fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-  anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-  shadow: true, //是否开启阴影
-  bloom: true, //是否开启泛光
-  shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-  modelHeight: 30,
-  translationZ: -25,
-  rotationZ: 90
+let gltfOptions = reactive({
+  id: 10,
+  cursor: "pointer",
+  symbol: {
+    url: new URL("@public/gltf/tractor/scene.gltf", import.meta.url), //模型的url
+    visible: true, //模型是否可见
+    translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+    rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+    scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+    animation: true, //是否开启动画
+    loop: true, //是否开启动画循环
+    speed: 1, //动画速度倍数
+    fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+    anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+    shadow: true, //是否开启阴影
+    bloom: true, //是否开启泛光
+    shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+    modelHeight: 30,
+    translationZ: -25,
+    rotationZ: 90
+  }
 });
+// 弹窗样式内容
 let content =
   '<div class="infocontent" ref="infoWindowRef">' +
   '<div class="infopop_title">1号拖拉机</div>' +
@@ -340,20 +356,6 @@ let content =
   '<div class="infopop_title">已作业面积（亩）: 2</div>' +
   '<div class="infopop_title">已作业时间（小时）: 1.5</div>' +
   "</div>";
-
-// 地图map配置
-let options = {
-  center: [120.543189862389, 31.35322014824814], // 苏州
-  zoom: 17.5,
-  spatialReference: {
-    projection: "EPSG:4326"
-  },
-  minZoom: 1,
-  maxZoom: 20,
-  bearing: -15.299999999999274,
-  pitch: 72.0000000000002
-  // baseLayer: TileLayer("base", {})
-};
 
 function getMap(e) {
   map = e;
@@ -370,6 +372,14 @@ onBeforeMount(() => {
     }, 2000);
   });
 });
+
+// 点加载完成后执行
+function makerLoad() {
+  // randomAltitude();
+  // setTimeout(() => {
+  //   addLine();
+  // }, 2000);
+}
 
 // 给线数据添加z轴数值(可以自己定义)
 function randomAltitude() {

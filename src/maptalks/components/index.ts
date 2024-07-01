@@ -13,11 +13,11 @@ import * as Map from "./map";
 // 图层类组件
 import * as Layers from "./layers";
 // 模型类组件
-import * as GLTF from './gltf';
+import * as GLTF from "./gltf";
 // maptalks高级功能及其组件
-import * as MtPlugin from './senior'
+import * as MtPlugin from "./senior";
 // 地图分析插件
-import * as MtAnalysis from './analysis'
+import * as MtAnalysis from "./analysis";
 
 const install: Plugin = (app: App) => {
   app.use(Map.install);
@@ -30,11 +30,4 @@ const install: Plugin = (app: App) => {
 const plugin = { install };
 
 export default plugin;
-export {
-  install,
-  Map,
-  Layers,
-  GLTF,
-  MtPlugin,
-  MtAnalysis
-};
+export { install, Map, Layers, GLTF, MtPlugin, MtAnalysis };

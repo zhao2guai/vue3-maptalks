@@ -1,6 +1,6 @@
 <template>
   <div v-loading="loading" class="map-content">
-    <mt-init-map ref="mapRef" @getMap="getMap" :options="options">
+    <mt-init-map ref="mapRef" :options="options" @getMap="getMap">
       <mt-group-gl-layer
         :terrainSwitch="false"
         tk="ec89e7ba91633b147f76d47e08f9f1a1"
@@ -22,12 +22,12 @@
           :params="params"
           :options="wmsOptions"
           :isFeatureInfo="true"
-        ></mt-wms-tile-layer>
+        />
         <mt-wms-tile-layer
           ref="wmstilelayer2"
           :options="wmsOptions2"
           :isFeatureInfo="false"
-        ></mt-wms-tile-layer>
+        />
       </mt-group-gl-layer>
       <!-- <mt-wms-tile-layer ref="wmstilelayer1" :options="wmsOptions"></mt-wms-tile-layer> -->
     </mt-init-map>
@@ -60,7 +60,7 @@ let options = {
 
 let wmsOptions = reactive({
   tileSystem: [1, -1, -180, 90],
-  urlTemplate: "http://10.18.27.132:28080/geoserver/agro/wms",
+  urlTemplate: import.meta.env.VITE_GEOSERVER_AGROURL,
   crs: "EPSG:4326",
   layers: "agro:sql_gbznt_bole",
   styles: "",
@@ -72,7 +72,7 @@ let wmsOptions = reactive({
 
 let wmsOptions2 = reactive({
   tileSystem: [1, -1, -180, 90],
-  urlTemplate: "http://10.18.27.132:28080/geoserver/agro/wms",
+  urlTemplate: import.meta.env.VITE_GEOSERVER_AGROURL,
   crs: "EPSG:4326",
   layers: "agro:sql_nmc_bole",
   styles: "",

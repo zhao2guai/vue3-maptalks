@@ -23,20 +23,20 @@
           ref="gbzRef"
           :options="wmsOptions"
           :isFeatureInfo="true"
-        ></mt-wms-tile-layer>
+        />
         <mt-geo3d-tile-layer
-          ref="geo3dRef"
           id="3dtiles"
+          ref="geo3dRef"
           :options="layerOptions"
           @loadtileset="loadtileset"
           @renderstart="renderstart"
           @renderend="renderend"
-        ></mt-geo3d-tile-layer>
+        />
         <mt-gltf-layer>
           <mt-gltf-maker
             ref="symbol3"
-            :point="[87.2836, 44.2208]"
-            :symbol="symbol1"
+            :coordinates="[87.2836, 44.2208]"
+            :options="gltfOptions"
           />
         </mt-gltf-layer>
       </mt-group-gl-layer>
@@ -71,6 +71,7 @@
   </div>
 </template>
 <script setup>
+import { buildUUID } from "@pureadmin/utils";
 import { Circle, ui } from "maptalks";
 import { ClipOutsideMask } from "@maptalks/gl-layers";
 import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
@@ -133,7 +134,7 @@ let sceneConfig = {
 // 高标准农田图层配置
 let wmsOptions = reactive({
   tileSystem: [1, -1, -180, 90],
-  urlTemplate: "http://10.18.27.132:28080/geoserver/agro/wms",
+  urlTemplate: import.meta.env.VITE_GEOSERVER_AGROURL,
   crs: "EPSG:4326",
   layers: "agro:sql_gbznt_bole",
   styles: "",
@@ -144,8 +145,9 @@ let wmsOptions = reactive({
 });
 // 图层配置信息
 let layerOptions = {
-  loadingLimit: 3,
-  loadingLimitOnInteracting: 3,
+  maxGPUMemory: 512, //最大缓存数，单位 M bytes
+  // loadingLimitOnInteracting : 3, //地图交互过程中瓦片请求最大数量
+  // loadingLimit : 3, //瓦片请求最大数量
   services: [
     {
       url: "http://mapgl.com/data/model/dikuai/tileset.json",
@@ -155,22 +157,26 @@ let layerOptions = {
   ]
 };
 // 摄像头监测设备
-let symbol1 = {
-  url: new URL("@public/gltf/equipment/01.gltf", import.meta.url), //模型的url
-  visible: true, //模型是否可见
-  translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-  rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-  scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-  animation: true, //是否开启动画
-  loop: true, //是否开启动画循环
-  speed: 1, //动画速度倍数
-  fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-  anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-  shadow: true, //是否开启阴影
-  bloom: true, //是否开启泛光
-  shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-  modelHeight: 200,
-  translationZ: -120
+let gltfOptions = {
+  id: buildUUID(),
+  cursor: "pointer",
+  symbol: {
+    url: new URL("@public/gltf/equipment/01.gltf", import.meta.url), //模型的url
+    visible: true, //模型是否可见
+    translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+    rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+    scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+    animation: true, //是否开启动画
+    loop: true, //是否开启动画循环
+    speed: 1, //动画速度倍数
+    fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+    anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+    shadow: true, //是否开启阴影
+    bloom: true, //是否开启泛光
+    shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+    modelHeight: 200,
+    translationZ: -120
+  }
 };
 // 设置圆心坐标和半径
 const circle = new Circle([108.95938550816857, 34.219794047869385], 100);

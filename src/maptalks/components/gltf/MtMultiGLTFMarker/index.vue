@@ -12,21 +12,47 @@ import {
   watch
 } from "vue";
 import { MultiGLTFMarker } from "@maptalks/gl-layers";
-
+import { buildUUID } from "@pureadmin/utils";
 export default defineComponent({
-  /** 初始化webgl图层组件 */
+  /** 多个模型打点组件 */
   name: "mt-multi-gltf-maker",
-
+  /** 组件参数 */
   props: {
     // 模型组数据
     data: {
       type: Array,
-      default: () => []
+      default: () => [
+        {
+          coordinates: [0, 0],
+          translation: [0, 0, 0],
+          rotation: [0, 0, 0],
+          scale: [1, 1, 1],
+          color: [1, 0, 0, 1]
+        },
+        {
+          coordinates: [0, 0],
+          translation: [0, 2, 0],
+          rotation: [0, 0, 0],
+          scale: [1, 1, 1],
+          color: [1, 1, 0, 1]
+        }
+      ]
     },
     // 模型组配置
     options: {
       type: Object,
-      default: null
+      default: () => ({
+        id: buildUUID(), // 主键唯一ID
+        fitSize: 100, // 模型加到地图上的初始尺寸，单位像素
+        symbol: null, // 样式配置(Object类型)
+        visible: true, // 是否显示
+        interactive: true, // 是否能够交互
+        editable: true, // 是否允许编辑
+        cursor: "pointer", // 鼠标样式
+        draggable: false, // 是否允许拖拽
+        dragOnAxis: null, // 是否沿x轴或者y轴拖拽，可选的值为"x"或者"y"
+        zIndex: null // 初始的zIndex，决定了绘制顺序
+      })
     },
     // 弹框HTML内容
     content: {
@@ -39,7 +65,7 @@ export default defineComponent({
     // 获取模型数据
     let data = props.data ? props.data : [];
     // 获取配置信息
-    let options = props.options ? props.options : null;
+    let options = props.options ? props.options : {};
     // 初始化gltf三维模型绘制图层
     let multiGLTFMarker = new MultiGLTFMarker(data, options);
     // 设置弹窗内容

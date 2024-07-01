@@ -8,61 +8,85 @@ import {
   onBeforeUnmount,
   onBeforeMount,
   inject,
-  provide
+  provide,
+  watch
 } from "vue";
 import { buildUUID } from "@pureadmin/utils";
 import { GLTFLayer } from "@maptalks/gl-layers";
+// 可选的draco插件
+import "@maptalks/transcoders.draco";
+// 可选的crn纹理解析插件
+import "@maptalks/transcoders.crn";
+// 可选的ktx2纹理解析插件
+import "@maptalks/transcoders.ktx2";
 
 export default defineComponent({
-  /** 初始化webgl图层组件 */
+  /** 初始化模型图层组件 */
   name: "mt-gltf-layer",
-
+  /** 模型图层参数 */
   props: {
     // gltf图层id
     id: {
-      type: String,
+      type: [String, Number],
       default: ""
     },
-    //gltf图层配置
+    // gltf图层配置
     options: {
       type: Object,
       default: () => ({
-        attribution: "",
-        minZoom: 1,
-        maxZoom: 18,
-        visible: true,
-        opacity: 1
+        attribution: "", // 图层版权声明
+        minZoom: null, // 图层显示的最小zoom
+        maxZoom: null, // 图层显示的最大zoom
+        visible: true, // 图层是否隐藏
+        opacity: 1, // 图层透明度
+        hitDetect: true, // 是否开启图层绘制检测（动态鼠标样式），关闭可以提高性能
+        collisionScope: "layer" // 碰撞检测索引的适用范围： map或者layer
         // ... 更多参照OverlayLayer文档
       })
     },
-    //gltf图层样式
+    // gltf图层样式
     style: {
       type: Array,
       default: () => []
     }
   },
-
   setup(props, context) {
     // 获取图层ID
-    let id = props.id ? props.id : buildUUID();
-
+    let layerId = props.id ? props.id : buildUUID();
+    // 获取图层参数
+    let options = props.options ? props.options : {};
     // 初始化gltf三维模型绘制图层
-    let gltfLayer = new GLTFLayer(props.id);
-
-    // 判断如果含有图层配置
-    if (props.options) {
-      gltfLayer.setOptions(props.options);
-    }
-
+    let gltfLayer = new GLTFLayer(layerId, options);
     // 判断是否含有图层样式
     if (props.style.length > 0) {
       gltfLayer.setStyle(props.style);
     }
-
     // 将gltf图层添加到注册组件中提供给子组件调用
     provide("gltfLayer", gltfLayer);
     // 向组件传送初始化完毕的layer
     context.emit("layerCreated", gltfLayer);
+
+    // 监听模型打点配置信息
+    watch(
+      () => props.id,
+      newId => {
+        if (gltfLayer && newId) {
+          gltfLayer.setId(newId);
+        }
+      },
+      { immediate: true }
+    );
+
+    // 监听模型打点配置信息
+    watch(
+      () => props.options,
+      newOptions => {
+        if (gltfLayer && newOptions) {
+          gltfLayer.setOptions(newOptions);
+        }
+      },
+      { immediate: true, deep: true }
+    );
 
     // 页面加载后执行
     onBeforeMount(() => {
@@ -162,5 +186,3 @@ export default defineComponent({
   }
 });
 </script>
-
-<style lang="scss" scoped></style>

@@ -1,56 +1,62 @@
 <template>
   <div id="gltf3" v-loading="loading" class="map-content">
-    <mt-init-map @getMap="getMap" :options="options">
+    <mt-init-map :options="mapOptions" @getMap="getMap">
       <mt-group-gl-layer :sceneConfig="defaultSceneConfig">
         <mt-gltf-layer>
           <mt-gltf-maker
             ref="symbol3"
-            :point="[81.863822, 44.940405]"
-            :symbol="barn"
+            :coordinates="[81.863822, 44.940405]"
+            :options="barn"
           />
           <mt-gltf-maker
             ref="farm"
-            :point="[81.882822, 44.940405]"
-            :symbol="farm"
+            :coordinates="[81.882822, 44.940405]"
+            :options="farm"
           />
           <mt-gltf-maker
             ref="cowRef1"
-            :point="[81.857522, 44.944405]"
-            :symbol="cow1"
+            :coordinates="[81.857522, 44.944405]"
+            :options="cow1"
             :content="cowContent"
             @load="cowLoad"
           />
           <mt-gltf-maker
             ref="cowRef2"
-            :point="[81.857522, 44.936805]"
-            :symbol="cow2"
+            :coordinates="[81.857522, 44.936805]"
+            :options="cow2"
             :content="cowContent"
             @load="cowLoad"
           />
-          <mt-gltf-maker :point="[81.870522, 44.944405]" :symbol="pig1" />
-          <mt-gltf-maker :point="[81.869922, 44.936805]" :symbol="pig2" />
+          <mt-gltf-maker
+            :coordinates="[81.870522, 44.944405]"
+            :options="pig1"
+          />
+          <mt-gltf-maker
+            :coordinates="[81.869922, 44.936805]"
+            :options="pig2"
+          />
           <mt-gltf-maker
             ref="sheepRef1"
-            :point="[81.881422, 44.940405]"
-            :symbol="sheep1"
+            :coordinates="[81.881422, 44.940405]"
+            :options="sheep1"
             @click="handlerClick()"
           />
           <mt-gltf-maker
             ref="sheepRef2"
-            :point="[81.884222, 44.944405]"
-            :symbol="sheep2"
+            :coordinates="[81.884222, 44.944405]"
+            :options="sheep2"
             @click="handlerClick()"
           />
           <mt-gltf-maker
             ref="sheepRef3"
-            :point="[81.884222, 44.940405]"
-            :symbol="sheep3"
+            :coordinates="[81.884222, 44.940405]"
+            :options="sheep3"
             @click="handlerClick()"
           />
           <mt-gltf-maker
             ref="jiRef"
-            :point="[81.876222, 44.935405]"
-            :symbol="chicken"
+            :coordinates="[81.876222, 44.935405]"
+            :options="chicken"
           />
         </mt-gltf-layer>
       </mt-group-gl-layer>
@@ -59,7 +65,7 @@
 </template>
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
-
+import { buildUUID } from "@pureadmin/utils";
 const loading = ref(true);
 
 let map = null;
@@ -67,7 +73,7 @@ const cowRef1 = ref(null);
 const cowRef2 = ref(null);
 
 // 设置默认地图配置
-let options = {
+let mapOptions = {
   center: [81.868822, 44.940405], // 博乐市小营盘镇
   zoom: 14,
   spatialReference: {
@@ -133,204 +139,244 @@ let defaultSceneConfig = {
 };
 // 大角牛
 let cow1 = {
-  url: new URL("@public/gltf/texas_longhorn/scene.gltf", import.meta.url), //模型的url
-  visible: true, //模型是否可见
-  translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-  rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-  scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-  animation: true, //是否开启动画
-  loop: true, //是否开启动画循环
-  speed: 1, //动画速度倍数
-  fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-  anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-  shadow: true, //是否开启阴影
-  bloom: true, //是否开启泛光
-  shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-  modelHeight: 320,
-  translationZ: -100,
-  rotationZ: 90
+  id: buildUUID(),
+  cursor: "pointer",
+  symbol: {
+    url: new URL("@public/gltf/texas_longhorn/scene.gltf", import.meta.url), //模型的url
+    visible: true, //模型是否可见
+    translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+    rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+    scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+    animation: true, //是否开启动画
+    loop: true, //是否开启动画循环
+    speed: 1, //动画速度倍数
+    fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+    anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+    shadow: true, //是否开启阴影
+    bloom: true, //是否开启泛光
+    shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+    modelHeight: 320,
+    translationZ: -100,
+    rotationZ: 90
+  }
 };
 let cow2 = {
-  url: new URL("@public/gltf/texas_longhorn/scene.gltf", import.meta.url), //模型的url
-  visible: true, //模型是否可见
-  translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-  rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-  scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-  animation: true, //是否开启动画
-  loop: true, //是否开启动画循环
-  speed: 1, //动画速度倍数
-  fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-  anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-  shadow: true, //是否开启阴影
-  bloom: true, //是否开启泛光
-  shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-  modelHeight: 320,
-  translationZ: -100,
-  rotationZ: 90
+  id: buildUUID(),
+  cursor: "pointer",
+  symbol: {
+    url: new URL("@public/gltf/texas_longhorn/scene.gltf", import.meta.url), //模型的url
+    visible: true, //模型是否可见
+    translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+    rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+    scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+    animation: true, //是否开启动画
+    loop: true, //是否开启动画循环
+    speed: 1, //动画速度倍数
+    fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+    anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+    shadow: true, //是否开启阴影
+    bloom: true, //是否开启泛光
+    shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+    modelHeight: 320,
+    translationZ: -100,
+    rotationZ: 90
+  }
 };
 // 黑猪
 let pig1 = {
-  url: new URL("@public/gltf/black_pig/scene.gltf", import.meta.url), //模型的url
-  visible: true, //模型是否可见
-  translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-  rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-  scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-  animation: true, //是否开启动画
-  loop: true, //是否开启动画循环
-  speed: 1, //动画速度倍数
-  fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-  anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-  shadow: true, //是否开启阴影
-  bloom: true, //是否开启泛光
-  shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-  modelHeight: 280,
-  translationZ: -160,
-  rotationZ: 180
+  id: buildUUID(),
+  cursor: "pointer",
+  symbol: {
+    url: new URL("@public/gltf/black_pig/scene.gltf", import.meta.url), //模型的url
+    visible: true, //模型是否可见
+    translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+    rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+    scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+    animation: true, //是否开启动画
+    loop: true, //是否开启动画循环
+    speed: 1, //动画速度倍数
+    fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+    anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+    shadow: true, //是否开启阴影
+    bloom: true, //是否开启泛光
+    shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+    modelHeight: 280,
+    translationZ: -160,
+    rotationZ: 180
+  }
 };
 // 白猪
 let pig2 = {
-  url: new URL("@public/gltf/animal/pig.gltf", import.meta.url), //模型的url
-  visible: true, //模型是否可见
-  translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-  rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-  scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-  animation: true, //是否开启动画
-  loop: true, //是否开启动画循环
-  speed: 1, //动画速度倍数
-  fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-  anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-  shadow: true, //是否开启阴影
-  bloom: true, //是否开启泛光
-  shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-  modelHeight: 280,
-  translationZ: -160,
-  rotationZ: 45
+  id: buildUUID(),
+  cursor: "pointer",
+  symbol: {
+    url: new URL("@public/gltf/animal/pig.gltf", import.meta.url), //模型的url
+    visible: true, //模型是否可见
+    translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+    rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+    scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+    animation: true, //是否开启动画
+    loop: true, //是否开启动画循环
+    speed: 1, //动画速度倍数
+    fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+    anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+    shadow: true, //是否开启阴影
+    bloom: true, //是否开启泛光
+    shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+    modelHeight: 280,
+    translationZ: -160,
+    rotationZ: 45
+  }
 };
 // 牛围栏
 let barn = {
-  url: new URL("@public/gltf/farm_cow_barn/scene.gltf", import.meta.url), //模型的url
-  visible: true, //模型是否可见
-  translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-  rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-  scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-  animation: true, //是否开启动画
-  loop: true, //是否开启动画循环
-  speed: 1, //动画速度倍数
-  fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-  anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-  shadow: true, //是否开启阴影
-  bloom: true, //是否开启泛光
-  shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-  modelHeight: 1384,
-  rotationX: 90,
-  translationZ: -420
+  id: buildUUID(),
+  cursor: "pointer",
+  symbol: {
+    url: new URL("@public/gltf/farm_cow_barn/scene.gltf", import.meta.url), //模型的url
+    visible: true, //模型是否可见
+    translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+    rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+    scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+    animation: true, //是否开启动画
+    loop: true, //是否开启动画循环
+    speed: 1, //动画速度倍数
+    fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+    anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+    shadow: true, //是否开启阴影
+    bloom: true, //是否开启泛光
+    shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+    modelHeight: 1384,
+    rotationX: 90,
+    translationZ: -420
+  }
 };
 // 棚子
 let farm = {
-  url: new URL("@public/gltf/farm_pigsty/scene.gltf", import.meta.url), //模型的url
-  visible: true, //模型是否可见
-  translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-  rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-  scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-  animation: true, //是否开启动画
-  loop: true, //是否开启动画循环
-  speed: 1, //动画速度倍数
-  fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-  anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-  shadow: true, //是否开启阴影
-  bloom: true, //是否开启泛光
-  shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-  modelHeight: 240,
-  translationZ: -120
+  id: buildUUID(),
+  cursor: "pointer",
+  symbol: {
+    url: new URL("@public/gltf/farm_pigsty/scene.gltf", import.meta.url), //模型的url
+    visible: true, //模型是否可见
+    translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+    rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+    scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+    animation: true, //是否开启动画
+    loop: true, //是否开启动画循环
+    speed: 1, //动画速度倍数
+    fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+    anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+    shadow: true, //是否开启阴影
+    bloom: true, //是否开启泛光
+    shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+    modelHeight: 240,
+    translationZ: -120
+  }
 };
 // 鸡
 let chicken = {
-  url: new URL("@public/gltf/chicken_rig/scene.gltf", import.meta.url), //模型的url
-  visible: true, //模型是否可见
-  translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-  rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-  scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-  animation: true, //是否开启动画
-  loop: true, //是否开启动画循环
-  speed: 1, //动画速度倍数
-  fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-  anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-  shadow: true, //是否开启阴影
-  bloom: true, //是否开启泛光
-  shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-  modelHeight: 120,
-  translationZ: -60,
-  rotationZ: 45
+  id: buildUUID(),
+  cursor: "pointer",
+  symbol: {
+    url: new URL("@public/gltf/chicken_rig/scene.gltf", import.meta.url), //模型的url
+    visible: true, //模型是否可见
+    translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+    rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+    scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+    animation: true, //是否开启动画
+    loop: true, //是否开启动画循环
+    speed: 1, //动画速度倍数
+    fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+    anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+    shadow: true, //是否开启阴影
+    bloom: true, //是否开启泛光
+    shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+    modelHeight: 120,
+    translationZ: -60,
+    rotationZ: 45
+  }
 };
-
+// 绵羊
 let sheep1 = {
-  url: new URL(
-    "@public/gltf/sheep-test_non-commercial/scene.gltf",
-    import.meta.url
-  ), //模型的url
-  visible: true, //模型是否可见
-  translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-  rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-  scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-  animation: true, //是否开启动画
-  loop: true, //是否开启动画循环
-  speed: 1, //动画速度倍数
-  fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-  anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-  shadow: true, //是否开启阴影
-  bloom: true, //是否开启泛光
-  shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-  modelHeight: 70,
-  rotationZ: 90
+  id: buildUUID(),
+  cursor: "pointer",
+  symbol: {
+    url: new URL(
+      "@public/gltf/sheep-test_non-commercial/scene.gltf",
+      import.meta.url
+    ), //模型的url
+    visible: true, //模型是否可见
+    translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+    rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+    scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+    animation: true, //是否开启动画
+    loop: true, //是否开启动画循环
+    speed: 1, //动画速度倍数
+    fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+    anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+    shadow: true, //是否开启阴影
+    bloom: true, //是否开启泛光
+    shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+    modelHeight: 70,
+    rotationZ: 90
+  }
 };
-
+// 绵羊2
 let sheep2 = {
-  url: new URL(
-    "@public/gltf/sheep-test_non-commercial/scene.gltf",
-    import.meta.url
-  ), //模型的url
-  visible: true, //模型是否可见
-  translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-  rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-  scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-  animation: true, //是否开启动画
-  loop: true, //是否开启动画循环
-  speed: 1, //动画速度倍数
-  fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-  anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-  shadow: true, //是否开启阴影
-  bloom: true, //是否开启泛光
-  shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-  modelHeight: 70,
-  rotationZ: 240
+  id: buildUUID(),
+  cursor: "pointer",
+  symbol: {
+    url: new URL(
+      "@public/gltf/sheep-test_non-commercial/scene.gltf",
+      import.meta.url
+    ), //模型的url
+    visible: true, //模型是否可见
+    translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+    rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+    scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+    animation: true, //是否开启动画
+    loop: true, //是否开启动画循环
+    speed: 1, //动画速度倍数
+    fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+    anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+    shadow: true, //是否开启阴影
+    bloom: true, //是否开启泛光
+    shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+    modelHeight: 70,
+    rotationZ: 240
+  }
 };
-
+// 绵羊3
 let sheep3 = {
-  url: new URL(
-    "@public/gltf/sheep-test_non-commercial/scene.gltf",
-    import.meta.url
-  ), //模型的url
-  visible: true, //模型是否可见
-  translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-  rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-  scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-  animation: true, //是否开启动画
-  loop: true, //是否开启动画循环
-  speed: 1, //动画速度倍数
-  fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-  anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-  shadow: true, //是否开启阴影
-  bloom: true, //是否开启泛光
-  shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-  modelHeight: 70,
-  rotationZ: 30
+  id: buildUUID(),
+  cursor: "pointer",
+  symbol: {
+    url: new URL(
+      "@public/gltf/sheep-test_non-commercial/scene.gltf",
+      import.meta.url
+    ), //模型的url
+    visible: true, //模型是否可见
+    translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+    rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+    scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+    animation: true, //是否开启动画
+    loop: true, //是否开启动画循环
+    speed: 1, //动画速度倍数
+    fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+    anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+    shadow: true, //是否开启阴影
+    bloom: true, //是否开启泛光
+    shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+    modelHeight: 70,
+    rotationZ: 30
+  }
 };
-
+// 获取加载好的地图对象
 function getMap(e) {
   map = e;
   loading.value = false;
 }
-
+// 设置自定义弹窗样式内容
 let cowContent =
   '<div class="infocontent" ref="infoWindowRef">' +
   '<div class="infopop_title">牛只信息</div>' +

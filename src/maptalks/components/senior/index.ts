@@ -8,7 +8,4 @@ function install(app: App) {
 
 export default install;
 
-export {
-  install,
-  MtRouterPlayer
-};
+export { install, MtRouterPlayer };

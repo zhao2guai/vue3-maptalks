@@ -135,12 +135,11 @@ let sceneConfig = {
 };
 // 文字边界图层配置
 let vectorOptions = {
-  enableAltitude: true,
-  altitudeProperty: "altitude", // altitude property in properties, default by 'altitude'
+  // enableAltitude: true,
+  // altitudeProperty: "altitude", // altitude property in properties, default by 'altitude'
   geometryEvents: false,
   collisionDelay: 250,
   collisionBufferSize: 6,
-  // zIndex: 99,
   collision: false
 };
 // THREE图层配置信息
@@ -235,6 +234,7 @@ async function addPolygons(layer) {
     // console.log(data);
     // 将查询到的geojson数据赋值给全局属性
     geojsonData.value = data;
+    // 将geojson数据转为geometry对象并提取每个区划的面信息赋值给polygons数组
     const polygons = GeoJSON.toGeometry(geojsonData.value);
     const extrudePolygons = polygons.map(p => {
       const { value } = p.getProperties();
@@ -259,14 +259,14 @@ async function addPolygons(layer) {
     // console.log(meshes);
     // 判断材质数据
     if (layer && meshes.length > 0) {
-      meshes.forEach(item => {
+      meshes.forEach(m => {
         // 外层场景环境材质不删除，奇遇没UUID的业务相关的全删
-        if (item.uuid == "light1" || item.uuid == "light2") {
+        if (m.uuid == "light1" || m.uuid == "light2") {
           // 获取场景并重新添加
           let scene = layer.getScene();
-          scene.add(item);
+          scene.add(m);
         } else {
-          layer.removeMesh(item);
+          layer.removeMesh(m);
         }
       });
     }
@@ -321,6 +321,7 @@ function addLabels() {
 }
 // 鼠标挪入挪出事件
 function mouseEventFunc(e) {
+  console.log(e);
   const polygon = e.target;
   if (e.type === "mouseover") {
     if (!polygon._oldSymbol) {

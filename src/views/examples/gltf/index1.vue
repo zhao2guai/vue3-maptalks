@@ -1,6 +1,6 @@
 <template>
   <div id="gltf2" v-loading="loading" class="map-content">
-    <mt-init-map :options="options" @getMap="getMap">
+    <mt-init-map :options="mapOptions" @getMap="getMap">
       <mt-group-gl-layer :sceneConfig="defaultSceneConfig">
         <mt-gltf-layer>
           <mt-gltf-maker
@@ -8,8 +8,8 @@
             :id="item.id"
             :key="index"
             :ref="el => setPointRef(el, index)"
-            :point="item.point"
-            :symbol="item.symbol"
+            :coordinates="item.coordinates"
+            :options="item.options"
             :content="item.content"
             @click="changeMaker(item, index)"
           />
@@ -19,15 +19,14 @@
   </div>
 </template>
 <script setup>
-import { title } from "process";
-import { ref, onMounted, onBeforeUnmount, reactive } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 
 const loading = ref(true);
 
 let map = null;
 
 // 设置默认地图配置
-let options = {
+let mapOptions = {
   center: [81.868822, 44.940405], // 博乐市小营盘镇
   zoom: 16,
   spatialReference: {
@@ -94,26 +93,29 @@ let defaultSceneConfig = {
 // 模型数组
 let makerList = [
   {
-    id: 10,
     name: "厂房",
-    point: [81.868822, 44.945405],
-    symbol: {
-      url: new URL("@public/gltf/farm/scene.gltf", import.meta.url), //模型的url
-      visible: true, //模型是否可见
-      translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-      rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-      scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-      animation: true, //是否开启动画
-      loop: true, //是否开启动画循环
-      speed: 1, //动画速度倍数
-      fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-      anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-      shadow: true, //是否开启阴影
-      bloom: true, //是否开启泛光
-      shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-      modelHeight: 300,
-      translationZ: 125,
-      rotationZ: 180
+    coordinates: [81.868822, 44.945405],
+    options: {
+      id: 10,
+      cursor: "pointer",
+      symbol: {
+        url: new URL("@public/gltf/farm/scene.gltf", import.meta.url), //模型的url
+        visible: true, //模型是否可见
+        translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+        rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+        scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+        animation: true, //是否开启动画
+        loop: true, //是否开启动画循环
+        speed: 1, //动画速度倍数
+        fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+        anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+        shadow: true, //是否开启阴影
+        bloom: true, //是否开启泛光
+        shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+        modelHeight: 300,
+        translationZ: 125,
+        rotationZ: 180
+      }
     },
     content:
       '<div class="infocontent" ref="infoWindowRef">' +
@@ -126,25 +128,28 @@ let makerList = [
       "</div>"
   },
   {
-    id: 11,
     name: "摄像头监测设备",
-    point: [81.863822, 44.940405],
-    symbol: {
-      url: new URL("@public/gltf/equipment/01.gltf", import.meta.url), //模型的url
-      visible: true, //模型是否可见
-      translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-      rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-      scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-      animation: true, //是否开启动画
-      loop: true, //是否开启动画循环
-      speed: 1, //动画速度倍数
-      fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-      anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-      shadow: true, //是否开启阴影
-      bloom: true, //是否开启泛光
-      shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-      modelHeight: 240,
-      translationZ: -120
+    coordinates: [81.863822, 44.940405],
+    options: {
+      id: 11,
+      cursor: "pointer",
+      symbol: {
+        url: new URL("@public/gltf/equipment/01.gltf", import.meta.url), //模型的url
+        visible: true, //模型是否可见
+        translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+        rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+        scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+        animation: true, //是否开启动画
+        loop: true, //是否开启动画循环
+        speed: 1, //动画速度倍数
+        fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+        anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+        shadow: true, //是否开启阴影
+        bloom: true, //是否开启泛光
+        shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+        modelHeight: 240,
+        translationZ: -120
+      }
     },
     content:
       '<div class="infocontent" ref="infoWindowRef">' +
@@ -156,25 +161,28 @@ let makerList = [
       "</div>"
   },
   {
-    id: 12,
     name: "气象监测设备",
-    point: [81.873822, 44.940405],
-    symbol: {
-      url: new URL("@public/gltf/equipment/02.gltf", import.meta.url), //模型的url
-      visible: true, //模型是否可见
-      translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-      rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-      scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-      animation: true, //是否开启动画
-      loop: true, //是否开启动画循环
-      speed: 1, //动画速度倍数
-      fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-      anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-      shadow: true, //是否开启阴影
-      bloom: true, //是否开启泛光
-      shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-      modelHeight: 240,
-      translationZ: -120
+    coordinates: [81.873822, 44.940405],
+    options: {
+      id: 12,
+      cursor: "pointer",
+      symbol: {
+        url: new URL("@public/gltf/equipment/02.gltf", import.meta.url), //模型的url
+        visible: true, //模型是否可见
+        translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+        rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+        scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+        animation: true, //是否开启动画
+        loop: true, //是否开启动画循环
+        speed: 1, //动画速度倍数
+        fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+        anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+        shadow: true, //是否开启阴影
+        bloom: true, //是否开启泛光
+        shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+        modelHeight: 240,
+        translationZ: -120
+      }
     },
     content:
       '<div class="infocontent" ref="infoWindowRef">' +
@@ -186,25 +194,28 @@ let makerList = [
       "</div>"
   },
   {
-    id: 13,
     name: "虫情设备",
-    point: [81.863822, 44.950405],
-    symbol: {
-      url: new URL("@public/gltf/equipment/02.gltf", import.meta.url), //模型的url
-      visible: true, //模型是否可见
-      translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-      rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-      scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-      animation: true, //是否开启动画
-      loop: true, //是否开启动画循环
-      speed: 1, //动画速度倍数
-      fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-      anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-      shadow: true, //是否开启阴影
-      bloom: true, //是否开启泛光
-      shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-      modelHeight: 240,
-      translationZ: -120
+    coordinates: [81.863822, 44.950405],
+    options: {
+      id: 13,
+      cursor: "pointer",
+      symbol: {
+        url: new URL("@public/gltf/equipment/02.gltf", import.meta.url), //模型的url
+        visible: true, //模型是否可见
+        translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+        rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+        scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+        animation: true, //是否开启动画
+        loop: true, //是否开启动画循环
+        speed: 1, //动画速度倍数
+        fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+        anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+        shadow: true, //是否开启阴影
+        bloom: true, //是否开启泛光
+        shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+        modelHeight: 240,
+        translationZ: -120
+      }
     },
     content:
       '<div class="infocontent" ref="infoWindowRef">' +
@@ -216,25 +227,28 @@ let makerList = [
       "</div>"
   },
   {
-    id: 14,
     name: "水肥一体机",
-    point: [81.873822, 44.950405],
-    symbol: {
-      url: new URL("@public/gltf/equipment/04.gltf", import.meta.url), //模型的url
-      visible: true, //模型是否可见
-      translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-      rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-      scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-      animation: true, //是否开启动画
-      loop: true, //是否开启动画循环
-      speed: 1, //动画速度倍数
-      fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-      anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-      shadow: true, //是否开启阴影
-      bloom: true, //是否开启泛光
-      shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-      modelHeight: 240,
-      translationZ: -120
+    coordinates: [81.873822, 44.950405],
+    options: {
+      id: 14,
+      cursor: "pointer",
+      symbol: {
+        url: new URL("@public/gltf/equipment/04.gltf", import.meta.url), //模型的url
+        visible: true, //模型是否可见
+        translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+        rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+        scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+        animation: true, //是否开启动画
+        loop: true, //是否开启动画循环
+        speed: 1, //动画速度倍数
+        fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+        anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+        shadow: true, //是否开启阴影
+        bloom: true, //是否开启泛光
+        shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+        modelHeight: 240,
+        translationZ: -120
+      }
     },
     content:
       '<div class="infocontent" ref="infoWindowRef">' +

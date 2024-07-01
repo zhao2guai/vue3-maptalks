@@ -73,8 +73,9 @@ let sceneConfig = {
 };
 // 图层配置信息
 let layerOptions = {
-  loadingLimit: 3,
-  loadingLimitOnInteracting: 3,
+  maxGPUMemory: 512, //最大缓存数，单位 M bytes
+  // loadingLimitOnInteracting : 3, //地图交互过程中瓦片请求最大数量
+  // loadingLimit : 3, //瓦片请求最大数量
   services: [
     {
       url: "http://resource.dvgis.cn/data/3dtiles/dayanta/tileset.json",
@@ -98,7 +99,7 @@ function loadtileset(e) {
   if (!geo3dRef.value) return;
   const layer = geo3dRef.value.geo3DTilesLayer;
   // 设置layer mask
-  layer.setMask(mask);
+  // layer.setMask(mask);
   const extent = layer.getExtent(e.index);
   map.fitExtent(extent, 0, {
     animation: false

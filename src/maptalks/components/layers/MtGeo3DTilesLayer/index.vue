@@ -15,8 +15,11 @@ import {
 } from "vue";
 import { buildUUID } from "@pureadmin/utils";
 import { Geo3DTilesLayer } from "@maptalks/gl-layers";
+// 可选的draco插件
 import "@maptalks/transcoders.draco";
+// 可选的crn纹理解析插件
 import "@maptalks/transcoders.crn";
+// 可选的ktx2纹理解析插件
 import "@maptalks/transcoders.ktx2";
 
 export default defineComponent({
@@ -32,7 +35,12 @@ export default defineComponent({
     // Geo3D图层配置
     options: {
       type: Object,
-      default: () => ({})
+      default: () => ({
+        maxGPUMemory: 512, //最大缓存数，单位 M bytes
+        // loadingLimitOnInteracting : 1, //地图交互过程中瓦片请求最大数量
+        // loadingLimit : 0, //瓦片请求最大数量
+        services: []
+      })
     }
   },
 
