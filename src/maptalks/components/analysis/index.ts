@@ -11,8 +11,4 @@ function install(app: App) {
 
 export default install;
 
-export {
-  install,
-  MtViewshedAnalysis,
-  DrawTool
-};
+export { install, MtViewshedAnalysis, DrawTool };

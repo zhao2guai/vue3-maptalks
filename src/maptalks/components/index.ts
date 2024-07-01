@@ -15,7 +15,7 @@ import * as Layers from "./layers";
 // 模型类组件
 import * as GLTF from "./gltf";
 // maptalks高级功能及其组件
-import * as MtPlugin from "./senior";
+import * as MtPlugin from "./others";
 // 地图分析插件
 import * as MtAnalysis from "./analysis";
 
