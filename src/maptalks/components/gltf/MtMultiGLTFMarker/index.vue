@@ -258,6 +258,7 @@ export default defineComponent({
     // 移除地图gltf三维模型绘制图层
     const removeAll = () => {
       if (multiGLTFMarker) {
+        close();
         multiGLTFMarker.remove();
         multiGLTFMarker = undefined;
       }

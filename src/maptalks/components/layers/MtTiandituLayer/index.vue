@@ -19,7 +19,7 @@ export default defineComponent({
   props: {
     // tile图层id
     id: {
-      type: String,
+      type: [String, Number],
       default: ""
     },
     // 天地图密匙
@@ -161,9 +161,9 @@ export default defineComponent({
         groupGLLayer.addLayer(tileLayer);
         return;
       }
-      // 再次判断图层组
+      // 再次判断瓦片图层组的情况
       const groupTileLayer = inject("groupTileLayer", null);
-      if (groupTileLayer) {
+      if (groupTileLayer && groupTileLayer.isLoaded()) {
         let layers = groupTileLayer.getLayers();
         layers.push(tileLayer);
         groupTileLayer.addLayer(layers);
@@ -175,6 +175,16 @@ export default defineComponent({
       // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
       if (map && map.isLoaded()) {
         tileLayer.addTo(map);
+        return;
+      }
+      // 获取上级组件是否是BaseLayer
+      let baseLayer = inject("baseLayer", null);
+      // 若是存在底图图层还要判断里面是否有其他的图层，因为底图中只能放一个
+      if (map && baseLayer) {
+        // 若是底图中已有其他图层则返回
+        if (!map.getBaseLayer()) map.setBaseLayer(tileLayer);
+        return;
+      } else {
         return;
       }
     };

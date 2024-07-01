@@ -16,12 +16,12 @@ export default defineComponent({
   /** 初始化图层组件 */
   name: "mt-group-tile-layer",
   props: {
-    // tile图层id
+    // 图层组id
     id: {
-      type: String,
+      type: [String, Number],
       default: ""
     },
-    // 服务配置信息
+    // 图层组配置信息
     options: {
       type: Object,
       default: () => ({
@@ -97,6 +97,16 @@ export default defineComponent({
         groupTileLayer.addTo(map);
         return;
       }
+      // 获取上级组件是否是BaseLayer
+      let baseLayer = inject("baseLayer", null);
+      // 若是存在底图图层还要判断里面是否有其他的图层，因为底图中只能放一个
+      if (map && baseLayer) {
+        // 若是底图中已有其他图层则返回
+        if (!map.getBaseLayer()) map.setBaseLayer(groupTileLayer);
+        return;
+      } else {
+        return;
+      }
     };
 
     // 初始化图层事件
@@ -156,6 +166,7 @@ export default defineComponent({
     const removeAll = () => {
       // 删除图层和地图对象
       if (groupTileLayer) {
+        groupTileLayer.clearLayers();
         groupTileLayer.remove();
         groupTileLayer = undefined;
       }

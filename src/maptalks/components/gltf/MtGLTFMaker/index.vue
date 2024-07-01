@@ -57,10 +57,7 @@ export default defineComponent({
 
   setup(props, context) {
     // 获取坐标位置
-    let coordinates =
-      props.coordinates && props.coordinates.length === 2
-        ? props.coordinates
-        : [0, 0];
+    let coordinates = props.coordinates ? props.coordinates : [0, 0];
     // 初始化gltf三维模型绘制图层
     let gltfMarker = new GLTFMarker(coordinates, props.options);
     // 设置弹窗内容
@@ -118,7 +115,7 @@ export default defineComponent({
       // 判断更多图层...
       const gltfLayer = inject("gltfLayer", null);
       // 若是GLTF图层存在则添加到它里面
-      if (gltfLayer) {
+      if (gltfLayer && gltfMarker) {
         gltfLayer.addGeometry(gltfMarker);
         return;
       }
@@ -234,6 +231,7 @@ export default defineComponent({
     // 移除地图gltf三维模型绘制图层
     const removeAll = () => {
       if (gltfMarker) {
+        close();
         gltfMarker.remove();
         gltfMarker = undefined;
       }

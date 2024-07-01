@@ -231,7 +231,6 @@ let makerList = [
     coordinates: [81.873822, 44.950405],
     options: {
       id: 14,
-      cursor: "pointer",
       symbol: {
         url: new URL("@public/gltf/equipment/04.gltf", import.meta.url), //模型的url
         visible: true, //模型是否可见

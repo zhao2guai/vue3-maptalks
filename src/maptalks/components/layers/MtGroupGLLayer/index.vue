@@ -19,7 +19,7 @@ export default defineComponent({
   props: {
     // GL图层id
     id: {
-      type: String,
+      type: [String, Number],
       default: "group"
     },
     // 地形开关

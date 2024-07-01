@@ -29,19 +29,19 @@ export default {
     },
     {
       path: "/basic/map3",
-      name: "开放街道图",
+      name: "单个底图组件示例",
       component: () => import("@/views/examples/basic/map3.vue"),
       meta: {
-        title: "开放街道图",
+        title: "单个底图组件示例",
         hiddenTag: true
       }
     },
     {
       path: "/basic/map4",
-      name: "开放街道图(暗黑)",
+      name: "多个底图组件示例",
       component: () => import("@/views/examples/basic/map4.vue"),
       meta: {
-        title: "开放街道图(暗黑)",
+        title: "多个底图组件示例",
         hiddenTag: true
       }
     }

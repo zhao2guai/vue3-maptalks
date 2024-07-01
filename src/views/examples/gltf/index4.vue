@@ -301,7 +301,7 @@ onBeforeUnmount(() => {
 </style>
 
 <style lang="scss">
-#gltf3 {
+#gltf4 {
   .infocontent {
     color: #fff;
     width: 20vw;

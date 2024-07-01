@@ -34,7 +34,7 @@ export default defineComponent({
   props: {
     // 绑定地图dom的id
     container: {
-      type: String,
+      type: [String, Number],
       default: "mapId"
     },
     // 地图配置

@@ -7,12 +7,15 @@
  */
 import type { App } from "vue";
 import MtInitMap from "./MtInitMap/index.vue";
+import MtBaseLayer from "./MtBaseLayer/index.vue";
 
 function install(app: App) {
   // 初始化地图组件
   app.component("mt-init-map", MtInitMap);
+  // 初始化底图组件
+  app.component("mt-base-layer", MtBaseLayer);
 }
 
 export default install;
 
-export { install, MtInitMap };
+export { install, MtInitMap, MtBaseLayer };

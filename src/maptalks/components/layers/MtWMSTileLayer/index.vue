@@ -23,7 +23,7 @@ export default defineComponent({
   props: {
     // 服务图层id
     id: {
-      type: String,
+      type: [String, Number],
       default: ""
     },
     // 服务配置信息
@@ -138,7 +138,7 @@ export default defineComponent({
       }
       // 再次判断图层组
       const groupTileLayer = inject("groupTileLayer", null);
-      if (groupTileLayer) {
+      if (groupTileLayer && groupTileLayer.isLoaded()) {
         let layers = groupTileLayer.getLayers();
         layers.push(wmsLayer);
         groupTileLayer.addLayer(layers);
