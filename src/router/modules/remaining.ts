@@ -39,7 +39,7 @@ export default [
     }
   },
   {
-    path: "/tdt-img",
+    path: "/examples/tdt-img",
     name: "天地图-影像",
     component: () => import("@/views/examples/basic/map1.vue"),
     meta: {
@@ -49,7 +49,7 @@ export default [
     }
   },
   {
-    path: "/dark-blue",
+    path: "/examples/dark-blue",
     name: "天地图-深蓝",
     component: () => import("@/views/examples/basic/map2.vue"),
     meta: {
@@ -59,7 +59,7 @@ export default [
     }
   },
   {
-    path: "/xzqh-62",
+    path: "/examples/xzqh-62",
     name: "分层设色(甘肃省)",
     component: () => import("@/views/examples/3d/index1.vue"),
     meta: {
@@ -69,7 +69,7 @@ export default [
     }
   },
   {
-    path: "/xzqh-65",
+    path: "/examples/xzqh-65",
     name: "分层设色(新疆)",
     component: () => import("@/views/examples/3d/index4.vue"),
     meta: {

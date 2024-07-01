@@ -1,5 +1,7 @@
 <template>
-  <div v-if="false" />
+  <div>
+    <slot />
+  </div>
 </template>
 
 <script>
@@ -13,12 +15,6 @@ import {
 } from "vue";
 import { buildUUID } from "@pureadmin/utils";
 import { GLTFLayer } from "@maptalks/gl-layers";
-// 可选的draco插件
-import "@maptalks/transcoders.draco";
-// 可选的crn纹理解析插件
-import "@maptalks/transcoders.crn";
-// 可选的ktx2纹理解析插件
-import "@maptalks/transcoders.ktx2";
 
 export default defineComponent({
   /** 初始化模型图层组件 */

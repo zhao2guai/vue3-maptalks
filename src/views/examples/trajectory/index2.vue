@@ -3,20 +3,20 @@
     <!-- 地图部分 -->
     <div class="map-div" :style="{ width: mapDivWidth + '%' }">
       <mt-init-map :options="options" @getMap="getMap">
-        <mt-group-gl-layer>
+        <mt-group-gl-layer :sceneConfig="defaultSceneConfig">
+          <mt-tianditu-layer
+            tk="ec89e7ba91633b147f76d47e08f9f1a1"
+            layerType="img"
+          />
           <mt-gltf-layer>
             <mt-gltf-maker
               ref="gltfMakerRef"
               :coordinates="point"
               :options="gltfOptions"
-              :content="content"
-              @load="makerLoad"
+              :infoWindow="infoWindow"
+              @add="makerLoad"
             />
           </mt-gltf-layer>
-          <mt-tianditu-layer
-            tk="ec89e7ba91633b147f76d47e08f9f1a1"
-            layerType="img"
-          />
           <mt-line-string-layer
             ref="lineLayerRef"
             @layerCreated="getLineStringLayer"
@@ -154,10 +154,62 @@ let options = {
     projection: "EPSG:4326"
   },
   minZoom: 1,
-  maxZoom: 20,
+  maxZoom: 22,
   bearing: -15.299999999999274,
   pitch: 72.0000000000002
-  // baseLayer: TileLayer("base", {})
+};
+// 设置默认场景配置信息
+let defaultSceneConfig = {
+  environment: {
+    enable: true,
+    mode: 1,
+    level: 0,
+    brightness: 0
+  },
+  shadow: {
+    type: "esm",
+    enable: true,
+    quality: "high",
+    opacity: 0.11,
+    color: [0, 0, 0],
+    blurOffset: 1
+  },
+  ground: {
+    enable: true,
+    renderPlugin: {
+      type: "fill"
+    },
+    symbol: {
+      polygonFill: [0.517647, 0.517647, 0.517647, 1]
+    }
+  },
+  postProcess: {
+    enable: false,
+    antialias: {
+      enable: true,
+      taa: true,
+      jitterRatio: 0.25
+    },
+    ssr: {
+      enable: true
+    },
+    bloom: {
+      enable: true,
+      threshold: 0,
+      factor: 0.2,
+      radius: 0.105
+    },
+    ssao: {
+      enable: true,
+      bias: 0.08,
+      radius: 0.08,
+      intensity: 1.5
+    },
+    sharpen: {
+      enable: false,
+      factor: 0.2
+    }
+  }
 };
 // 跟页面样式和右侧操作模块有关的变量
 let mapDivWidth = ref(80);
@@ -320,7 +372,7 @@ let coordinates = ref([
   [120.6465155185075, 31.370868523138512]
 ]);
 // 模型点坐标
-let point = ref([]);
+let point = ref([120.543189862389, 31.35322014824814]);
 // 模型对象
 let currentModel = ref(null);
 let linestring = ref(null);
@@ -349,13 +401,16 @@ let gltfOptions = reactive({
   }
 });
 // 弹窗样式内容
-let content =
-  '<div class="infocontent" ref="infoWindowRef">' +
-  '<div class="infopop_title">1号拖拉机</div>' +
-  '<div class="infopop_title">拖拉机编号: A103JHR89Y20</div>' +
-  '<div class="infopop_title">已作业面积（亩）: 2</div>' +
-  '<div class="infopop_title">已作业时间（小时）: 1.5</div>' +
-  "</div>";
+let infoWindow = {
+  custom: true,
+  content:
+    '<div class="infocontent" ref="infoWindowRef">' +
+    '<div class="infopop_title">1号拖拉机</div>' +
+    '<div class="infopop_title">拖拉机编号: A103JHR89Y20</div>' +
+    '<div class="infopop_title">已作业面积（亩）: 2</div>' +
+    '<div class="infopop_title">已作业时间（小时）: 1.5</div>' +
+    "</div>"
+};
 
 function getMap(e) {
   map = e;
@@ -437,11 +492,11 @@ function playingFun(e) {
 
 function changeModel(val) {
   if (val === "拖拉机1") {
-    gltfSymbol.url = tljList[0].modelurl;
+    gltfOptions.symbol.url = tljList[0].modelurl;
   } else if (val === "拖拉机2") {
-    gltfSymbol.url = tljList[1].modelurl;
+    gltfOptions.symbol.url = tljList[1].modelurl;
   } else {
-    gltfSymbol.url = tljList[2].modelurl;
+    gltfOptions.symbol.url = tljList[2].modelurl;
   }
 }
 

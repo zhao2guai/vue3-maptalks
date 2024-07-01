@@ -49,9 +49,14 @@ export default defineComponent({
       })
     },
     // 弹框HTML内容
-    content: {
-      type: String,
-      default: ""
+    infoWindow: {
+      type: Object,
+      default: () => ({
+        // title: "GLTFMarker InfoWindow",
+        // autoOpenOn: "", // 解除click绑定
+        custom: true,
+        content: ""
+      })
     }
   },
 
@@ -60,12 +65,10 @@ export default defineComponent({
     let coordinates = props.coordinates ? props.coordinates : [0, 0];
     // 初始化gltf三维模型绘制图层
     let gltfLineString = new GLTFLineString(coordinates, props.options);
+    // 获取弹窗配置
+    let infoWindow = props.infoWindow ? props.infoWindow : {};
     // 设置弹窗内容
-    gltfLineString.setInfoWindow({
-      // autoOpenOn: "", // 解除click绑定
-      custom: true,
-      content: props.content
-    });
+    gltfMarker.setInfoWindow(infoWindow);
     // 注入gltfLineString对象，以便其他组件获取并使用它。
     provide("gltfLineString", gltfLineString);
 

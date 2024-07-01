@@ -2,24 +2,24 @@
   <div id="gltf2" v-loading="loading" class="map-content">
     <mt-init-map :options="options" @getMap="getMap">
       <mt-group-gl-layer :sceneConfig="defaultSceneConfig">
-        <mt-gltf-layer>
+        <mt-gltf-layer @layerCreated="layerCreated">
           <mt-gltf-maker
             ref="camera1"
             :coordinates="[81.863822, 44.940405]"
             :options="symbol1"
-            :content="content"
+            :infoWindow="infoWindow1"
           />
           <mt-gltf-maker
             ref="camera2"
             :coordinates="[81.873822, 44.940405]"
             :options="symbol2"
-            :content="content"
+            :infoWindow="infoWindow2"
           />
           <mt-gltf-maker
             ref="camera3"
             :coordinates="[81.868822, 44.945405]"
             :options="symbol3"
-            :content="content2"
+            :infoWindow="infoWindow3"
           />
         </mt-gltf-layer>
       </mt-group-gl-layer>
@@ -33,7 +33,7 @@ import { ref, onMounted, onBeforeUnmount } from "vue";
 const loading = ref(true);
 
 let map = null;
-
+let gltfLayer = ref(undefined);
 // 设置默认地图配置
 let options = {
   center: [81.868822, 44.940405], // 博乐市小营盘镇
@@ -165,29 +165,53 @@ let symbol3 = {
     translationZ: -120
   }
 };
-// 自定义弹窗内容
-let content =
-  '<div class="infocontent" ref="infoWindowRef">' +
-  '<i class="info-close"/>' +
-  '<div class="infopop_title">这是一个摄像头</div>' +
-  '<div class="infopop_time">当前时间: ' +
-  new Date().toLocaleTimeString() +
-  "</div><br>" +
-  "</div>";
+// 自定义弹窗内容1
+let infoWindow1 = {
+  custom: true,
+  content:
+    '<div class="info-content" ref="infoWindowRef">' +
+    '<i class="info-close"/>' +
+    '<div class="infopop-title">这是一个摄像头（枪机）</div>' +
+    '<div class="infopop-time">当前时间: ' +
+    new Date().toLocaleTimeString() +
+    "</div><br>" +
+    "</div>"
+};
 
-// 自定义弹窗内容
-let content2 =
-  '<div class="infocontent" ref="infoWindowRef">' +
-  '<div class="infopop_title">青年牛2号圈舍</div>' +
-  '<div class="infopop_title">圈舍编号: A103JHR89Y20</div>' +
-  '<div class="infopop_title">圈舍容量: 30 (头)</div>' +
-  '<div class="infopop_title">圈舍负责任: 林星宇</div>' +
-  '<div class="infopop_dept">=> 点击进入 <=' +
-  "</div>";
+// 自定义弹窗内容2
+let infoWindow2 = {
+  custom: true,
+  content:
+    '<div class="info-content" ref="infoWindowRef">' +
+    '<i class="info-close"/>' +
+    '<div class="infopop-title">这是一个摄像头（球机）</div>' +
+    '<div class="infopop-time">当前时间: ' +
+    new Date().toLocaleTimeString() +
+    "</div><br>" +
+    "</div>"
+};
+
+// 自定义弹窗内容3
+let infoWindow3 = {
+  title: "青年牛2号圈舍",
+  content:
+    '<div class="info-content-none" ref="infoWindowRef">' +
+    '<div class="infopop-text">圈舍编号: A103JHR89Y20</div>' +
+    '<div class="infopop-text">圈舍容量: 30 (头)</div>' +
+    '<div class="infopop-text">圈舍剩余: 8 (头)</div>' +
+    '<div class="infopop-text">圈舍负责任: 林星宇</div>' +
+    '<div class="infopop-dept">=> 点击进入 <=' +
+    "</div>"
+};
 
 function getMap(e) {
   map = e;
   loading.value = false;
+}
+
+function layerCreated(e) {
+  gltfLayer.value = e;
+  console.log("模型图层创建完成！");
 }
 
 onMounted(() => {});
@@ -211,14 +235,21 @@ onBeforeUnmount(() => {
 
 <style lang="scss">
 #gltf2 {
-  .infocontent {
+  .info-content {
     color: #fff;
     width: 20vw;
     height: 20vh;
     background-color: #051127;
     border: 1px solid #0c2c45;
   }
-  .infopop_title {
+  .info-content-none {
+    color: #fff;
+    width: 20vw;
+    height: 20vh;
+    background-color: none;
+    border: 1px solid #0c2c45;
+  }
+  .infopop-title {
     float: left;
     padding-left: 10px;
     width: 100%;
@@ -228,20 +259,29 @@ onBeforeUnmount(() => {
     font-weight: bold;
     font-size: 16px;
   }
-  .infopop_time {
+  .infopop-time {
     width: 100%;
     height: 30px;
     margin: 0 10px;
     line-height: 36px;
   }
-  .infopop_dept {
+  .infopop-text {
+    float: left;
+    padding-left: 10px;
+    width: 100%;
+    height: 36px;
+    line-height: 36px;
+    font-weight: bold;
+    font-size: 16px;
+    color: darkgreen;
+  }
+  .infopop-dept {
     padding: 5px;
-    line-height: 15px;
-    border: 1px solid #192b41;
-    position: absolute;
+    line-height: 32px;
     bottom: 1vh;
     width: 100%;
     text-align: center;
+    color: darkgreen;
   }
 }
 </style>

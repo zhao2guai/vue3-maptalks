@@ -22,7 +22,7 @@ export default defineComponent({
     // 坐标
     coordinates: {
       type: Array,
-      default: () => []
+      default: () => [0, 0]
     },
     // gltf配置
     options: {
@@ -49,9 +49,14 @@ export default defineComponent({
       })
     },
     // 弹框HTML内容
-    content: {
-      type: String,
-      default: ""
+    infoWindow: {
+      type: Object,
+      default: () => ({
+        // title: "GLTFMarker InfoWindow",
+        // autoOpenOn: "", // 解除click绑定
+        custom: true,
+        content: ""
+      })
     }
   },
 
@@ -60,12 +65,10 @@ export default defineComponent({
     let coordinates = props.coordinates ? props.coordinates : [0, 0];
     // 初始化gltf三维模型绘制图层
     let gltfMarker = new GLTFMarker(coordinates, props.options);
+    // 获取弹窗配置
+    let infoWindow = props.infoWindow ? props.infoWindow : {};
     // 设置弹窗内容
-    gltfMarker.setInfoWindow({
-      // autoOpenOn: "", // 解除click绑定
-      custom: true,
-      content: props.content
-    });
+    gltfMarker.setInfoWindow(infoWindow);
     // 注入GLTFMarker对象，以便其他组件获取并使用它。
     provide("gltfMarker", gltfMarker);
 
@@ -93,7 +96,7 @@ export default defineComponent({
 
     // 页面加载后执行
     onBeforeMount(() => {
-      addGLTFMakerToGLTFLayer();
+      addGLTFMaker();
       initEvents();
     });
 
@@ -103,7 +106,7 @@ export default defineComponent({
     });
 
     // 将gltfMaker点添加到gltflayer中
-    const addGLTFMakerToGLTFLayer = () => {
+    const addGLTFMaker = () => {
       // 获取map对象
       let maptalks = inject("maptalks", null);
       let map = maptalks.value;

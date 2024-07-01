@@ -1,21 +1,21 @@
 <template>
-  <div v-loading="loading" id="trajectoryId" class="map-content">
+  <div id="trajectoryId" v-loading="loading" class="map-content">
     <!-- 地图部分 -->
     <div class="map-div" :style="{ width: mapDivWidth + '%' }">
-      <mt-init-map @getMap="getMap" :options="options">
-        <mt-group-gl-layer>
+      <mt-init-map :options="options" @getMap="getMap">
+        <mt-group-gl-layer :sceneConfig="defaultSceneConfig">
           <mt-gltf-layer>
             <mt-gltf-maker
               ref="gltfMakerRef"
-              :point="point"
-              :symbol="gltfSymbol"
-              :content="content"
-            ></mt-gltf-maker>
+              :coordinates="point"
+              :options="gltfSymbol"
+              :infoWindow="infoWindow"
+            />
           </mt-gltf-layer>
           <mt-line-string-layer
             ref="lineLayerRef"
             @layerCreated="getLineStringLayer"
-          ></mt-line-string-layer>
+          />
           <mt-tianditu-layer
             tk="ec89e7ba91633b147f76d47e08f9f1a1"
             layerType="img"
@@ -28,7 +28,7 @@
         :options="routePlayerOptions"
         @routePlayerCreated="getRoutePlayerCreated"
         @playing="playingFun"
-      ></mt-router-player>
+      />
     </div>
 
     <!-- 操作部分 -->
@@ -37,8 +37,8 @@
       :style="{ width: operationWidth + '%' }"
       :class="[showOperation ? '' : 'hide-operation-div']"
     >
-      <p class="title-style" v-if="showOperation">地图中的操作</p>
-      <el-row style="margin-top: 2vh" v-if="showOperation">
+      <p v-if="showOperation" class="title-style">地图中的操作</p>
+      <el-row v-if="showOperation" style="margin-top: 2vh">
         <el-col :span="24" style="margin-top: 2.5vh">
           <span class="label-style">自动设置中心点：</span
           ><el-switch
@@ -92,10 +92,10 @@
           <el-slider
             v-model="speed"
             style="position: relative; top: -0.5vh"
-            @change="speedChange"
             :min="1"
             :max="20"
-          ></el-slider>
+            @change="speedChange"
+          />
         </el-col>
         <el-col
           :span="24"
@@ -114,8 +114,8 @@
         </el-col>
       </el-row>
       <div class="show-operation-div" @click="isShowOperation">
-        <i class="right-icon" v-if="showOperation"></i>
-        <i class="left-icon" v-else></i>
+        <i v-if="showOperation" class="right-icon" />
+        <i v-else class="left-icon" />
       </div>
     </div>
   </div>
@@ -150,6 +150,72 @@ let routePlayerOptions = reactive({
 });
 
 let map = null;
+// 地图map配置
+let options = {
+  center: [120.543189862389, 31.35322014824814], // 苏州
+  zoom: 17.5,
+  spatialReference: {
+    projection: "EPSG:4326"
+  },
+  minZoom: 1,
+  maxZoom: 20,
+  bearing: -15.299999999999274,
+  pitch: 72.0000000000002
+  // baseLayer: TileLayer("base", {})
+};
+// 设置默认场景配置信息
+let defaultSceneConfig = {
+  environment: {
+    enable: true,
+    mode: 1,
+    level: 0,
+    brightness: 0
+  },
+  shadow: {
+    type: "esm",
+    enable: true,
+    quality: "high",
+    opacity: 0.11,
+    color: [0, 0, 0],
+    blurOffset: 1
+  },
+  ground: {
+    enable: true,
+    renderPlugin: {
+      type: "fill"
+    },
+    symbol: {
+      polygonFill: [0.517647, 0.517647, 0.517647, 1]
+    }
+  },
+  postProcess: {
+    enable: false,
+    antialias: {
+      enable: true,
+      taa: true,
+      jitterRatio: 0.25
+    },
+    ssr: {
+      enable: true
+    },
+    bloom: {
+      enable: true,
+      threshold: 0,
+      factor: 0.2,
+      radius: 0.105
+    },
+    ssao: {
+      enable: true,
+      bias: 0.08,
+      radius: 0.08,
+      intensity: 1.5
+    },
+    sharpen: {
+      enable: false,
+      factor: 0.2
+    }
+  }
+};
 // 轨迹点数据
 let coordinates = ref([
   [120.543189862389, 31.35322014824814],
@@ -268,51 +334,45 @@ let coordinates = ref([
   [120.6465155185075, 31.370868523138512]
 ]);
 // 模型点坐标
-let point = ref([]);
+let point = ref([120.543189862389, 31.35322014824814]);
 // 模型对象
 let currentModel = ref(null);
 let linestring = ref(null);
 let info = ref(null);
 // 模型数据
 let gltfSymbol = reactive({
-  url: new URL("@public/gltf/flying_drone/scene.gltf", import.meta.url), //模型的url
-  visible: true, //模型是否可见
-  translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
-  rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
-  scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
-  animation: true, //是否开启动画
-  loop: true, //是否开启动画循环
-  speed: 1, //动画速度倍数
-  fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
-  anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
-  shadow: true, //是否开启阴影
-  bloom: true, //是否开启泛光
-  shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
-  modelHeight: 30,
-  translationZ: 50,
-  rotationZ: 90
+  id: "makerId",
+  cursor: "pointer",
+  symbol: {
+    url: new URL("@public/gltf/flying_drone/scene.gltf", import.meta.url), //模型的url
+    visible: true, //模型是否可见
+    translationL: [0, 0, 0], //模型在本地坐标系xyz轴上的偏移量
+    rotation: [0, 0, 0], //模型在本地坐标系xyz轴上的旋转角度，单位角度
+    scale: [1, 1, 1], //模型在本地坐标系xyz轴上的缩放倍数
+    animation: true, //是否开启动画
+    loop: true, //是否开启动画循环
+    speed: 1, //动画速度倍数
+    fixSizeOnZoom: -1, //在给定级别上固定模型大小，不再随地图缩放而改变，设置为-1时取消
+    anchorZ: "bottom", //模型在z轴上的锚点或对齐点，可选的值： top， bottom
+    shadow: true, //是否开启阴影
+    bloom: true, //是否开启泛光
+    shader: "pbr", //模型绘制的shader，可选值：pbr, phong, wireframe
+    modelHeight: 30,
+    translationZ: 50,
+    rotationZ: 90
+  }
 });
-let content =
-  '<div class="infocontent" ref="infoWindowRef">' +
-  '<div class="infopop_title">1号无人机</div>' +
-  '<div class="infopop_title">无人机编号: A103JHR89Y20</div>' +
-  '<div class="infopop_title">无人机型号: 经纬 M300 RTK</div>' +
-  '<div class="infopop_title">已巡田面积（亩）: 2</div>' +
-  '<div class="infopop_title">已巡田时间（小时）: 1.5</div>' +
-  "</div>";
-
-// 地图map配置
-let options = {
-  center: [120.543189862389, 31.35322014824814], // 苏州
-  zoom: 17.5,
-  spatialReference: {
-    projection: "EPSG:4326"
-  },
-  minZoom: 1,
-  maxZoom: 20,
-  bearing: -15.299999999999274,
-  pitch: 72.0000000000002
-  // baseLayer: TileLayer("base", {})
+// 弹窗信息
+let infoWindow = {
+  custom: true,
+  content:
+    '<div class="infocontent" ref="infoWindowRef">' +
+    '<div class="infopop_title">1号无人机</div>' +
+    '<div class="infopop_title">无人机编号: A103JHR89Y20</div>' +
+    '<div class="infopop_title">无人机型号: 经纬 M300 RTK</div>' +
+    '<div class="infopop_title">已巡田面积（亩）: 2</div>' +
+    '<div class="infopop_title">已巡田时间（小时）: 1.5</div>' +
+    "</div>"
 };
 
 function getMap(e) {
@@ -363,7 +423,8 @@ function getRoutePlayerCreated(routerPlayer) {
 // 初始化模型点的位置
 function addLine() {
   point.value = info.value.coordinate;
-  currentModel.value = gltfMakerRef.value.gltfMarker;
+  if (gltfMakerRef.value.gltfMarker)
+    currentModel.value = gltfMakerRef.value.gltfMarker;
   updateModelPosition(info.value);
 }
 

@@ -2,7 +2,7 @@
   <div id="gltf2" v-loading="loading" class="map-content">
     <mt-init-map :options="mapOptions" @getMap="getMap">
       <mt-group-gl-layer :sceneConfig="defaultSceneConfig">
-        <mt-gltf-layer>
+        <mt-gltf-layer @modelload="modelload">
           <mt-gltf-maker
             v-for="(item, index) in makerList"
             :id="item.id"
@@ -10,7 +10,7 @@
             :ref="el => setPointRef(el, index)"
             :coordinates="item.coordinates"
             :options="item.options"
-            :content="item.content"
+            :infoWindow="item.infoWindow"
             @click="changeMaker(item, index)"
           />
         </mt-gltf-layer>
@@ -117,15 +117,18 @@ let makerList = [
         rotationZ: 180
       }
     },
-    content:
-      '<div class="infocontent" ref="infoWindowRef">' +
-      '<div class="infopop_title">2号种植大棚</div>' +
-      '<div class="infopop_title">大棚编号: A103JHR89Y20</div>' +
-      '<div class="infopop_title">大棚占地（亩）: 10</div>' +
-      '<div class="infopop_title">种植作物: 辣椒</div>' +
-      '<div class="infopop_title">作物苗量（株）: 2000</div>' +
-      '<div class="infopop_dept">=> 点击进入 <=' +
-      "</div>"
+    infoWindow: {
+      custom: true,
+      content:
+        '<div class="infocontent" ref="infoWindowRef">' +
+        '<div class="infopop_title">2号种植大棚</div>' +
+        '<div class="infopop_title">大棚编号: A103JHR89Y20</div>' +
+        '<div class="infopop_title">大棚占地（亩）: 10</div>' +
+        '<div class="infopop_title">种植作物: 辣椒</div>' +
+        '<div class="infopop_title">作物苗量（株）: 2000</div>' +
+        '<div class="infopop_dept">=> 点击进入 <=' +
+        "</div>"
+    }
   },
   {
     name: "摄像头监测设备",
@@ -151,14 +154,17 @@ let makerList = [
         translationZ: -120
       }
     },
-    content:
-      '<div class="infocontent" ref="infoWindowRef">' +
-      '<div class="infopop_title">这是一个虫情设备</div>' +
-      '<div class="infopop_time">当前时间: ' +
-      new Date().toLocaleTimeString() +
-      "</div><br>" +
-      '<div class="infopop_dept">' +
-      "</div>"
+    infoWindow: {
+      custom: true,
+      content:
+        '<div class="infocontent" ref="infoWindowRef">' +
+        '<div class="infopop_title">这是一个虫情设备</div>' +
+        '<div class="infopop_time">当前时间: ' +
+        new Date().toLocaleTimeString() +
+        "</div><br>" +
+        '<div class="infopop_dept">' +
+        "</div>"
+    }
   },
   {
     name: "气象监测设备",
@@ -184,14 +190,17 @@ let makerList = [
         translationZ: -120
       }
     },
-    content:
-      '<div class="infocontent" ref="infoWindowRef">' +
-      '<div class="infopop_title">这是一个虫情设备</div>' +
-      '<div class="infopop_time">当前时间: ' +
-      new Date().toLocaleTimeString() +
-      "</div><br>" +
-      '<div class="infopop_dept">' +
-      "</div>"
+    infoWindow: {
+      custom: true,
+      content:
+        '<div class="infocontent" ref="infoWindowRef">' +
+        '<div class="infopop_title">这是一个虫情设备</div>' +
+        '<div class="infopop_time">当前时间: ' +
+        new Date().toLocaleTimeString() +
+        "</div><br>" +
+        '<div class="infopop_dept">' +
+        "</div>"
+    }
   },
   {
     name: "虫情设备",
@@ -217,14 +226,17 @@ let makerList = [
         translationZ: -120
       }
     },
-    content:
-      '<div class="infocontent" ref="infoWindowRef">' +
-      '<div class="infopop_title">这是一个虫情设备</div>' +
-      '<div class="infopop_time">当前时间: ' +
-      new Date().toLocaleTimeString() +
-      "</div><br>" +
-      '<div class="infopop_dept">' +
-      "</div>"
+    infoWindow: {
+      custom: true,
+      content:
+        '<div class="infocontent" ref="infoWindowRef">' +
+        '<div class="infopop_title">这是一个虫情设备</div>' +
+        '<div class="infopop_time">当前时间: ' +
+        new Date().toLocaleTimeString() +
+        "</div><br>" +
+        '<div class="infopop_dept">' +
+        "</div>"
+    }
   },
   {
     name: "水肥一体机",
@@ -249,14 +261,17 @@ let makerList = [
         translationZ: -120
       }
     },
-    content:
-      '<div class="infocontent" ref="infoWindowRef">' +
-      '<div class="infopop_title">这是一个虫情设备</div>' +
-      '<div class="infopop_time">当前时间: ' +
-      new Date().toLocaleTimeString() +
-      "</div><br>" +
-      '<div class="infopop_dept">' +
-      "</div>"
+    infoWindow: {
+      custom: true,
+      content:
+        '<div class="infocontent" ref="infoWindowRef">' +
+        '<div class="infopop_title">这是一个虫情设备</div>' +
+        '<div class="infopop_time">当前时间: ' +
+        new Date().toLocaleTimeString() +
+        "</div><br>" +
+        '<div class="infopop_dept">' +
+        "</div>"
+    }
   }
 ];
 // 摄像头监测设备
@@ -367,7 +382,11 @@ function getMap(e) {
   map = e;
   loading.value = false;
 }
-
+// 模型载入完成后执行
+function modelload() {
+  // loading.value = false;
+  // console.log("所有模型载入完成!");
+}
 // 定义ref存储数组
 let swipeCellRefList = ref([]);
 // 动态设置ref

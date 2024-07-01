@@ -4,8 +4,8 @@
       <mt-group-gl-layer :sceneConfig="defaultSceneConfig">
         <mt-gltf-layer>
           <mt-gltf-maker
-            :point="[-74.01026733935669, 40.710726717547544]"
-            :symbol="symbol"
+            :coordinates="[-74.01026733935669, 40.710726717547544]"
+            :options="makerOptions"
           />
         </mt-gltf-layer>
         <mt-video-layer
@@ -85,18 +85,22 @@ let defaultSceneConfig = {
   }
 };
 let symbolUrl = new URL("@public/gltf/ebc/scene.gltf", import.meta.url);
-let symbol = {
-  shadow: true,
-  url: symbolUrl,
-  scaleX: 24.7345,
-  scaleY: 24.7345,
-  scaleZ: 10.7345,
-  shader: "pbr",
-  uniforms: {
-    polygonFill: [1, 1, 1, 1],
-    polygonOpacity: 1,
-    baseColorIntensity: 1.69,
-    outputSRGB: 1
+let makerOptions = {
+  id: "makerId",
+  cursor: "pointer",
+  symbol: {
+    shadow: true,
+    url: symbolUrl,
+    scaleX: 24.7345,
+    scaleY: 24.7345,
+    scaleZ: 10.7345,
+    shader: "pbr",
+    uniforms: {
+      polygonFill: [1, 1, 1, 1],
+      polygonOpacity: 1,
+      baseColorIntensity: 1.69,
+      outputSRGB: 1
+    }
   }
 };
 

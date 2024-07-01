@@ -55,9 +55,14 @@ export default defineComponent({
       })
     },
     // 弹框HTML内容
-    content: {
-      type: String,
-      default: ""
+    infoWindow: {
+      type: Object,
+      default: () => ({
+        // title: "GLTFMarker InfoWindow",
+        // autoOpenOn: "", // 解除click绑定
+        custom: true,
+        content: ""
+      })
     }
   },
 
@@ -68,12 +73,10 @@ export default defineComponent({
     let options = props.options ? props.options : {};
     // 初始化gltf三维模型绘制图层
     let multiGLTFMarker = new MultiGLTFMarker(data, options);
+    // 获取弹窗配置
+    let infoWindow = props.infoWindow ? props.infoWindow : {};
     // 设置弹窗内容
-    multiGLTFMarker.setInfoWindow({
-      // autoOpenOn: "", // 解除click绑定
-      custom: true,
-      content: props.content
-    });
+    multiGLTFMarker.setInfoWindow(infoWindow);
     // 向父组件提供多三维模型组对象
     provide("multiGLTFMarker", multiGLTFMarker);
 

@@ -1,8 +1,8 @@
 <template>
-  <div id="gltf3" v-loading="loading" class="map-content">
+  <div id="gltf4" v-loading="loading" class="map-content">
     <mt-init-map :options="options" @getMap="getMap">
       <mt-group-gl-layer :sceneConfig="defaultSceneConfig">
-        <mt-gltf-layer>
+        <mt-gltf-layer @modelload="modelload">
           <mt-gltf-maker
             ref="barnRef"
             :coordinates="[81.863822, 44.940405]"
@@ -17,14 +17,14 @@
             ref="cowRef"
             :data="cowData"
             :options="cowOptions"
-            :content="cowContent"
+            :infoWindow="cowInfoWindow"
             @load="cowLoad"
             @click="handlerClick"
           />
           <mt-multi-gltf-maker
             :data="gltfData"
             :options="gltfOptions"
-            :content="sheepContent"
+            :infoWindow="sheepInfoWindow"
           />
         </mt-gltf-layer>
       </mt-group-gl-layer>
@@ -232,32 +232,47 @@ let gltfOptions = {
   }
 };
 // 点击牛只详情弹窗
-let cowContent =
-  '<div class="infocontent" ref="infoWindowRef">' +
-  '<div class="infopop_title">牛只信息</div>' +
-  '<div class="infopop_title">耳标号: A103JHR89Y20</div>' +
-  '<div class="infopop_title">牛只品种: 平凉红牛</div>' +
-  '<div class="infopop_title">生长阶段: 青年牛</div>' +
-  '<div class="infopop_title">上次饲喂: 48小时以前</div>' +
-  '<div class="infopop_title">健康状况: 良好</div>' +
-  '<div class="infopop_title">当前状态: 正常</div>' +
-  "</div>";
+let cowInfoWindow = {
+  custom: true,
+  content:
+    '<div class="infocontent" ref="infoWindowRef">' +
+    '<div class="infopop_title">牛只信息</div>' +
+    '<div class="infopop_title">耳标号: A103JHR89Y20</div>' +
+    '<div class="infopop_title">牛只品种: 平凉红牛</div>' +
+    '<div class="infopop_title">生长阶段: 青年牛</div>' +
+    '<div class="infopop_title">上次饲喂: 48小时以前</div>' +
+    '<div class="infopop_title">健康状况: 良好</div>' +
+    '<div class="infopop_title">当前状态: 正常</div>' +
+    "</div>"
+};
+
 // 点击羊的详情弹窗
-let sheepContent =
-  '<div class="infocontent" ref="infoWindowRef">' +
-  '<div class="infopop_title">羊群信息</div>' +
-  '<div class="infopop_title">耳标号: A103JHR89Y20</div>' +
-  '<div class="infopop_title">品种: 靖远滩羊</div>' +
-  '<div class="infopop_title">生长阶段: 青年羊</div>' +
-  '<div class="infopop_title">上次饲喂: 48小时以前</div>' +
-  '<div class="infopop_title">健康状况: 良好</div>' +
-  '<div class="infopop_title">当前状态: 正常</div>' +
-  "</div>";
+let sheepInfoWindow = {
+  custom: true,
+  content:
+    '<div class="infocontent" ref="infoWindowRef">' +
+    '<div class="infopop_title">羊群信息</div>' +
+    '<div class="infopop_title">耳标号: A103JHR89Y20</div>' +
+    '<div class="infopop_title">品种: 靖远滩羊</div>' +
+    '<div class="infopop_title">生长阶段: 青年羊</div>' +
+    '<div class="infopop_title">上次饲喂: 48小时以前</div>' +
+    '<div class="infopop_title">健康状况: 良好</div>' +
+    '<div class="infopop_title">当前状态: 正常</div>' +
+    "</div>"
+};
+
 // 获取地图对象
 function getMap(e) {
   map = e;
-  loading.value = false;
+  // loading.value = false;
 }
+
+// 模型数据加载完成执行
+function modelload() {
+  loading.value = false;
+  console.log("批量模型加载完毕！");
+}
+
 // 模型加载完成后执行
 function cowLoad() {
   if (!cowRef.value) return;
