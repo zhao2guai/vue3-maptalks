@@ -28,8 +28,8 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
 
-const loading = ref(true);
 const mapRef = ref(null);
+let loading = ref(true);
 let map = null;
 let mapOptions = {
   center: [103.831741, 36.061685], // 甘肃省兰州市

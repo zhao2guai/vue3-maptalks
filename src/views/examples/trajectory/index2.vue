@@ -10,7 +10,7 @@
           />
           <mt-gltf-layer>
             <mt-gltf-maker
-              ref="gltfMakerRef"
+              ref="tuolajiRef"
               :coordinates="point"
               :options="gltfOptions"
               :infoWindow="infoWindow"
@@ -142,7 +142,7 @@ import { LineString } from "maptalks";
 import { ref, onBeforeMount, nextTick, reactive } from "vue";
 
 const loading = ref(true);
-const gltfMakerRef = ref(null);
+const tuolajiRef = ref(null);
 const lineLayerRef = ref(null);
 const routePlayerRef = ref(null);
 let map = null;
@@ -468,7 +468,7 @@ function getRoutePlayerCreated(routerPlayer) {
 // 初始化模型点的位置
 function addLine() {
   point.value = info.value.coordinate;
-  currentModel.value = gltfMakerRef.value.gltfMarker;
+  currentModel.value = tuolajiRef.value.gltfMarker;
   updateModelPosition(info.value);
 }
 
@@ -490,7 +490,10 @@ function playingFun(e) {
   updateModelPosition(e);
 }
 
+// 切换拖拉机模型
 function changeModel(val) {
+  if (!tuolajiRef.value.gltfMarker) return;
+  let gltfMarker = tuolajiRef.value.gltfMarker;
   if (val === "拖拉机1") {
     gltfOptions.symbol.url = tljList[0].modelurl;
   } else if (val === "拖拉机2") {
@@ -498,6 +501,8 @@ function changeModel(val) {
   } else {
     gltfOptions.symbol.url = tljList[2].modelurl;
   }
+  // 更新模型的url
+  gltfMarker.setUrl(gltfOptions.symbol.url);
 }
 
 function isShowOperation() {

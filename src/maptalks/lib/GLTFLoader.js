@@ -1,4 +1,5 @@
 import * as THREE from "three";
+// const THREE = import.meta.glob("./three.min.js", { eager: true });
 
 class GLTFLoader extends THREE.Loader {
   constructor(manager) {
@@ -1095,8 +1096,8 @@ class GLTFTextureTransformExtension {
     if (transform.texCoord !== undefined) {
       console.warn(
         'THREE.GLTFLoader: Custom UV sets in "' +
-          this.name +
-          '" extension not yet supported.'
+        this.name +
+        '" extension not yet supported.'
       );
     }
 
@@ -1818,7 +1819,7 @@ class GLTFParser {
     if (
       typeof createImageBitmap !== "undefined" &&
       /Firefox|^((?!chrome|android).)*safari/i.test(navigator.userAgent) ===
-        false
+      false
     ) {
       this.textureLoader = new THREE.ImageBitmapLoader(this.options.manager);
     } else {
@@ -2392,8 +2393,8 @@ class GLTFParser {
     } else if (sourceDef.uri === undefined) {
       throw new Error(
         "THREE.GLTFLoader: Image " +
-          sourceIndex +
-          " is missing URI and bufferView"
+        sourceIndex +
+        " is missing URI and bufferView"
       );
     }
 
@@ -2453,10 +2454,10 @@ class GLTFParser {
       ) {
         console.warn(
           "THREE.GLTFLoader: Custom UV set " +
-            mapDef.texCoord +
-            " for texture " +
-            mapName +
-            " not yet supported."
+          mapDef.texCoord +
+          " for texture " +
+          mapName +
+          " not yet supported."
         );
       }
 

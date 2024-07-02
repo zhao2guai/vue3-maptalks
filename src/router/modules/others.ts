@@ -1,6 +1,6 @@
 export default {
-  path: "/lineOfFlight",
-  redirect: "/lineOfFlight/index1",
+  path: "/others",
+  redirect: "/others/index1",
   meta: {
     icon: "majesticons:airplane-flight-2-line",
     // showLink: false,
@@ -9,13 +9,13 @@ export default {
   },
   children: [
     {
-      path: "/lineOfFlight/index1",
+      path: "/others/index1",
       name: "飞行线",
-      component: () => import("@/views/examples/lineOfFlight/index.vue"),
+      component: () => import("@/views/examples/others/index1.vue"),
       meta: {
         title: "飞行线",
         hiddenTag: true
       }
-    },
+    }
   ]
 } satisfies RouteConfigsTable;

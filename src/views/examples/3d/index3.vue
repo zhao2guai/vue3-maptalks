@@ -44,13 +44,27 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-text class="mx-1">边界颜色</el-text>
+          <el-text class="mx-1">边界线颜色</el-text>
         </el-col>
         <el-col :span="16">
           <el-color-picker
             v-model="lineColor"
             show-alpha
             @active-change="changeLineColor"
+          />
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-text class="mx-1">边界线粗细</el-text>
+        </el-col>
+        <el-col :span="16">
+          <el-slider
+            v-model="widthData"
+            :min="0"
+            :max="30"
+            :step="0.5"
+            @input="changeWidthData"
           />
         </el-col>
       </el-row>
@@ -156,6 +170,8 @@ let layerOptions = {
 // const color = "rgb(255,255,255)";
 // 边界线颜色
 let lineColor = ref("#969642");
+// 边界线粗细
+let widthData = ref(5);
 // 区划块高度
 const height = 10000;
 const offset = 100;
@@ -322,7 +338,7 @@ function resetTopUV(extrudePolygons) {
       maxZ = Math.max(maxZ, z);
     }
   });
-  console.log(minx, miny, maxx, maxy);
+  // console.log(minx, miny, maxx, maxy);
   //计算每个子区域的每个轮廓坐标点的在这个包围盒的百分比
   const dx = maxx - minx,
     dy = maxy - miny;
@@ -446,6 +462,12 @@ function changeLineColor(e) {
   lineColor.value = e;
 }
 
+// 更换边界线粗细
+function changeWidthData(e) {
+  linematerial.linewidth = e;
+  widthData.value = e;
+}
+
 // 添加打点
 async function addPoints(layer) {
   // 这里开始模拟查询后台获取geosjon数据当然也可以从本页面import中获取
@@ -518,7 +540,7 @@ async function addPoints(layer) {
   overflow: hidden;
   .map-operation-area {
     position: absolute;
-    width: 280px;
+    width: 320px;
     top: 2%;
     right: 2%;
     max-width: 480px;

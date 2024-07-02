@@ -7,13 +7,13 @@
           layerType="img"
         />
         <mt-geo3d-tile-layer
-          ref="geo3dRef"
           id="3dtiles"
+          ref="geo3dRef"
           :options="layerOptions"
           @loadtileset="loadtileset"
           @renderstart="renderstart"
           @renderend="renderend"
-        ></mt-geo3d-tile-layer>
+        />
       </mt-group-gl-layer>
     </mt-init-map>
   </div>
@@ -73,8 +73,9 @@ let sceneConfig = {
 };
 // 图层配置信息
 let layerOptions = {
-  loadingLimit: 3,
-  loadingLimitOnInteracting: 3,
+  maxGPUMemory: 512, //最大缓存数，单位 M bytes
+  // loadingLimitOnInteracting : 3, //地图交互过程中瓦片请求最大数量
+  // loadingLimit : 3, //瓦片请求最大数量
   services: [
     {
       url: "http://resource.dvgis.cn/data/3dtiles/dayanta/tileset.json",
@@ -92,23 +93,26 @@ const mask = new ClipOutsideMask([coordinates]);
 // 地图加载完毕回调
 function getMap(e) {
   map = e;
+  if (map.isLoaded()) {
+    loading.value = false;
+  }
 }
 // 图层加载完成后执行
 function loadtileset(e) {
   if (!geo3dRef.value) return;
   const layer = geo3dRef.value.geo3DTilesLayer;
   // 设置layer mask
-  layer.setMask(mask);
+  // layer.setMask(mask);
   const extent = layer.getExtent(e.index);
   map.fitExtent(extent, 0, {
     animation: false
   });
 }
 function renderstart(e) {
-  loading.value = true;
+  // loading.value = true;
 }
 function renderend(e) {
-  loading.value = false;
+  // loading.value = false;
 }
 // 页面加载后执行
 onMounted(() => {});

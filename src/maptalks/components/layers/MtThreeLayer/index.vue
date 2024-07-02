@@ -15,6 +15,10 @@ import {
 } from "vue";
 import { buildUUID } from "@pureadmin/utils";
 import { ThreeLayer } from "maptalks.three";
+// const THREE = import.meta.glob("../../../lib/three.min.js", { eager: true });
+// const ThreeLayer = import.meta.glob("../../../lib/maptalks.three.min.js", {
+//   eager: true
+// });
 export default defineComponent({
   // three.js渲染图层
   name: "mt-three-layer",
