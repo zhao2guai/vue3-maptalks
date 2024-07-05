@@ -6,13 +6,7 @@
 
 <script>
 import { DrawTool } from "maptalks";
-import {
-  onBeforeMount,
-  defineComponent,
-  onBeforeUnmount,
-  provide,
-  inject
-} from "vue";
+import { onMounted, defineComponent, onUnmounted, provide, inject } from "vue";
 
 export default defineComponent({
   /** 轨迹播放组件 */
@@ -42,13 +36,13 @@ export default defineComponent({
     provide("drawTool", drawTool);
 
     // 页面加载后执行
-    onBeforeMount(() => {
+    onMounted(() => {
       addDrawTool();
       initEvents();
     });
 
     // 页面元素销毁之前执行
-    onBeforeUnmount(() => {
+    onUnmounted(() => {
       removeAll();
     });
 

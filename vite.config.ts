@@ -4,7 +4,7 @@ import { type UserConfigExport, type ConfigEnv, loadEnv } from "vite";
 import {
   root,
   alias,
-  warpperEnv,
+  wrapperEnv,
   pathResolve,
   __APP_INFO__
 } from "./build/utils";
@@ -17,7 +17,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
     VITE_PUBLIC_PATH,
     VITE_GEOSERVER_BASEURL,
     VITE_API_TIANDITU_BASEURL
-  } = warpperEnv(loadEnv(mode, root));
+  } = wrapperEnv(loadEnv(mode, root));
   return {
     base: VITE_PUBLIC_PATH,
     root,

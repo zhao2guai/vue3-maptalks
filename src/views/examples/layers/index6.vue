@@ -128,7 +128,7 @@ function closeMarkerDataDialog() {
 .dialog-div {
   width: 20vw;
   height: 30vh;
-  background: url("@/maptalks/assets/imgs/dialog/tooltipBg1.png") no-repeat;
+  background: url("@/maptalks/assets/images/dialog/tooltipBg1.png") no-repeat;
   background-size: 100% 100%;
   position: absolute;
   top: 50%;
@@ -140,7 +140,7 @@ function closeMarkerDataDialog() {
   .close-icon {
     width: 2vh;
     height: 2vh;
-    background: url("@/maptalks/assets/imgs/dialog/modalClose.png") no-repeat;
+    background: url("@/maptalks/assets/images/dialog/modalClose.png") no-repeat;
     background-size: 100% 100%;
     position: absolute;
     top: 1vh;

@@ -7,8 +7,8 @@
 <script>
 import {
   defineComponent,
+  onUnmounted,
   onBeforeMount,
-  onBeforeUnmount,
   inject,
   provide,
   watch
@@ -74,7 +74,7 @@ export default defineComponent({
     });
 
     // 页面元素销毁之前执行
-    onBeforeUnmount(() => {
+    onUnmounted(() => {
       removeAll();
     });
 

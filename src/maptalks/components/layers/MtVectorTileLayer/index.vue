@@ -7,10 +7,10 @@
 <script>
 import {
   defineComponent,
-  inject,
-  provide,
   onUnmounted,
   onBeforeMount,
+  inject,
+  provide,
   watch
 } from "vue";
 import { VectorTileLayer } from "@maptalks/gl-layers";

@@ -7,12 +7,12 @@
 <script>
 import { ViewshedAnalysis } from "@maptalks/gl-layers";
 import {
-  onBeforeMount,
-  defineComponent,
-  onBeforeUnmount,
   watch,
   inject,
-  provide
+  provide,
+  onBeforeMount,
+  onUnmounted,
+  defineComponent
 } from "vue";
 
 export default defineComponent({
@@ -109,7 +109,7 @@ export default defineComponent({
     });
 
     // 页面元素销毁之前执行
-    onBeforeUnmount(() => {
+    onUnmounted(() => {
       removeAll();
     });
 

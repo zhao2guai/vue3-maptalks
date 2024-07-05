@@ -363,7 +363,7 @@ window.closeInfoWindow = closeInfoWindow;
   .close-icon {
     width: 2vh;
     height: 2vh;
-    background: url("../../../maptalks/assets/imgs/dialog/modalClose.png")
+    background: url("../../../maptalks/assets/images/dialog/modalClose.png")
       no-repeat;
     background-size: 100% 100%;
     position: absolute;

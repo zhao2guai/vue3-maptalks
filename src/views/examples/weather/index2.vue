@@ -354,7 +354,7 @@ function changeColor(e) {
       .right-icon {
         width: 3vh;
         height: 3vh;
-        background: url(../../../assets/imgs/right-icon.png) no-repeat center
+        background: url(../../../assets/images/right-icon.png) no-repeat center
           center;
         background-size: 100% 100%;
         position: absolute;
@@ -366,7 +366,7 @@ function changeColor(e) {
       .left-icon {
         width: 3vh;
         height: 3vh;
-        background: url(../../../assets/imgs/left-icon.png) no-repeat center
+        background: url(../../../assets/images/left-icon.png) no-repeat center
           center;
         background-size: 100% 100%;
         position: absolute;

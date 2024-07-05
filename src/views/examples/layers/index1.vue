@@ -1,11 +1,6 @@
 <template>
   <div v-loading="loading" class="map-content">
-    <mt-init-map
-      ref="mapRef"
-      :options="options"
-      :darkAngleSwitch="darkAngleSwitch"
-      @getMap="getMap"
-    >
+    <mt-init-map ref="mapRef" :options="options" @getMap="getMap">
       <mt-group-gl-layer
         :sceneConfig="sceneConfig"
         :terrainSwitch="terrainSwitch"
@@ -19,13 +14,6 @@
     </mt-init-map>
     <!-- 右上角开关 -->
     <el-card class="map-operation-area">
-      <el-switch
-        v-model="darkAngleSwitch"
-        class="mb-2"
-        active-text="开启暗角"
-        inactive-text="关闭暗角"
-      />
-      <br />
       <el-switch
         v-model="terrainSwitch"
         class="mb-2"
@@ -43,8 +31,6 @@ let loading = ref(true);
 const mapRef = ref(null);
 // webGL图层地形开关
 const terrainSwitch = ref(false);
-// 地图组件的暗角开关
-const darkAngleSwitch = ref(false);
 // 地图对象
 let map = null;
 // 初始化地图参数

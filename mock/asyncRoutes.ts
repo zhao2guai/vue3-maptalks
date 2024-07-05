@@ -10,8 +10,8 @@ const permissionRouter = {
   path: "/permission",
   meta: {
     title: "权限管理",
+    showLink: false,
     icon: "ep:lollipop",
-    showLink: false, // 隐藏路由菜单
     rank: 10
   },
   children: [

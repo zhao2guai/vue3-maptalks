@@ -7,10 +7,10 @@
 <script>
 import {
   defineComponent,
-  inject,
-  provide,
   onUnmounted,
   onBeforeMount,
+  inject,
+  provide,
   watch
 } from "vue";
 import { VideoLayer, VideoSurface } from "@maptalks/gl-layers";

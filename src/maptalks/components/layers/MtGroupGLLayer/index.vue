@@ -5,9 +5,9 @@
 import {
   provide,
   inject,
-  onBeforeUnmount,
-  onBeforeMount,
   watch,
+  onBeforeMount,
+  onUnmounted,
   defineComponent
 } from "vue";
 import { GroupGLLayer } from "@maptalks/gl-layers";
@@ -144,7 +144,7 @@ export default defineComponent({
     });
 
     // 页面元素销毁之前执行
-    onBeforeUnmount(() => {
+    onUnmounted(() => {
       removeAll();
     });
 

@@ -3,16 +3,16 @@
 </template>
 <script>
 import {
-  inject,
-  provide,
-  onBeforeUnmount,
-  onBeforeMount,
   watch,
+  provide,
+  onBeforeMount,
+  onUnmounted,
   defineComponent
 } from "vue";
 import { buildUUID } from "@pureadmin/utils";
 import { TileLayer } from "maptalks";
 import { tiandituApi } from "./tianditu.ts";
+import useLayer from "../../map/useLayer.ts";
 export default defineComponent({
   /** 初始化天地图图层组件 */
   name: "mt-tianditu-layer",
@@ -65,10 +65,9 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    // 定义瓦片图层对象
-    let tileLayer = null;
     // 获取坐标系
-    let proj = props.projection ? props.projection : "EPSG:4326";
+    let proj =
+      props.projection === "EPSG:4326" ? props.projection : "EPSG:3857";
     // 获取图层类型
     let type = props.layerType ? props.layerType : "img";
     // 获取图层ID
@@ -76,37 +75,51 @@ export default defineComponent({
     // 是否开启图层滤镜
     let cssFilter = props.cssFilter ? props.cssFilter : null;
     // 获取天地图URL
-    let url = "";
+    let urlTemplate = "";
     if (!props.tk) console.error("天地图密匙不能为空!");
-    if (type === "vec") url = tiandituApi.getUrlByVecc(props.tk);
-    if (type === "cva") url = tiandituApi.getUrlByCvac(props.tk);
-    if (type === "ter") url = tiandituApi.getUrlByTerc(props.tk);
-    if (type === "cta") url = tiandituApi.getUrlByCtac(props.tk);
-    if (type === "img") url = tiandituApi.getUrlByImgc(props.tk);
-    if (type === "cia") url = tiandituApi.getUrlByCiac(props.tk);
-    if (type === "ibo") url = tiandituApi.getUrlByIboc(props.tk);
-    // 若图层url和id为空则返回
-    if (url) {
-      // 接收图层配置信息并初始化图层对象
-      tileLayer = new TileLayer(id, {
-        tileSystem: [1, -1, -180, 90],
-        spatialReference: {
-          projection: proj
-        },
-        urlTemplate: url,
-        maxAvailableZoom: 18,
-        subdomains: ["1", "2", "3", "4", "5"],
-        visible: props.visible,
-        minZoom: props.minZoom,
-        maxZoom: props.maxZoom,
-        zIndex: props.zIndex,
-        cssFilter: cssFilter
-      });
+    // 选择返回天地图的 EPSG3857 墨卡托 或者 EPSG4326 经纬度
+    if (proj === "EPSG:4326") {
+      if (type === "vec") urlTemplate = tiandituApi.getUrlByVecc(props.tk);
+      if (type === "cva") urlTemplate = tiandituApi.getUrlByCvac(props.tk);
+      if (type === "ter") urlTemplate = tiandituApi.getUrlByTerc(props.tk);
+      if (type === "cta") urlTemplate = tiandituApi.getUrlByCtac(props.tk);
+      if (type === "img") urlTemplate = tiandituApi.getUrlByImgc(props.tk);
+      if (type === "cia") urlTemplate = tiandituApi.getUrlByCiac(props.tk);
+      if (type === "ibo") urlTemplate = tiandituApi.getUrlByIboc(props.tk);
+    } else {
+      if (type === "vec") urlTemplate = tiandituApi.getUrlByVecw(props.tk);
+      if (type === "cva") urlTemplate = tiandituApi.getUrlByCvaw(props.tk);
+      if (type === "ter") urlTemplate = tiandituApi.getUrlByTerw(props.tk);
+      if (type === "cta") urlTemplate = tiandituApi.getUrlByCtaw(props.tk);
+      if (type === "img") urlTemplate = tiandituApi.getUrlByImgw(props.tk);
+      if (type === "cia") urlTemplate = tiandituApi.getUrlByCiaw(props.tk);
+      if (type === "ibo") urlTemplate = tiandituApi.getUrlByIbow(props.tk);
     }
+    // 天地图图层配置信息
+    let options = {
+      spatialReference: {
+        projection: proj
+      },
+      urlTemplate: urlTemplate,
+      maxAvailableZoom: 18, //可用平铺的最大缩放级别。当以更高的缩放级别显示地图时，将使用来自最大可用缩放的分幅的数据。
+      repeatWorld: false, // 关闭瓦片将在世界之外重复加载。
+      subdomains: ["1", "2", "3", "4", "5"],
+      visible: props.visible,
+      minZoom: props.minZoom,
+      maxZoom: props.maxZoom,
+      zIndex: props.zIndex,
+      cssFilter: cssFilter
+    };
+    // 若为经纬度EPSG4326则需要单独设置tileSystem
+    if (proj === "EPSG:4326") options.tileSystem = [1, -1, -180, 90];
+    // 接收图层配置信息并初始化图层对象
+    let tileLayer = new TileLayer(id, options);
     // 向组件传送初始化完毕的layer
     context.emit("layerCreated", tileLayer);
+    // 添加图层
+    const { layer } = useLayer(tileLayer);
     // 将天地图图层对象向组件提供 (可供其他地方使用) 使用provide函数
-    provide("tileLayer", tileLayer);
+    provide("tileLayer", layer);
 
     // 监听瓦片图层ID
     watch(
@@ -143,51 +156,14 @@ export default defineComponent({
 
     // 页面加载后执行
     onBeforeMount(() => {
-      addTileLayer();
+      // 初始化图层事件
       initEvents();
     });
 
     // 页面元素销毁之前执行
-    onBeforeUnmount(() => {
+    onUnmounted(() => {
       removeAll();
     });
-
-    // 添加天地图图层
-    const addTileLayer = () => {
-      // 获取插槽的上级组件 (groupGLLayer优先插入其次groupTileLayer最后才是map)
-      const groupGLLayer = inject("groupGLLayer", null);
-      // 若是GL图层存在则优先添加到它里面
-      if (groupGLLayer) {
-        groupGLLayer.addLayer(tileLayer);
-        return;
-      }
-      // 再次判断瓦片图层组的情况
-      const groupTileLayer = inject("groupTileLayer", null);
-      if (groupTileLayer && groupTileLayer.isLoaded()) {
-        let layers = groupTileLayer.getLayers();
-        layers.push(tileLayer);
-        groupTileLayer.addLayer(layers);
-        return;
-      }
-      // 获取上级组件中的地图对象
-      let maptalks = inject("maptalks", null);
-      let map = maptalks.value;
-      // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
-      if (map && map.isLoaded()) {
-        tileLayer.addTo(map);
-        return;
-      }
-      // 获取上级组件是否是BaseLayer
-      let baseLayer = inject("baseLayer", null);
-      // 若是存在底图图层还要判断里面是否有其他的图层，因为底图中只能放一个
-      if (map && baseLayer) {
-        // 若是底图中已有其他图层则返回
-        if (!map.getBaseLayer()) map.setBaseLayer(tileLayer);
-        return;
-      } else {
-        return;
-      }
-    };
 
     // 初始化图层事件
     const initEvents = () => {

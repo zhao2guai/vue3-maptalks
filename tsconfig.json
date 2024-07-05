@@ -25,9 +25,6 @@
       "@/*": [
         "src/*"
       ],
-      "@public/*": [
-        "public/*"
-      ],
       "@build/*": [
         "build/*"
       ]
@@ -47,7 +44,7 @@
     "src/**/*.vue",
     "types/*.d.ts",
     "vite.config.ts"
-, "src/maptalks/components/index.js", "src/maptalks/components/map/index.js", "src/maptalks/components/layers/index.js", "src/maptalks/components/layers/MtWMSTileLayer/TileLayerModel.js"  ],
+  ],
   "exclude": [
     "dist",
     "**/*.js",

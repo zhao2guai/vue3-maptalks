@@ -6,7 +6,7 @@ dist-ssr
 .eslintcache
 report.html
 vite.config.*.timestamp*
-package-lock.json
+
 yarn.lock
 npm-debug.log*
 .pnpm-error.log*

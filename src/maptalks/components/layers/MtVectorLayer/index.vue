@@ -7,10 +7,10 @@
 <script>
 import {
   defineComponent,
-  inject,
-  provide,
   onUnmounted,
   onBeforeMount,
+  inject,
+  provide,
   watch
 } from "vue";
 import { VectorLayer } from "maptalks";
@@ -82,7 +82,7 @@ export default defineComponent({
       // 获取地图对象
       let map = maptalks.value;
       // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
-      if (map && map.isLoaded()) {
+      if (map) {
         vectorLayer.addTo(map);
         return;
       }

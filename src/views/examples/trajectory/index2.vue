@@ -130,17 +130,45 @@
           >
         </el-col>
       </el-row>
-      <div class="show-operation-div" @click="isShowOperation">
+      <!-- 操作的折叠按钮 -->
+      <div
+        v-tippy="{
+          content: isActive ? '点击折叠' : '点击展开',
+          theme: tooltipEffect,
+          hideOnClick: 'toggle',
+          placement: 'right'
+        }"
+        class="center-collapse"
+        @click="isShowOperation"
+      >
+        <IconifyIconOffline
+          :icon="ArrowRight"
+          :class="[iconClass, themeColor === 'light' ? '' : 'text-primary']"
+          :style="{ transform: isActive ? 'none' : 'rotateY(180deg)' }"
+        />
+      </div>
+      <!-- <div class="show-operation-div" @click="isShowOperation">
         <i v-if="showOperation" class="right-icon" />
         <i v-else class="left-icon" />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 <script setup>
 import { LineString } from "maptalks";
-import { ref, onBeforeMount, nextTick, reactive } from "vue";
-
+import { ref, onBeforeMount, nextTick, reactive, computed } from "vue";
+import { useGlobal } from "@pureadmin/utils";
+import { useNav } from "@/layout/hooks/useNav";
+import ArrowRight from "@iconify-icons/ri/arrow-right-double-fill";
+// 右侧折叠按钮相关
+let isActive = ref(true);
+const { tooltipEffect } = useNav();
+const iconClass = computed(() => {
+  return ["w-[16px]", "h-[16px]"];
+});
+const { $storage } = useGlobal();
+const themeColor = computed(() => $storage.layout?.themeColor);
+// 以下为页面内容
 const loading = ref(true);
 const tuolajiRef = ref(null);
 const lineLayerRef = ref(null);
@@ -505,7 +533,9 @@ function changeModel(val) {
   gltfMarker.setUrl(gltfOptions.symbol.url);
 }
 
+// 折叠操作窗
 function isShowOperation() {
+  isActive.value = !isActive.value;
   showOperation.value = !showOperation.value;
   if (showOperation.value) {
     mapDivWidth.value = 80;
@@ -633,7 +663,7 @@ function positionChangeThree(val) {
       .right-icon {
         width: 3vh;
         height: 3vh;
-        background: url(../../../assets/imgs/right-icon.png) no-repeat center
+        background: url(../../../assets/images/right-icon.png) no-repeat center
           center;
         background-size: 100% 100%;
         position: absolute;
@@ -645,7 +675,7 @@ function positionChangeThree(val) {
       .left-icon {
         width: 3vh;
         height: 3vh;
-        background: url(../../../assets/imgs/left-icon.png) no-repeat center
+        background: url(../../../assets/images/left-icon.png) no-repeat center
           center;
         background-size: 100% 100%;
         position: absolute;
@@ -659,6 +689,22 @@ function positionChangeThree(val) {
   .hide-operation-div {
     padding: 0;
     box-sizing: border-box;
+  }
+  .center-collapse {
+    position: absolute;
+    top: 50%;
+    left: -24px;
+    z-index: 1002;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 34px;
+    cursor: pointer;
+    background: var(--el-bg-color);
+    border: 1px solid var(--pure-border-color);
+    border-radius: 4px;
+    transform: translate(12px, -50%);
   }
 }
 </style>

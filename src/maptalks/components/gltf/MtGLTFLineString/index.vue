@@ -5,7 +5,7 @@
 <script>
 import {
   defineComponent,
-  onBeforeUnmount,
+  onUnmounted,
   onBeforeMount,
   provide,
   inject,
@@ -96,17 +96,17 @@ export default defineComponent({
 
     // 页面加载后执行
     onBeforeMount(() => {
-      addGLTFMakerToGLTFLayer();
+      addLineString();
       initEvents();
     });
 
     // 页面元素销毁之前执行
-    onBeforeUnmount(() => {
+    onUnmounted(() => {
       removeAll();
     });
 
-    // 将gltfMaker点添加到gltflayer中
-    const addGLTFMakerToGLTFLayer = () => {
+    // 将gltf线添加到gltflayer中
+    const addLineString = () => {
       // 获取map对象
       let maptalks = inject("maptalks", null);
       let map = maptalks.value;

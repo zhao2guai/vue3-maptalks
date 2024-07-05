@@ -3,11 +3,11 @@
 </template>
 <script>
 import {
+  watch,
   inject,
   provide,
-  onBeforeUnmount,
   onBeforeMount,
-  watch,
+  onUnmounted,
   defineComponent
 } from "vue";
 import { buildUUID } from "@pureadmin/utils";
@@ -75,7 +75,7 @@ export default defineComponent({
     });
 
     // 页面元素销毁之前执行
-    onBeforeUnmount(() => {
+    onUnmounted(() => {
       removeAll();
     });
 
@@ -100,7 +100,7 @@ export default defineComponent({
       let maptalks = inject("maptalks", null);
       let map = maptalks.value;
       // 若不存在任何图层组则判断地图对象是否加载并添加至map的layers数组中
-      if (map && map.isLoaded()) {
+      if (map) {
         tileLayer.addTo(map);
         return;
       }

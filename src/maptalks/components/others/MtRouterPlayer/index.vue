@@ -5,10 +5,10 @@
 <script>
 import {
   provide,
-  onMounted,
+  onBeforeMount,
   defineComponent,
   watch,
-  onBeforeUnmount
+  onUnmounted
 } from "vue";
 import { RoutePlayer, formatRouteData } from "maptalks.routeplayer";
 
@@ -75,12 +75,12 @@ export default defineComponent({
       { deep: true, immediate: true }
     );
 
-    onMounted(() => {
+    onBeforeMount(() => {
       initEvents();
     });
 
     // 轨迹播放器销毁
-    onBeforeUnmount(() => {
+    onUnmounted(() => {
       removeAll();
     });
 

@@ -45,8 +45,10 @@ declare global {
       /** 离场动画 */
       leaveTransition?: string;
     };
-    // 是否不添加信息到标签页，（默认`false`）
+    /** 当前菜单名称或自定义信息禁止添加到标签页（默认`false`） */
     hiddenTag?: boolean;
+    /** 当前菜单名称是否固定显示在标签页且不可关闭（默认`false`） */
+    fixedTag?: boolean;
     /** 动态路由可打开的最大数量 `可选` */
     dynamicLevel?: number;
     /** 将某个菜单激活
@@ -60,8 +62,6 @@ declare global {
    * @description 完整子路由配置表
    */
   interface RouteChildrenConfigsTable {
-    /** 锚点位置ID `必填` */
-    hash?: string;
     /** 子路由地址 `必填` */
     path: string;
     /** 路由名字（对应不要重复，和当前组件的`name`保持一致）`必填` */
@@ -79,8 +79,6 @@ declare global {
    * @description 整体路由配置表（包括完整子路由）
    */
   interface RouteConfigsTable {
-    /** 锚点位置ID `必填` */
-    hash?: string;
     /** 路由地址 `必填` */
     path: string;
     /** 路由名字（保持唯一）`可选` */
